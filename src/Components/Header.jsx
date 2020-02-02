@@ -1,3 +1,3 @@
 import React from "react";
 
-export default () => <div>Future Header</div>;
+export default () => <img src={require("../images/test_image.JPG")} alt="" />;

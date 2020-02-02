@@ -1,3 +1,5 @@
 import React from "react";
 
-export default () => <div>This will be a dope webite!</div>;
+import Header from "../Components/Header";
+
+export default () => <Header />;
