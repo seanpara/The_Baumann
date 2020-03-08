@@ -42,7 +42,7 @@ export default () => {
     >
       <Carousel showThumbs={false}>{renderImages()}</Carousel>
       <Paper className={classes.paper}>
-        <p>Hi fergas </p>
+        <h2>Hi fergas </h2>
         <p>41 Varick </p>
         <p>fbaumann@bennington.edu</p>
       </Paper>

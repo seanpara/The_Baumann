@@ -64,7 +64,7 @@ export default () => {
             </IconButton>
           </Link>
         </div>
-        <h3>The Baumann</h3>
+        <h2>The Baumann</h2>
         <div style={{ display: "flex", justifyContent: "space-apart" }}>
           <IconButton
             size="small"
