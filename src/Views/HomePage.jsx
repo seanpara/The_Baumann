@@ -1,48 +1,43 @@
-import React from "react";
+import React, { useState } from "react";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
-import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 
+import { useHomePageStyles } from "../styles";
 import { siteImages } from "../images";
 
-const useStyles = makeStyles(theme => ({
-  paper: {
-    padding: "5%",
-    margin: "2%",
-    background: theme.palette.secondary.dark,
-    color: "white",
-    width: "80%",
-    height: "100%",
-    textAlign: "center",
-    display: "flex",
-    flexDirection: "column",
-  },
-  carouselPaper: {
-    background: "black",
-  },
-}));
 export default () => {
-  const classes = useStyles();
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const classes = useHomePageStyles();
+
+  const updateCurrentSlide = index => {
+    if (currentSlide !== index) {
+      setCurrentSlide(index);
+    }
+  };
+
   const renderImages = () =>
-    siteImages.map(imageSrc => (
-      <Paper className={classes.carouselPaper} key={imageSrc}>
-        <img style={{ width: "60%", height: "auto" }} src={imageSrc} alt="" />
+    siteImages.map(({ src }) => (
+      <Paper className={classes.carouselPaper} key={src}>
+        <img style={{ width: "60%", height: "auto" }} src={src} alt="" />
       </Paper>
     ));
+  const { text } = siteImages[currentSlide];
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        background: "#1976d2",
-      }}
-    >
-      <Carousel showThumbs={false}>{renderImages()}</Carousel>
+    <div className={classes.root}>
+      <Carousel
+        showThumbs={false}
+        onChange={updateCurrentSlide}
+        selectedItem={currentSlide}
+        infiniteLoop
+      >
+        {renderImages()}
+      </Carousel>
       <Paper className={classes.paper}>
-        <h2>Hi fergas </h2>
+        <h3> {text}</h3>
+      </Paper>
+      <Paper className={classes.paper}>
+        <h2>Contact Info Here?? </h2>
         <p>41 Varick </p>
         <p>fbaumann@bennington.edu</p>
       </Paper>

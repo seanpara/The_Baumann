@@ -49,11 +49,7 @@ export default () => {
               />
             </IconButton>
           </Link>
-          <Link
-            edge="start"
-            style={{ textDecoration: "none", color: "black" }}
-            to="/about"
-          >
+          <Link style={{ textDecoration: "none", color: "black" }} to="/about">
             <IconButton
               size="small"
               edge="end"

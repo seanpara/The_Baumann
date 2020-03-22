@@ -1,35 +1,14 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    display: "flex",
-    justifyContent: "center",
-    flexWrap: "wrap",
-    "& > *": {
-      margin: "5% 0% 0% 0%",
-      width: "80%",
-      height: "70%",
-    },
-    background: theme.palette.secondary.main,
-    height: "100vh",
-  },
-  paper: {
-    padding: "2% 2% 5% 2%",
-    background: theme.palette.primary.main,
-    color: "white",
-    height: "10%",
-    textAlign: "center",
-  },
-}));
+import { useAboutPageStyles } from "../styles";
 
 const AboutPage = () => {
-  const classes = useStyles();
+  const classes = useAboutPageStyles();
 
   return (
     <div className={classes.root}>
-      <Paper className={classes.paper} elevation={3}>
+      <Paper className={classes.paper} style={{ height: "10%" }} elevation={3}>
         The Baumann performance venue was founded in September 2017 by Zivon
         Toplin, Owen Campbell, and Fergus Baumann, members of the Zoo City
         theatre collective. They debuted the venue with a theatrical adaptation
@@ -48,6 +27,9 @@ const AboutPage = () => {
         facility-rich space, allowing for curators to exhibit developing or
         experimental work. It seeks to create partnerships between artists and
         curators, and form unique collaborations.
+      </Paper>
+      <Paper className={classes.paper} style={{ height: "auto" }}>
+        Should we put something here?
       </Paper>
     </div>
   );

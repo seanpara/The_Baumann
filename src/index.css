@@ -12,6 +12,11 @@ body {
   font-family: "Amatic SC", cursive !important;
   font-size: 1.5em !important;
 }
+
+.MuiPaper-rounded {
+  font-family: "Roboto", sans-serif !important;
+  font-size: 0.8em !important;
+}
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
