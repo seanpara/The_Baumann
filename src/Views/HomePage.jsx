@@ -1,28 +1,74 @@
-import React, { useState } from "react";
-import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { Carousel } from "react-responsive-carousel";
-import Paper from "@material-ui/core/Paper";
+import React, { useState } from 'react';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import { Carousel } from 'react-responsive-carousel';
+import Paper from '@material-ui/core/Paper';
+import IconButton from '@material-ui/core/IconButton';
+import TheatersIcon from '@material-ui/icons/Theaters';
 
-import { useHomePageStyles } from "../styles";
-import { siteImages } from "../images";
+import { useHomePageStyles } from '../styles';
+import { siteImages } from '../images';
 
 export default () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const classes = useHomePageStyles();
 
-  const updateCurrentSlide = index => {
+  const updateCurrentSlide = (index) => {
     if (currentSlide !== index) {
       setCurrentSlide(index);
     }
   };
 
   const renderImages = () =>
-    siteImages.map(({ src }) => (
+    siteImages.map(({ src, href }) => (
       <Paper className={classes.carouselPaper} key={src}>
-        <img style={{ width: "60%", height: "auto" }} src={src} alt="" />
+        <a
+          style={{ display: 'flex', justifyContent: 'center', width: '55%' }}
+          href={href}
+          target="_blank"
+        >
+          <img style={{ width: '100%', height: 'auto' }} src={src} alt="" />
+        </a>
       </Paper>
     ));
-  const { text } = siteImages[currentSlide];
+
+  const renderEventList = () => (
+    <div
+      style={{
+        display: 'flex',
+        width: '90%',
+      }}
+    >
+      {siteImages.map(({ text: { eventName }, src }, i) => {
+        return (
+          <Paper
+            className={classes.paper}
+            square
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              width: '25%',
+            }}
+          >
+            <IconButton
+              size="small"
+              edge="end"
+              aria-label="home"
+              className={classes.icon}
+              onClick={() => window.open(src, '_blank')}
+            >
+              <TheatersIcon style={{ fontSize: 100 }} />
+            </IconButton>
+            <h3> {eventName}</h3>
+          </Paper>
+        );
+      })}
+    </div>
+  );
+
+  const {
+    text: { eventName, curators, date },
+  } = siteImages[currentSlide];
   return (
     <div className={classes.root}>
       <Carousel
@@ -30,17 +76,21 @@ export default () => {
         onChange={updateCurrentSlide}
         selectedItem={currentSlide}
         infiniteLoop
+        autoPlay
+        interval={2500}
       >
         {renderImages()}
       </Carousel>
-      <Paper className={classes.paper}>
-        <h3> {text}</h3>
+      <Paper className={classes.eventDetailPaper}>
+        <h4 style={{ margin: '1% 0%' }}> {eventName}</h4>
+        <div>{curators}</div>
+        <div>{date}</div>
       </Paper>
       <Paper className={classes.paper}>
-        <h2>Contact Info Here?? </h2>
-        <p>41 Varick </p>
-        <p>fbaumann@bennington.edu</p>
+        <h2>This Week at the Baumann:</h2>
       </Paper>
+
+      {renderEventList()}
     </div>
   );
 };

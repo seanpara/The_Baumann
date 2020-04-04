@@ -1,18 +1,45 @@
 export const logoImage =
   "https://baumann-pics.s3.us-east-2.amazonaws.com/edited_baumann_logo.png";
+
 export const siteImages = [
   {
     src:
-      "https://baumann-pics.s3.us-east-2.amazonaws.com/2780469F-31E4-410C-B713-56D93D8C3A35.JPG",
-    text: "Some Text About this image?",
+      "https://baumann-pics.s3.us-east-2.amazonaws.com/PostersForDeployment/IMG_3096.jpeg",
+    text: {
+      eventName: "On the DL",
+      curators: "Curated by Just Lunning and Chandler Dean",
+      date: "March 12",
+    },
+    href: "https://www.nytimes.com/",
   },
   {
     src:
-      "https://baumann-pics.s3.us-east-2.amazonaws.com/57B3F688-571D-410B-A4B9-45DAFA649609.JPG",
-    text: "More Text?",
+      "https://baumann-pics.s3.us-east-2.amazonaws.com/PostersForDeployment/IMG_3097.jpeg",
+    text: {
+      eventName: "Poetry at The Baumann XII",
+      curators: "Curated by Matthew Rowe",
+      date: "March 13",
+    },
+    href: "https://www.nytimes.com/",
   },
   {
-    src: "https://baumann-pics.s3.us-east-2.amazonaws.com/IMG_0607.JPG",
-    text: "Also more text!",
+    src:
+      "https://baumann-pics.s3.us-east-2.amazonaws.com/PostersForDeployment/IMG_3098.jpeg",
+    text: {
+      eventName: "Spectaculum",
+      curators: "Curated by Nathaniel Jameson and Evan Gambardella",
+      date: "March 14",
+    },
+    href: "https://www.nytimes.com/",
+  },
+  {
+    src:
+      "https://baumann-pics.s3.us-east-2.amazonaws.com/PostersForDeployment/IMG_3099.jpeg",
+    text: {
+      eventName: "Really Truly's EP Release Show",
+      curators: "Curated by The Lesbian Bookstore",
+      date: "March 15",
+    },
+    href: "https://www.nytimes.com/",
   },
 ];

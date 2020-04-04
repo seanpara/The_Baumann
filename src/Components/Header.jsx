@@ -1,35 +1,25 @@
-import React from "react";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import { Link } from "react-router-dom";
-import IconButton from "@material-ui/core/IconButton";
-import { makeStyles } from "@material-ui/core/styles";
-import FacebookIcon from "@material-ui/icons/Facebook";
-import InstagramIcon from "@material-ui/icons/Instagram";
+import React from 'react';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import { Link } from 'react-router-dom';
+import IconButton from '@material-ui/core/IconButton';
+import FacebookIcon from '@material-ui/icons/Facebook';
+import InstagramIcon from '@material-ui/icons/Instagram';
 
-import { logoImage } from "../images";
-
-const useStyles = makeStyles(theme => ({
-  root: {
-    flexGrow: 1,
-  },
-  toolbar: {
-    justifyContent: "space-between",
-    opacity: ".8",
-  },
-}));
+import { useHeaderStyles } from '../styles';
+import { logoImage } from '../images';
 
 export default () => {
-  const classes = useStyles();
+  const classes = useHeaderStyles();
   return (
     <AppBar position="sticky">
       <Toolbar className={classes.toolbar}>
         <div
           style={{
-            display: "flex",
-            justifyContent: "space-apart",
-            alignItems: "center",
+            display: 'flex',
+            justifyContent: 'space-apart',
+            alignItems: 'center',
           }}
         >
           <Link to="/">
@@ -41,7 +31,7 @@ export default () => {
             >
               <img
                 style={{
-                  width: "auto",
+                  width: 'auto',
                   height: 50,
                 }}
                 src={logoImage}
@@ -49,7 +39,7 @@ export default () => {
               />
             </IconButton>
           </Link>
-          <Link style={{ textDecoration: "none", color: "black" }} to="/about">
+          <Link style={{ textDecoration: 'none', color: 'black' }} to="/about">
             <IconButton
               size="small"
               edge="end"
@@ -61,14 +51,14 @@ export default () => {
           </Link>
         </div>
         <h2>The Baumann</h2>
-        <div style={{ display: "flex", justifyContent: "space-apart" }}>
+        <div style={{ display: 'flex', justifyContent: 'space-apart' }}>
           <IconButton
             size="small"
             edge="end"
             aria-label="home"
             color="secondary"
             onClick={() =>
-              window.open("https://www.facebook.com/BaumannNY/", "_blank")
+              window.open('https://www.facebook.com/BaumannNY/', '_blank')
             }
           >
             <FacebookIcon />
@@ -79,7 +69,7 @@ export default () => {
             aria-label="home"
             color="secondary"
             onClick={() =>
-              window.open("https://www.instagram.com/baumannnyc/", "_blank")
+              window.open('https://www.instagram.com/baumannnyc/', '_blank')
             }
           >
             <InstagramIcon />

@@ -8,7 +8,11 @@ const AboutPage = () => {
 
   return (
     <div className={classes.root}>
-      <Paper className={classes.paper} style={{ height: "10%" }} elevation={3}>
+      <Paper
+        className={classes.paper}
+        style={{ height: "10%", width: "80%" }}
+        elevation={3}
+      >
         The Baumann performance venue was founded in September 2017 by Zivon
         Toplin, Owen Campbell, and Fergus Baumann, members of the Zoo City
         theatre collective. They debuted the venue with a theatrical adaptation
@@ -28,8 +32,9 @@ const AboutPage = () => {
         experimental work. It seeks to create partnerships between artists and
         curators, and form unique collaborations.
       </Paper>
-      <Paper className={classes.paper} style={{ height: "auto" }}>
-        Should we put something here?
+      <Paper className={classes.paper} style={{ height: "3%", width: "30%" }}>
+        <p> The Baumann is Located at 41 Varick Ave Brooklyn, NY 11237 </p>
+        <p> For Questions, please reach out to fbaumann@bennington.edu</p>
       </Paper>
     </div>
   );
