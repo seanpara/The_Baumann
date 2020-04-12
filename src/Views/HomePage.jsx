@@ -23,7 +23,7 @@ export default () => {
       <Paper className={classes.carouselPaper} key={src}>
         <a
           style={{ display: 'flex', justifyContent: 'center', width: '55%' }}
-          href={href}
+          href={href || null}
           target="_blank"
         >
           <img style={{ width: '100%', height: 'auto' }} src={src} alt="" />
@@ -35,10 +35,10 @@ export default () => {
     <div
       style={{
         display: 'flex',
-        width: '90%',
+        width: '90vw',
       }}
     >
-      {siteImages.map(({ text: { eventName }, src }, i) => {
+      {siteImages.map(({ text: { eventName }, src, href }) => {
         return (
           <Paper
             className={classes.paper}
@@ -48,6 +48,7 @@ export default () => {
               flexDirection: 'column',
               alignItems: 'center',
               width: '25%',
+              height: 'auto',
             }}
           >
             <IconButton
@@ -55,7 +56,7 @@ export default () => {
               edge="end"
               aria-label="home"
               className={classes.icon}
-              onClick={() => window.open(src, '_blank')}
+              onClick={() => window.open(href, '_blank')}
             >
               <TheatersIcon style={{ fontSize: 100 }} />
             </IconButton>
@@ -77,7 +78,7 @@ export default () => {
         selectedItem={currentSlide}
         infiniteLoop
         autoPlay
-        interval={2500}
+        interval={5000}
       >
         {renderImages()}
       </Carousel>
@@ -86,8 +87,8 @@ export default () => {
         <div>{curators}</div>
         <div>{date}</div>
       </Paper>
-      <Paper className={classes.paper}>
-        <h2>This Week at the Baumann:</h2>
+      <Paper className={classes.theaterImagePaper}>
+        <h1>This Week at the Baumann</h1>
       </Paper>
 
       {renderEventList()}

@@ -1,5 +1,7 @@
 import { createMuiTheme, makeStyles } from '@material-ui/core/styles';
 
+import { lightsImage } from '../images';
+
 export const theme = createMuiTheme({
   palette: {
     primary: {
@@ -50,6 +52,20 @@ export const useHomePageStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-apart',
+  },
+  theaterImagePaper: {
+    padding: '2%',
+    margin: '1%',
+    background: theme.palette.primary.main,
+    color: 'white',
+    width: '50%',
+    height: 'auto',
+    textAlign: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-apart',
+    backgroundImage: `url(${lightsImage})`,
+    backgroundSize: 'cover',
   },
   carouselPaper: {
     background: 'black',
