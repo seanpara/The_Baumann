@@ -4,6 +4,7 @@ import { Carousel } from 'react-responsive-carousel';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import TheatersIcon from '@material-ui/icons/Theaters';
+import { useMediaQuery } from 'react-responsive';
 
 import { useHomePageStyles } from '../styles';
 import { siteImages } from '../images';
@@ -11,6 +12,8 @@ import { siteImages } from '../images';
 export default () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const classes = useHomePageStyles();
+
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1224px)' });
 
   const updateCurrentSlide = (index) => {
     if (currentSlide !== index) {
@@ -25,6 +28,7 @@ export default () => {
           style={{ display: 'flex', justifyContent: 'center', width: '55%' }}
           href={href || null}
           target="_blank"
+          rel="noreferrer noopener"
         >
           <img style={{ width: '100%', height: 'auto' }} src={src} alt="" />
         </a>
@@ -35,7 +39,9 @@ export default () => {
     <div
       style={{
         display: 'flex',
-        width: '90vw',
+        justifyContent: 'center',
+        flexWrap: 'wrap',
+        width: isTabletOrMobile ? '80vw' : '100vw',
       }}
     >
       {siteImages.map(({ text: { eventName }, src, href }) => {
@@ -47,7 +53,7 @@ export default () => {
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              width: '25%',
+              width: isTabletOrMobile ? '40%' : '18%',
               height: 'auto',
             }}
           >
@@ -71,7 +77,12 @@ export default () => {
     text: { eventName, curators, date },
   } = siteImages[currentSlide];
   return (
-    <div className={classes.root}>
+    <div
+      className={classes.root}
+      style={{
+        height: isTabletOrMobile && '110vh',
+      }}
+    >
       <Carousel
         showThumbs={false}
         onChange={updateCurrentSlide}
@@ -82,12 +93,21 @@ export default () => {
       >
         {renderImages()}
       </Carousel>
-      <Paper className={classes.eventDetailPaper}>
+      <Paper
+        className={classes.eventDetailPaper}
+        style={{
+          width: isTabletOrMobile && '90%',
+          height: isTabletOrMobile && '10%',
+        }}
+      >
         <h4 style={{ margin: '1% 0%' }}> {eventName}</h4>
         <div>{curators}</div>
         <div>{date}</div>
       </Paper>
-      <Paper className={classes.theaterImagePaper}>
+      <Paper
+        className={`${classes.theaterImagePaper} theater-header`}
+        style={{ width: isTabletOrMobile && '90%' }}
+      >
         <h1>This Week at the Baumann</h1>
       </Paper>
 

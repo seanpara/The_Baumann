@@ -7,11 +7,15 @@ import IconButton from '@material-ui/core/IconButton';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import InstagramIcon from '@material-ui/icons/Instagram';
 
+import { useMediaQuery } from 'react-responsive';
+
 import { useHeaderStyles } from '../styles';
 import { logoImage } from '../images';
 
 export default () => {
   const classes = useHeaderStyles();
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1224px)' });
+
   return (
     <AppBar position="sticky">
       <Toolbar className={classes.toolbar}>
@@ -20,6 +24,7 @@ export default () => {
             display: 'flex',
             justifyContent: 'space-apart',
             alignItems: 'center',
+            fontSize: isTabletOrMobile && '15px',
           }}
         >
           <Link to="/">

@@ -89,6 +89,7 @@ export const useAboutPageStyles = makeStyles((theme) => ({
     },
     background: theme.palette.secondary.main,
     height: '100vh',
+    textAlign: 'center',
   },
   paper: {
     padding: '2% 2% 5% 2%',

@@ -20,7 +20,8 @@ body {
 .MuiPaper-elevation3 {
   font-family: 'Roboto', sans-serif !important;
 }
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+
+.theater-header {
+  font-family: 'Century Gothic' !important;
+  font-weight: bold;
 }
