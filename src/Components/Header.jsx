@@ -57,6 +57,19 @@ export default () => {
         </div>
         <h2>The Baumann</h2>
         <div style={{ display: 'flex', justifyContent: 'space-apart' }}>
+          <Link
+            style={{ textDecoration: 'none', color: 'black' }}
+            to="/contact"
+          >
+            <IconButton
+              size="small"
+              edge="end"
+              color="inherit"
+              aria-label="home"
+            >
+              <Typography variant="h6">Contact</Typography>
+            </IconButton>
+          </Link>
           <IconButton
             size="small"
             edge="end"
