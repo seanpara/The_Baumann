@@ -57,8 +57,6 @@ const ContactPage = () => {
     if (res.status !== 200) {
       const errorMessage = parsedRes.error;
       setErrorMessage(errorMessage);
-    } else {
-      console.log(parsedRes.message);
     }
   };
 
