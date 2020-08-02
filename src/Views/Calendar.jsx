@@ -14,6 +14,16 @@ const Calendar = () => {
         setCalendarEvents(r);
       });
   }, []);
+
+  const handleEventClick = ({
+    event: {
+      _def: {
+        extendedProps: { eventLink },
+      },
+    },
+  }) => {
+    window.open(eventLink);
+  };
   return (
     <div style={{ backgroundColor: '#0d47a1', padding: '5%' }}>
       <div style={{ backgroundColor: '#8c9eff' }}>
@@ -22,7 +32,7 @@ const Calendar = () => {
           initialView="dayGridMonth"
           eventColor="black"
           dateClick={(event) => console.log('date  click', event)}
-          eventClick={(event) => console.log('event  click,', event)}
+          eventClick={handleEventClick}
           events={calendarEvents}
         />
       </div>
