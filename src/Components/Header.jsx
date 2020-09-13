@@ -17,96 +17,105 @@ export default () => {
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1224px)' });
 
   return (
-    <AppBar position="sticky">
-      <Toolbar className={classes.toolbar}>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-apart',
-            alignItems: 'center',
-            fontSize: isTabletOrMobile && '15px',
-          }}
-        >
-          <Link to="/">
-            <IconButton
-              size="small"
-              edge="start"
-              color="inherit"
-              aria-label="home"
+    <div
+      style={{
+        width: isTabletOrMobile && '140%',
+      }}
+    >
+      <AppBar position="sticky">
+        <Toolbar className={classes.toolbar}>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-apart',
+              alignItems: 'center',
+              fontSize: isTabletOrMobile && '15px',
+            }}
+          >
+            <Link to="/">
+              <IconButton
+                size="small"
+                edge="start"
+                color="inherit"
+                aria-label="home"
+              >
+                <img
+                  style={{
+                    width: 'auto',
+                    height: 50,
+                  }}
+                  src={logoImage}
+                  alt=""
+                />
+              </IconButton>
+            </Link>
+            <Link
+              style={{ textDecoration: 'none', color: 'black' }}
+              to="/about"
             >
-              <img
-                style={{
-                  width: 'auto',
-                  height: 50,
-                }}
-                src={logoImage}
-                alt=""
-              />
-            </IconButton>
-          </Link>
-          <Link style={{ textDecoration: 'none', color: 'black' }} to="/about">
+              <IconButton
+                size="small"
+                edge="end"
+                color="inherit"
+                aria-label="home"
+              >
+                <Typography variant="h6">About</Typography>
+              </IconButton>
+            </Link>
+          </div>
+          <h2>The Baumann</h2>
+          <div style={{ display: 'flex', justifyContent: 'space-apart' }}>
+            <Link
+              style={{ textDecoration: 'none', color: 'black' }}
+              to="/calendar"
+            >
+              <IconButton
+                size="small"
+                edge="end"
+                color="inherit"
+                aria-label="home"
+              >
+                <Typography variant="h6">Calendar</Typography>
+              </IconButton>
+            </Link>
+            <Link
+              style={{ textDecoration: 'none', color: 'black' }}
+              to="/contact"
+            >
+              <IconButton
+                size="small"
+                edge="end"
+                color="inherit"
+                aria-label="home"
+              >
+                <Typography variant="h6">Contact</Typography>
+              </IconButton>
+            </Link>
             <IconButton
               size="small"
               edge="end"
-              color="inherit"
               aria-label="home"
+              color="secondary"
+              onClick={() =>
+                window.open('https://www.facebook.com/BaumannNY/', '_blank')
+              }
             >
-              <Typography variant="h6">About</Typography>
+              <FacebookIcon />
             </IconButton>
-          </Link>
-        </div>
-        <h2>The Baumann</h2>
-        <div style={{ display: 'flex', justifyContent: 'space-apart' }}>
-          <Link
-            style={{ textDecoration: 'none', color: 'black' }}
-            to="/calendar"
-          >
             <IconButton
               size="small"
               edge="end"
-              color="inherit"
               aria-label="home"
+              color="secondary"
+              onClick={() =>
+                window.open('https://www.instagram.com/baumannnyc/', '_blank')
+              }
             >
-              <Typography variant="h6">Calendar</Typography>
+              <InstagramIcon />
             </IconButton>
-          </Link>
-          <Link
-            style={{ textDecoration: 'none', color: 'black' }}
-            to="/contact"
-          >
-            <IconButton
-              size="small"
-              edge="end"
-              color="inherit"
-              aria-label="home"
-            >
-              <Typography variant="h6">Contact</Typography>
-            </IconButton>
-          </Link>
-          <IconButton
-            size="small"
-            edge="end"
-            aria-label="home"
-            color="secondary"
-            onClick={() =>
-              window.open('https://www.facebook.com/BaumannNY/', '_blank')
-            }
-          >
-            <FacebookIcon />
-          </IconButton>
-          <IconButton
-            size="small"
-            edge="end"
-            aria-label="home"
-            color="secondary"
-            onClick={() =>
-              window.open('https://www.instagram.com/baumannnyc/', '_blank')
-            }
-          >
-            <InstagramIcon />
-          </IconButton>
-        </div>
-      </Toolbar>
-    </AppBar>
+          </div>
+        </Toolbar>
+      </AppBar>
+    </div>
   );
 };

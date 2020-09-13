@@ -6,7 +6,6 @@ import HomePage from './Views/HomePage';
 import AboutPage from './Views/AboutPage';
 import ContactPage from './Views/ContactPage';
 import Calendar from './Views/Calendar';
-
 import Header from './Components/Header';
 import { theme } from './styles';
 

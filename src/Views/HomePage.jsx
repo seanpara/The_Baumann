@@ -39,9 +39,11 @@ export default () => {
     <div
       style={{
         display: 'flex',
-        justifyContent: 'center',
+        justifyContent: isTabletOrMobile ? 'bottom' : 'space-around',
+        flexDirection: isTabletOrMobile ? 'column' : 'row',
+        alignItems: 'center',
         flexWrap: 'wrap',
-        width: isTabletOrMobile ? '80vw' : '100vw',
+        width: '100%',
       }}
     >
       {siteImages.map(({ text: { eventName }, src, href }) => {
@@ -53,19 +55,30 @@ export default () => {
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              width: isTabletOrMobile ? '40%' : '18%',
-              height: 'auto',
+              width: isTabletOrMobile ? '60%' : '18%',
             }}
           >
-            <IconButton
-              size="small"
-              edge="end"
-              aria-label="home"
-              className={classes.icon}
-              onClick={() => window.open(href, '_blank')}
-            >
-              <TheatersIcon style={{ fontSize: 100 }} />
-            </IconButton>
+            {isTabletOrMobile ? (
+              <img
+                alt=""
+                src={src}
+                style={{
+                  width: '60%',
+                  height: 'auto',
+                }}
+                onClick={() => window.open(href, '_blank')}
+              />
+            ) : (
+              <IconButton
+                size="small"
+                edge="end"
+                aria-label="home"
+                className={classes.icon}
+                onClick={() => window.open(href, '_blank')}
+              >
+                <TheatersIcon style={{ fontSize: 100 }} />
+              </IconButton>
+            )}
             <h3> {eventName}</h3>
           </Paper>
         );
@@ -80,30 +93,38 @@ export default () => {
     <div
       className={classes.root}
       style={{
-        height: isTabletOrMobile && '110vh',
+        display: 'flex',
+        overflow: isTabletOrMobile && 'scroll',
+        width: isTabletOrMobile && '140vw',
+        height: isTabletOrMobile && '100vh',
       }}
     >
-      <Carousel
-        showThumbs={false}
-        onChange={updateCurrentSlide}
-        selectedItem={currentSlide}
-        infiniteLoop
-        autoPlay
-        interval={5000}
-      >
-        {renderImages()}
-      </Carousel>
-      <Paper
-        className={classes.eventDetailPaper}
-        style={{
-          width: isTabletOrMobile && '90%',
-          height: isTabletOrMobile && '10%',
-        }}
-      >
-        <h4 style={{ margin: '1% 0%' }}> {eventName}</h4>
-        <div>{curators}</div>
-        <div>{date}</div>
-      </Paper>
+      {!isTabletOrMobile && (
+        <>
+          <Carousel
+            showThumbs={false}
+            onChange={updateCurrentSlide}
+            selectedItem={currentSlide}
+            infiniteLoop
+            autoPlay
+            interval={5000}
+          >
+            {renderImages()}
+          </Carousel>
+          <Paper
+            className={classes.eventDetailPaper}
+            style={{
+              width: isTabletOrMobile && '90%',
+              height: isTabletOrMobile && '10%',
+            }}
+          >
+            <h4 style={{ margin: '1% 0%' }}> {eventName}</h4>
+            <div>{curators}</div>
+            <div>{date}</div>
+          </Paper>
+        </>
+      )}
+
       <Paper
         className={`${classes.theaterImagePaper} theater-header`}
         style={{ width: isTabletOrMobile && '90%' }}

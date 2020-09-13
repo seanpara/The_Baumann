@@ -99,15 +99,17 @@ export const useAboutPageStyles = makeStyles((theme) => ({
   },
 }));
 
-export const useHeaderStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  toolbar: {
-    justifyContent: 'space-between',
-    opacity: '.8',
-    typography: {
-      fontFamily: '"Amatic SC", cursive',
+export const useHeaderStyles = makeStyles(() => {
+  return {
+    root: {
+      flexGrow: 1,
     },
-  },
-}));
+    toolbar: {
+      justifyContent: 'space-between',
+      opacity: '.8',
+      typography: {
+        fontFamily: '"Amatic SC", cursive',
+      },
+    },
+  };
+});
