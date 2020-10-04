@@ -42,7 +42,7 @@ export default () => {
         justifyContent: isTabletOrMobile ? 'bottom' : 'space-around',
         flexDirection: isTabletOrMobile ? 'column' : 'row',
         alignItems: 'center',
-        flexWrap: 'wrap',
+        flexWrap: isTabletOrMobile ? 'nowrap' : 'wrap',
         width: '100%',
       }}
     >
@@ -95,7 +95,7 @@ export default () => {
       style={{
         display: 'flex',
         overflow: isTabletOrMobile && 'scroll',
-        width: isTabletOrMobile && '140vw',
+        width: isTabletOrMobile && '100vw',
         height: isTabletOrMobile && '100vh',
       }}
     >
@@ -118,20 +118,18 @@ export default () => {
               height: isTabletOrMobile && '10%',
             }}
           >
-            <h4 style={{ margin: '1% 0%' }}> {eventName}</h4>
+            <h4 style={{ margin: '1% 0%' }}>{eventName}</h4>
             <div>{curators}</div>
             <div>{date}</div>
           </Paper>
         </>
       )}
-
       <Paper
         className={`${classes.theaterImagePaper} theater-header`}
-        style={{ width: isTabletOrMobile && '90%' }}
+        style={{ padding: isTabletOrMobile && '0% 5%' }}
       >
         <h1>This Week at the Baumann</h1>
       </Paper>
-
       {renderEventList()}
     </div>
   );
