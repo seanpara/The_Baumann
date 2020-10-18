@@ -44,7 +44,7 @@ export default () => {
         alignItems: 'center',
         flexWrap: isTabletOrMobile ? 'nowrap' : 'wrap',
         width: '100%',
-        overflow: isTabletOrMobile && 'scroll',
+        overflow: isTabletOrMobile && 'relative',
       }}
     >
       {siteImages.map(({ text: { eventName }, src, href }) => {

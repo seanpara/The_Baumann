@@ -19,7 +19,7 @@ export default () => {
   return (
     <div
       style={{
-        width: isTabletOrMobile && '140%',
+        width: isTabletOrMobile && '100vw',
       }}
     >
       <AppBar position="sticky">
