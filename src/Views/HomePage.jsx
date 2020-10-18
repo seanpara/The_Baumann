@@ -4,7 +4,7 @@ import { Carousel } from 'react-responsive-carousel';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import TheatersIcon from '@material-ui/icons/Theaters';
-import { useMediaQuery } from 'react-responsive';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 import { useHomePageStyles } from '../styles';
 import { siteImages } from '../images';
@@ -13,7 +13,7 @@ export default () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const classes = useHomePageStyles();
 
-  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1224px)' });
+  const isTabletOrMobile = useMediaQuery('(max-width: 1224px)');
 
   const updateCurrentSlide = (index) => {
     if (currentSlide !== index) {
@@ -95,7 +95,7 @@ export default () => {
       style={{
         display: 'flex',
         overflow: isTabletOrMobile && 'scroll',
-        width: isTabletOrMobile && '100vw',
+        width: '100%',
         height: isTabletOrMobile && '100vh',
       }}
     >
