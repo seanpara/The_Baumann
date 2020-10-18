@@ -96,7 +96,7 @@ export default () => {
         display: 'flex',
         overflow: isTabletOrMobile && 'scroll',
         width: '100%',
-        height: isTabletOrMobile && '100vh',
+        position: 'fixed',
       }}
     >
       {!isTabletOrMobile && (
