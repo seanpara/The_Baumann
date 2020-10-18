@@ -44,6 +44,7 @@ export default () => {
         alignItems: 'center',
         flexWrap: isTabletOrMobile ? 'nowrap' : 'wrap',
         width: '100%',
+        overflow: isTabletOrMobile && 'scroll',
       }}
     >
       {siteImages.map(({ text: { eventName }, src, href }) => {
@@ -94,9 +95,10 @@ export default () => {
       className={classes.root}
       style={{
         display: 'flex',
-        overflow: isTabletOrMobile && 'scroll',
+        overflow: 'scroll',
         width: '100%',
-        position: 'fixed',
+        height: isTabletOrMobile && '100%',
+        position: isTabletOrMobile && 'fixed',
       }}
     >
       {!isTabletOrMobile && (
