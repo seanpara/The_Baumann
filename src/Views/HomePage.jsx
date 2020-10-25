@@ -44,7 +44,7 @@ export default () => {
         alignItems: 'center',
         flexWrap: isTabletOrMobile ? 'nowrap' : 'wrap',
         width: '100%',
-        overflow: isTabletOrMobile && 'scroll',
+        overflowY: isTabletOrMobile && 'auto',
       }}
     >
       {siteImages.map(({ text: { eventName }, src, href }) => {
@@ -52,6 +52,7 @@ export default () => {
           <Paper
             className={classes.paper}
             square
+            key={eventName}
             style={{
               display: 'flex',
               flexDirection: 'column',
@@ -96,9 +97,8 @@ export default () => {
       style={{
         display: 'flex',
         overflow: 'scroll',
-        width: '100%',
-        height: isTabletOrMobile && '100%',
-        position: isTabletOrMobile && 'fixed',
+        width: isTabletOrMobile ? '100vw' : '100%',
+        height: isTabletOrMobile && 'auto',
       }}
     >
       {!isTabletOrMobile && (
