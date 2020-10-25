@@ -97,8 +97,8 @@ export default () => {
       style={{
         display: 'flex',
         overflow: 'scroll',
-        width: isTabletOrMobile ? '100vw' : '100%',
-        height: isTabletOrMobile && 'auto',
+        width: '100%',
+        position: isTabletOrMobile && 'fixed',
       }}
     >
       {!isTabletOrMobile && (
