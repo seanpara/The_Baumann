@@ -96,9 +96,8 @@ export default () => {
       className={classes.root}
       style={{
         display: 'flex',
-        overflow: 'scroll',
+        overflow: 'auto',
         width: '100%',
-        position: isTabletOrMobile && 'fixed',
       }}
     >
       {!isTabletOrMobile && (
