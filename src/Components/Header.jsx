@@ -13,8 +13,9 @@ import { useHeaderStyles } from '../styles';
 import { logoImage } from '../images';
 
 export default () => {
-  const classes = useHeaderStyles();
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1224px)' });
+
+  const classes = useHeaderStyles(isTabletOrMobile);
 
   return (
     <div
@@ -22,119 +23,132 @@ export default () => {
         width: isTabletOrMobile && '100%',
       }}
     >
-      <AppBar position="sticky">
+      <AppBar
+        position="sticky"
+        style={{
+          width: isTabletOrMobile && '100%',
+        }}
+      >
         <Toolbar className={classes.toolbar}>
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-apart',
-              alignItems: 'center',
-              fontSize: isTabletOrMobile && '15px',
-            }}
-          >
-            <Link to="/">
-              <IconButton
-                size="small"
-                edge="start"
-                color="inherit"
-                aria-label="home"
-              >
-                <img
-                  style={{
-                    width: 'auto',
-                    height: 50,
-                  }}
-                  src={logoImage}
-                  alt=""
-                />
-              </IconButton>
-            </Link>
-            <Link
-              style={{ textDecoration: 'none', color: 'black' }}
-              to="/about"
+          {!isTabletOrMobile && (
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-apart',
+                alignItems: 'center',
+                fontSize: isTabletOrMobile && '15px',
+                width: isTabletOrMobile && '100%',
+              }}
             >
-              <IconButton
-                size="small"
-                edge="end"
-                color="inherit"
-                aria-label="home"
+              <Link to="/">
+                <IconButton
+                  size="small"
+                  edge="start"
+                  color="inherit"
+                  aria-label="home"
+                >
+                  <img
+                    style={{
+                      width: 'auto',
+                      height: 50,
+                    }}
+                    src={logoImage}
+                    alt=""
+                  />
+                </IconButton>
+              </Link>
+              <Link
+                style={{ textDecoration: 'none', color: 'black' }}
+                to="/about"
               >
-                <Typography variant="h6">About</Typography>
-              </IconButton>
-            </Link>
-          </div>
+                <IconButton
+                  size="small"
+                  edge="end"
+                  color="inherit"
+                  aria-label="home"
+                >
+                  <Typography variant="h6">About</Typography>
+                </IconButton>
+              </Link>
+            </div>
+          )}
           <h2>The Baumann</h2>
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'flex-end',
-              width: '25%',
-            }}
-          >
+          {!isTabletOrMobile && (
             <div
               style={{
                 display: 'flex',
-                justifyContent: 'space-around',
-                width: '70%',
+                justifyContent: 'flex-end',
+                width: '25%',
               }}
             >
-              <Link
-                style={{ textDecoration: 'none', color: 'black' }}
-                to="/calendar"
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-around',
+                  width: '70%',
+                }}
+              >
+                <Link
+                  style={{ textDecoration: 'none', color: 'black' }}
+                  to="/calendar"
+                >
+                  <IconButton
+                    size="small"
+                    edge="end"
+                    color="inherit"
+                    aria-label="home"
+                  >
+                    <Typography variant="h6">Calendar</Typography>
+                  </IconButton>
+                </Link>
+                <Link
+                  style={{ textDecoration: 'none', color: 'black' }}
+                  to="/contact"
+                >
+                  <IconButton
+                    size="small"
+                    edge="end"
+                    color="inherit"
+                    aria-label="home"
+                  >
+                    <Typography variant="h6">Contact</Typography>
+                  </IconButton>
+                </Link>
+              </div>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-together',
+                }}
               >
                 <IconButton
                   size="small"
                   edge="end"
-                  color="inherit"
                   aria-label="home"
+                  color="secondary"
+                  onClick={() =>
+                    window.open('https://www.facebook.com/BaumannNY/', '_blank')
+                  }
                 >
-                  <Typography variant="h6">Calendar</Typography>
+                  <FacebookIcon />
                 </IconButton>
-              </Link>
-              <Link
-                style={{ textDecoration: 'none', color: 'black' }}
-                to="/contact"
-              >
                 <IconButton
                   size="small"
                   edge="end"
-                  color="inherit"
                   aria-label="home"
+                  color="secondary"
+                  onClick={() =>
+                    window.open(
+                      'https://www.instagram.com/baumannnyc/',
+                      '_blank',
+                    )
+                  }
                 >
-                  <Typography variant="h6">Contact</Typography>
+                  <InstagramIcon />
                 </IconButton>
-              </Link>
+              </div>
             </div>
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'space-together',
-              }}
-            >
-              <IconButton
-                size="small"
-                edge="end"
-                aria-label="home"
-                color="secondary"
-                onClick={() =>
-                  window.open('https://www.facebook.com/BaumannNY/', '_blank')
-                }
-              >
-                <FacebookIcon />
-              </IconButton>
-              <IconButton
-                size="small"
-                edge="end"
-                aria-label="home"
-                color="secondary"
-                onClick={() =>
-                  window.open('https://www.instagram.com/baumannnyc/', '_blank')
-                }
-              >
-                <InstagramIcon />
-              </IconButton>
-            </div>
-          </div>
+          )}
         </Toolbar>
       </AppBar>
     </div>

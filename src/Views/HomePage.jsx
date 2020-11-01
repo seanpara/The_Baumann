@@ -57,7 +57,7 @@ export default () => {
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              width: isTabletOrMobile ? '60%' : '18%',
+              width: isTabletOrMobile ? '80%' : '18%',
             }}
           >
             {isTabletOrMobile ? (
@@ -65,7 +65,7 @@ export default () => {
                 alt=""
                 src={src}
                 style={{
-                  width: '60%',
+                  width: '100%',
                   height: 'auto',
                 }}
                 onClick={() => window.open(href, '_blank')}
@@ -127,7 +127,10 @@ export default () => {
       )}
       <Paper
         className={`${classes.theaterImagePaper} theater-header`}
-        style={{ padding: isTabletOrMobile && '0% 5%' }}
+        style={{
+          padding: isTabletOrMobile && '0% 5%',
+          width: isTabletOrMobile && '80%',
+        }}
       >
         <h1>This Week at the Baumann</h1>
       </Paper>
