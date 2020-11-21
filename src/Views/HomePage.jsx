@@ -97,7 +97,7 @@ export default () => {
       style={{
         display: 'flex',
         overflow: 'auto',
-        height: 'auto',
+        height: '90vh',
         width: '100%',
       }}
     >

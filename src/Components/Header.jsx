@@ -5,7 +5,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import Typography from '@material-ui/core/Typography';
+import MailOutlineIcon from '@material-ui/icons/MailOutline';
 import { Link } from 'react-router-dom';
 import IconButton from '@material-ui/core/IconButton';
 import FacebookIcon from '@material-ui/icons/Facebook';
@@ -23,23 +23,14 @@ export default () => {
 
   const [anchorEl, setAnchorEl] = React.useState(null);
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const capitalize = (word) => {
-    const re = /(\b[a-z](?!\s))/g;
-    return word.replace(re, (x) => x.toUpperCase());
-  };
+  const capitalize = (word) =>
+    word.replace(/(\b[a-z](?!\s))/g, (w) => w.toUpperCase());
 
   return (
     <div
       style={{
         width: isTabletOrMobile && '100%',
+        height: !isTabletOrMobile && '10vh',
       }}
     >
       <AppBar
@@ -55,8 +46,7 @@ export default () => {
                 display: 'flex',
                 justifyContent: 'space-apart',
                 alignItems: 'center',
-                fontSize: isTabletOrMobile && '15px',
-                width: isTabletOrMobile && '100%',
+                width: '40%',
               }}
             >
               <Link to="/">
@@ -80,7 +70,9 @@ export default () => {
                 aria-label="more"
                 aria-controls="long-menu"
                 aria-haspopup="true"
-                onClick={handleClick}
+                onClick={({ currentTarget }) => {
+                  setAnchorEl(currentTarget);
+                }}
                 ref={menuRef}
               >
                 <MoreVertIcon />
@@ -89,10 +81,15 @@ export default () => {
                 id="long-menu"
                 keepMounted
                 open={Boolean(anchorEl)}
-                onClose={handleClose}
+                onClose={() => {
+                  setAnchorEl(null);
+                }}
                 anchorEl={anchorEl}
+                style={{}}
                 PaperProps={{
                   style: {
+                    color: 'white',
+                    backgroundColor: 'grey',
                     width: '20ch',
                   },
                 }}
@@ -116,75 +113,31 @@ export default () => {
               style={{
                 display: 'flex',
                 justifyContent: 'flex-end',
-                width: '25%',
+                width: '40%',
               }}
             >
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-around',
-                  width: '70%',
-                }}
+              <IconButton
+                size="small"
+                edge="end"
+                aria-label="home"
+                color="secondary"
+                onClick={() =>
+                  window.open('https://www.facebook.com/BaumannNY/', '_blank')
+                }
               >
-                <Link
-                  style={{ textDecoration: 'none', color: 'black' }}
-                  to="/calendar"
-                >
-                  <IconButton
-                    size="small"
-                    edge="end"
-                    color="inherit"
-                    aria-label="home"
-                  >
-                    <Typography variant="h6">Calendar</Typography>
-                  </IconButton>
-                </Link>
-                <Link
-                  style={{ textDecoration: 'none', color: 'black' }}
-                  to="/contact"
-                >
-                  <IconButton
-                    size="small"
-                    edge="end"
-                    color="inherit"
-                    aria-label="home"
-                  >
-                    <Typography variant="h6">Contact</Typography>
-                  </IconButton>
-                </Link>
-              </div>
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-together',
-                }}
+                <FacebookIcon />
+              </IconButton>
+              <IconButton
+                size="small"
+                edge="end"
+                aria-label="home"
+                color="secondary"
+                onClick={() =>
+                  window.open('https://www.instagram.com/baumannnyc/', '_blank')
+                }
               >
-                <IconButton
-                  size="small"
-                  edge="end"
-                  aria-label="home"
-                  color="secondary"
-                  onClick={() =>
-                    window.open('https://www.facebook.com/BaumannNY/', '_blank')
-                  }
-                >
-                  <FacebookIcon />
-                </IconButton>
-                <IconButton
-                  size="small"
-                  edge="end"
-                  aria-label="home"
-                  color="secondary"
-                  onClick={() =>
-                    window.open(
-                      'https://www.instagram.com/baumannnyc/',
-                      '_blank',
-                    )
-                  }
-                >
-                  <InstagramIcon />
-                </IconButton>
-              </div>
+                <InstagramIcon />
+              </IconButton>
             </div>
           )}
         </Toolbar>
