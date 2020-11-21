@@ -39,12 +39,12 @@ export default () => {
     <div
       style={{
         display: 'flex',
-        justifyContent: isTabletOrMobile ? 'bottom' : 'space-around',
-        flexDirection: isTabletOrMobile ? 'column' : 'row',
+        justifyContent: 'bottom',
+        flexDirection: 'column',
         alignItems: 'center',
-        flexWrap: isTabletOrMobile ? 'nowrap' : 'wrap',
+        flexWrap: 'nowrap',
         width: '100%',
-        overflowY: isTabletOrMobile && 'auto',
+        overflowY: 'auto',
       }}
     >
       {siteImages.map(({ text: { eventName }, src, href }) => {
@@ -97,6 +97,7 @@ export default () => {
       style={{
         display: 'flex',
         overflow: 'auto',
+        height: 'auto',
         width: '100%',
       }}
     >
@@ -125,16 +126,20 @@ export default () => {
           </Paper>
         </>
       )}
-      <Paper
-        className={`${classes.theaterImagePaper} theater-header`}
-        style={{
-          padding: isTabletOrMobile && '0% 5%',
-          width: isTabletOrMobile && '80%',
-        }}
-      >
-        <h1>This Week at the Baumann</h1>
-      </Paper>
-      {renderEventList()}
+      {isTabletOrMobile && (
+        <>
+          <Paper
+            className={classes.eventDetailPaper}
+            style={{
+              padding: '0% 5%',
+              width: '80%',
+            }}
+          >
+            <h1>This Week at the Baumann</h1>
+          </Paper>
+          {renderEventList()}
+        </>
+      )}
     </div>
   );
 };
