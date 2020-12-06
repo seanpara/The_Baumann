@@ -6,7 +6,7 @@ export const theme = createMuiTheme({
   palette: {
     primary: {
       // light: will be calculated from palette.primary.main,
-      main: '#757575',
+      main: '#FFFFFF',
       light: '#f06292',
       // dark: will be calculated from palette.primary.main,
       // contrastText: will be calculated to contrast with palette.primary.main
@@ -68,9 +68,9 @@ export const useHomePageStyles = makeStyles((theme) => ({
     backgroundSize: 'cover',
   },
   carouselPaper: {
-    background: 'black',
     display: 'flex',
     justifyContent: 'center',
+    height: '80%',
   },
   icon: {
     color: '#f48fb1',
@@ -104,14 +104,6 @@ export const useHeaderStyles = (isTabletOrMobile) =>
     return {
       root: {
         flexGrow: 1,
-      },
-      toolbar: {
-        display: 'flex',
-        justifyContent: isTabletOrMobile ? 'center' : 'space-between',
-        opacity: '.8',
-        typography: {
-          fontFamily: '"Amatic SC", cursive',
-        },
       },
     };
   })();

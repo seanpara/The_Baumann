@@ -21,19 +21,36 @@ export default () => {
     }
   };
 
-  const renderImages = () =>
-    siteImages.map(({ src, href }) => (
-      <Paper className={classes.carouselPaper} key={src}>
-        <a
-          style={{ display: 'flex', justifyContent: 'center', width: '55%' }}
-          href={href || null}
-          target="_blank"
-          rel="noreferrer noopener"
-        >
-          <img style={{ width: '100%', height: 'auto' }} src={src} alt="" />
-        </a>
-      </Paper>
-    ));
+  const renderCarouselImages = () => [
+    <div
+      style={{
+        width: '100%',
+        height: '100%',
+        backgroundColor: '#8c9eff',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+      }}
+    >
+      <div
+        style={{
+          fontSize: '100px',
+        }}
+      >
+        A NEW BAUMANN
+      </div>
+      <div
+        style={{
+          fontSize: '100px',
+        }}
+      >
+        IS COMING
+      </div>
+    </div>,
+    ...siteImages.map(({ src }) => (
+      <img style={{ width: '100%', height: 'auto' }} src={src} alt="" />
+    )),
+  ];
 
   const renderEventList = () => (
     <div
@@ -88,16 +105,13 @@ export default () => {
     </div>
   );
 
-  const {
-    text: { eventName, curators, date },
-  } = siteImages[currentSlide];
   return (
     <div
       className={classes.root}
       style={{
         display: 'flex',
         overflow: 'auto',
-        height: '90vh',
+        height: '100%',
         width: '100%',
       }}
     >
@@ -111,19 +125,8 @@ export default () => {
             autoPlay
             interval={5000}
           >
-            {renderImages()}
+            {renderCarouselImages()}
           </Carousel>
-          <Paper
-            className={classes.eventDetailPaper}
-            style={{
-              width: isTabletOrMobile && '90%',
-              height: isTabletOrMobile && '10%',
-            }}
-          >
-            <h4 style={{ margin: '1% 0%' }}>{eventName}</h4>
-            <div>{curators}</div>
-            <div>{date}</div>
-          </Paper>
         </>
       )}
       {isTabletOrMobile && (

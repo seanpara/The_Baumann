@@ -7,16 +7,6 @@ export const lightsImage =
 export const siteImages = [
   {
     src:
-      'https://baumann-pics.s3.us-east-2.amazonaws.com/PostersForDeployment/89178497_10221691023094291_4919902496610058240_o-1.jpg',
-    text: {
-      eventName: 'On the DL',
-      curators: 'Curated by Just Lunning and Chandler Dean',
-      date: 'March 12',
-    },
-    href: 'https://www.facebook.com/events/844171976067632/',
-  },
-  {
-    src:
       'https://baumann-pics.s3.us-east-2.amazonaws.com/PostersForDeployment/poet.png',
     text: {
       eventName: 'Poetry at The Baumann XII',
