@@ -1,23 +1,19 @@
-import React, { useRef } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import Button from '@material-ui/core/Button';
 
 import IconButton from '@material-ui/core/IconButton';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import InstagramIcon from '@material-ui/icons/Instagram';
 import { useMediaQuery } from 'react-responsive';
 
-import { useHeaderStyles } from '../styles';
-
 export default () => {
+  // hover pseudo selector refuses to work so this is a workaround
+  // hopefully remove later
+  const [hoveringEl, setHoveringEl] = useState('');
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1224px)' });
   const history = useHistory();
-  const classes = useHeaderStyles(isTabletOrMobile);
-
-  const capitalize = (word) =>
-    word.replace(/(\b[a-z](?!\s))/g, (w) => w.toUpperCase());
 
   return (
     <div
@@ -53,20 +49,29 @@ export default () => {
               style={{
                 display: 'flex',
                 justifyContent: 'space-between',
+                alignItems: 'center',
                 width: '20%',
               }}
             >
               {['about', 'calendar', 'contact'].map((routeName) => (
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  style={{ color: 'black' }}
+                <div
+                  style={{
+                    fontSize: '20px',
+                    borderBottom:
+                      hoveringEl === routeName && '5px solid #8c9eff',
+                  }}
+                  onMouseEnter={() => {
+                    setHoveringEl(routeName);
+                  }}
+                  onMouseLeave={() => {
+                    setHoveringEl('');
+                  }}
                   onClick={() => {
                     history.push(`/${routeName}`);
                   }}
                 >
-                  {capitalize(routeName)}
-                </Button>
+                  {routeName.toUpperCase()}
+                </div>
               ))}
               <IconButton
                 size="small"

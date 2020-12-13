@@ -105,5 +105,11 @@ export const useHeaderStyles = (isTabletOrMobile) =>
       root: {
         flexGrow: 1,
       },
+      hoverEle: {
+        fontSize: '20x',
+        '&:hover': {
+          color: 'red',
+        },
+      },
     };
   })();
