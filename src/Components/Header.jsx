@@ -50,13 +50,13 @@ export default () => {
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                width: '20%',
+                width: '25%',
               }}
             >
               {['about', 'calendar', 'contact'].map((routeName) => (
                 <div
                   style={{
-                    fontSize: '20px',
+                    fontSize: '18px',
                     borderBottom:
                       hoveringEl === routeName && '5px solid #8c9eff',
                   }}

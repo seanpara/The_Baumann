@@ -129,20 +129,7 @@ export default () => {
           </Carousel>
         </>
       )}
-      {isTabletOrMobile && (
-        <>
-          <Paper
-            className={classes.eventDetailPaper}
-            style={{
-              padding: '0% 5%',
-              width: '80%',
-            }}
-          >
-            <h1>This Week at the Baumann</h1>
-          </Paper>
-          {renderEventList()}
-        </>
-      )}
+      {isTabletOrMobile && <>{renderEventList()}</>}
     </div>
   );
 };

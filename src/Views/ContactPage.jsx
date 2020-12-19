@@ -58,6 +58,7 @@ const ContactPage = () => {
         body: JSON.stringify(formState),
       },
     );
+    // @ts-ignore
     const { status, error } = res.json();
     if (status !== 200) {
       setErrorMessage(error);

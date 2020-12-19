@@ -1,5 +1,4 @@
 import React from 'react';
-import Paper from '@material-ui/core/Paper';
 
 import { useMediaQuery } from 'react-responsive';
 
@@ -25,7 +24,7 @@ const AboutPage = () => {
         }}
       >
         <div style={{ fontSize: '80px' }}>A Headline</div>
-        <div style={{ fontSize: '80px' }}>A Sub header</div>
+        <div style={{ fontSize: '80px' }}>Hi fergas</div>
         <div style={{ marginTop: '1%' }}>
           The Baumann performance venue was founded in September 2017 by Zivon
           Toplin, Owen Campbell, and Fergus Baumann, members of the Zoo City
