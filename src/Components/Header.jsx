@@ -25,6 +25,7 @@ export default () => {
 
   const handleClose = () => {
     setAnchorEl(null);
+    history.push('contact');
   };
 
   return (
@@ -110,10 +111,19 @@ export default () => {
                 keepMounted
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
+                getContentAnchorEl={null}
                 PaperProps={{
                   style: {
                     width: '20ch',
                   },
+                }}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'center',
+                }}
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'center',
                 }}
               >
                 <MenuItem onClick={handleClose}>Book With Us</MenuItem>

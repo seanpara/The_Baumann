@@ -64,12 +64,12 @@ export default () => {
         overflowY: 'auto',
       }}
     >
-      {siteImages.map(({ text: { eventName }, src, href }) => {
+      {siteImages.map(({ src }) => {
         return (
           <Paper
             className={classes.paper}
             square
-            key={eventName}
+            key={src}
             style={{
               display: 'flex',
               flexDirection: 'column',
@@ -85,7 +85,6 @@ export default () => {
                   width: '100%',
                   height: 'auto',
                 }}
-                onClick={() => window.open(href, '_blank')}
               />
             ) : (
               <IconButton
@@ -93,12 +92,10 @@ export default () => {
                 edge="end"
                 aria-label="home"
                 className={classes.icon}
-                onClick={() => window.open(href, '_blank')}
               >
                 <TheatersIcon style={{ fontSize: 100 }} />
               </IconButton>
             )}
-            <h3> {eventName}</h3>
           </Paper>
         );
       })}
