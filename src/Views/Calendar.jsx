@@ -42,10 +42,12 @@ const Calendar = () => {
             display: 'flex',
             flexDirection: 'column',
             width: 'auto',
+            height: '100%',
+            justifyContent: 'space-apart',
           }}
         >
-          <div style={{ fontSize: '20px' }}>DEC. 25</div>
-          <div style={{ fontSize: '30px' }}>CHRISTMAS</div>
+          <div style={{ fontSize: '25px' }}>DEC. 25</div>
+          <div style={{ fontSize: '35px' }}>CHRISTMAS</div>
 
           <div style={{ width: '90%', alignSelf: 'left' }}>
             Christmas (or the Feast of the Nativity) is an annual festival
@@ -59,12 +61,28 @@ const Calendar = () => {
             octave.Christmas Day is a public holiday in many of the world's
             nations, is celebrated religiously by a majority of Christians, as
             well as culturally by many non-Christians, and forms an integral
-            part of the holiday season centered around it.
+            part of the holiday season centered around it. The traditional
+            Christmas narrative, the Nativity of Jesus, delineated in the New
+            Testament says that Jesus was born in Bethlehem, in accordance with
+            messianic prophecies. When Joseph and Mary arrived in the city, the
+            inn had no room and so they were offered a stable where the Christ
+            Child was soon born, with angels proclaiming this news to shepherds
+            who then further disseminated the information.s
+          </div>
+
+          <div
+            style={{
+              borderTop: 'solid black',
+
+              width: '60%',
+            }}
+          >
+            Lasts All Day: Free Admission
           </div>
         </div>
 
         <img
-          style={{ width: '40%', height: 'autos' }}
+          style={{ width: '50%', height: 'auto' }}
           src="https://upload.wikimedia.org/wikipedia/commons/f/f7/Adolph_Tidemand_Norsk_juleskik.jpg"
           alt=""
         />

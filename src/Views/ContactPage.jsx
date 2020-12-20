@@ -109,34 +109,12 @@ const ContactPage = () => {
         justifyContent: 'flex-start',
       }}
     >
-      <h1
-        style={{
-          fontFamily: 'serif',
-        }}
-      >
-        Please contact us with questions or if you would like to get involved!
-      </h1>
-      <Paper
-        elevation={4}
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          height: '50%',
-          width: '60%',
-          justifyContent: 'space-between',
-          backgroundColor: 'grey',
-        }}
-      >
-        {renderForm()}
-        <Button
-          onClick={handleFormSubmit}
-          variant="contained"
-          style={{ backgroundColor: '#0d47a1' }}
-          disabled={!name || !email}
-        >
-          Submit
-        </Button>
-      </Paper>
+      <h1>How Can We Help You?</h1>
+
+      {renderForm()}
+      <Button onClick={handleFormSubmit} variant="contained">
+        Work With Us
+      </Button>
     </div>
   );
 };

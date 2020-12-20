@@ -23,7 +23,7 @@ const App = () => (
         <Route exact path="/contact">
           <ContactPage />
         </Route>
-        <Route exact path="/calendar">
+        <Route exact path="/events">
           <Calendar />
         </Route>
         <Route exact path="/admin">

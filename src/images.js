@@ -7,7 +7,7 @@ export const lightsImage =
 export const siteImages = [
   {
     src:
-      'https://baumann-pics.s3.us-east-2.amazonaws.com/PostersForDeployment/poet.png',
+      'https://baumann-pics.s3.us-east-2.amazonaws.com/57B3F688-571D-410B-A4B9-45DAFA649609.JPG',
     text: {
       eventName: 'Poetry at The Baumann XII',
       curators: 'Curated by Matthew Rowe',

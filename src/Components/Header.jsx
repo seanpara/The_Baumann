@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 
 import IconButton from '@material-ui/core/IconButton';
 import FacebookIcon from '@material-ui/icons/Facebook';
@@ -14,6 +16,16 @@ export default () => {
   const [hoveringEl, setHoveringEl] = useState('');
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1224px)' });
   const history = useHistory();
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = (currentTarget) => {
+    setAnchorEl(currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
     <div
@@ -50,10 +62,10 @@ export default () => {
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                width: '25%',
+                width: '35%',
               }}
             >
-              {['about', 'calendar', 'contact'].map((routeName) => (
+              {['about', 'events', 'contact'].map((routeName) => (
                 <div
                   style={{
                     fontSize: '18px',
@@ -66,13 +78,47 @@ export default () => {
                   onMouseLeave={() => {
                     setHoveringEl('');
                   }}
-                  onClick={() => {
-                    history.push(`/${routeName}`);
+                  onClick={({ currentTarget }) => {
+                    routeName === 'contact'
+                      ? handleClick(currentTarget)
+                      : history.push(`/${routeName}`);
                   }}
                 >
                   {routeName.toUpperCase()}
                 </div>
               ))}
+              <div
+                style={{
+                  fontSize: '18px',
+                  borderBottom: hoveringEl === 'rentals' && '5px solid #8c9eff',
+                }}
+                onMouseEnter={() => {
+                  setHoveringEl('rentals');
+                }}
+                onMouseLeave={() => {
+                  setHoveringEl('');
+                }}
+                onClick={() =>
+                  window.open('baumannrentals.com/s/order', '_blank')
+                }
+              >
+                EQUIPMENT
+              </div>
+              <Menu
+                id="simple-menu"
+                anchorEl={anchorEl}
+                keepMounted
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+                PaperProps={{
+                  style: {
+                    width: '20ch',
+                  },
+                }}
+              >
+                <MenuItem onClick={handleClose}>Book With Us</MenuItem>
+                <MenuItem onClick={handleClose}>General Contact</MenuItem>
+              </Menu>
               <IconButton
                 size="small"
                 edge="end"
