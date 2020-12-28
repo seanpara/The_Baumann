@@ -51,7 +51,17 @@ export default () => {
             }}
           >
             <div
-              style={{ fontSize: '25px' }}
+              style={{
+                fontSize: '25px',
+                borderBottom:
+                  hoveringEl === 'homeButton' && '5px solid #8c9eff',
+              }}
+              onMouseEnter={() => {
+                setHoveringEl('homeButton');
+              }}
+              onMouseLeave={() => {
+                setHoveringEl('');
+              }}
               onClick={() => {
                 history.push('/');
               }}

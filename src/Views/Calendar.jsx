@@ -1,7 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import FullCalendar from '@fullcalendar/react';
-import interactionPlugin from '@fullcalendar/interaction';
-import dayGridPlugin from '@fullcalendar/daygrid';
 
 const Calendar = () => {
   const [calendarEvents, setCalendarEvents] = useState([]);
@@ -11,7 +8,12 @@ const Calendar = () => {
     )
       .then((r) => r.json())
       .then((r) => {
-        setCalendarEvents(r);
+        setCalendarEvents(
+          r.reduce(
+            (acc, cur) => ({ ...acc, [Object.values(cur)[0].month]: cur }),
+            {},
+          ),
+        );
       });
   }, []);
 
@@ -67,7 +69,7 @@ const Calendar = () => {
             messianic prophecies. When Joseph and Mary arrived in the city, the
             inn had no room and so they were offered a stable where the Christ
             Child was soon born, with angels proclaiming this news to shepherds
-            who then further disseminated the information.s
+            who then further disseminated the information.
           </div>
 
           <div
