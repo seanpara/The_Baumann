@@ -10,12 +10,70 @@ const Calendar = () => {
       .then((r) => {
         setCalendarEvents(
           r.reduce(
-            (acc, cur) => ({ ...acc, [Object.values(cur)[0].month]: cur }),
+            (acc, cur) => ({
+              ...acc,
+              [Object.values(cur)[0].month]: Object.values(cur),
+            }),
             {},
           ),
         );
       });
   }, []);
+
+  const renderEvents = () =>
+    Object.keys(calendarEvents).map((month) => (
+      <>
+        <div
+          style={{
+            borderBottom: 'solid black',
+            width: '100%',
+            marginTop: '5%',
+            marginBottom: '1%',
+          }}
+        >
+          <div style={{ fontSize: '70px' }}> {month.toUpperCase()}</div>
+        </div>
+
+        {calendarEvents[month].map(({ date, description, name }) => {
+          return (
+            <div style={{ display: 'flex', width: '100%' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  width: 'auto',
+                  height: '100%',
+                  justifyContent: 'space-apart',
+                }}
+              >
+                <div style={{ fontSize: '25px' }}>{date}</div>
+                <div style={{ fontSize: '35px' }}>{name.toUpperCase()}</div>
+
+                <div style={{ width: '90%', alignSelf: 'left' }}>
+                  {description}
+                </div>
+
+                <div
+                  style={{
+                    borderTop: 'solid black',
+
+                    width: '60%',
+                  }}
+                >
+                  Lasts All Day: Free Admission
+                </div>
+              </div>
+
+              <img
+                style={{ width: '50%', height: 'auto' }}
+                src="https://upload.wikimedia.org/wikipedia/commons/f/f7/Adolph_Tidemand_Norsk_juleskik.jpg"
+                alt=""
+              />
+            </div>
+          );
+        })}
+      </>
+    ));
 
   return (
     <div
@@ -28,67 +86,7 @@ const Calendar = () => {
         padding: '0% 5%',
       }}
     >
-      <div
-        style={{
-          borderBottom: 'solid black',
-          width: '100%',
-          marginTop: '5%',
-          marginBottom: '1%',
-        }}
-      >
-        <div style={{ fontSize: '70px' }}>DECEMBER</div>
-      </div>
-      <div style={{ display: 'flex', width: '100%' }}>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            width: 'auto',
-            height: '100%',
-            justifyContent: 'space-apart',
-          }}
-        >
-          <div style={{ fontSize: '25px' }}>DEC. 25</div>
-          <div style={{ fontSize: '35px' }}>CHRISTMAS</div>
-
-          <div style={{ width: '90%', alignSelf: 'left' }}>
-            Christmas (or the Feast of the Nativity) is an annual festival
-            commemorating the birth of Jesus Christ, observed primarily on
-            December 25 as a religious and cultural celebration among billions
-            of people around the world. A feast central to the Christian
-            liturgical year, it is preceded by the season of Advent or the
-            Nativity Fast and initiates the season of Christmastide, which
-            historically in the West lasts twelve days and culminates on Twelfth
-            Night; in some traditions, Christmastide includes an
-            octave.Christmas Day is a public holiday in many of the world's
-            nations, is celebrated religiously by a majority of Christians, as
-            well as culturally by many non-Christians, and forms an integral
-            part of the holiday season centered around it. The traditional
-            Christmas narrative, the Nativity of Jesus, delineated in the New
-            Testament says that Jesus was born in Bethlehem, in accordance with
-            messianic prophecies. When Joseph and Mary arrived in the city, the
-            inn had no room and so they were offered a stable where the Christ
-            Child was soon born, with angels proclaiming this news to shepherds
-            who then further disseminated the information.
-          </div>
-
-          <div
-            style={{
-              borderTop: 'solid black',
-
-              width: '60%',
-            }}
-          >
-            Lasts All Day: Free Admission
-          </div>
-        </div>
-
-        <img
-          style={{ width: '50%', height: 'auto' }}
-          src="https://upload.wikimedia.org/wikipedia/commons/f/f7/Adolph_Tidemand_Norsk_juleskik.jpg"
-          alt=""
-        />
-      </div>
+      {renderEvents()}
     </div>
   );
 };
