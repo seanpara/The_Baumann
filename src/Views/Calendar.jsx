@@ -12,7 +12,10 @@ const Calendar = () => {
           r.reduce(
             (acc, cur) => ({
               ...acc,
-              [Object.values(cur)[0].month]: Object.values(cur),
+              [cur[0].month]: [...cur].sort(
+                ({ date: dateA }, { date: dateB }) =>
+                  Date.parse(dateA) - Date.parse(dateB),
+              ),
             }),
             {},
           ),
@@ -29,6 +32,8 @@ const Calendar = () => {
             width: '100%',
             marginTop: '5%',
             marginBottom: '1%',
+            position: 'sticky',
+            top: '0px',
           }}
         >
           <div style={{ fontSize: '70px' }}> {month.toUpperCase()}</div>
@@ -36,7 +41,12 @@ const Calendar = () => {
 
         {calendarEvents[month].map(({ date, description, name }) => {
           return (
-            <div style={{ display: 'flex', width: '100%' }}>
+            <div
+              style={{
+                display: 'flex',
+                width: '100%',
+              }}
+            >
               <div
                 style={{
                   display: 'flex',
@@ -65,7 +75,7 @@ const Calendar = () => {
               </div>
 
               <img
-                style={{ width: '50%', height: 'auto' }}
+                style={{ width: 'auto', height: '90%' }}
                 src="https://upload.wikimedia.org/wikipedia/commons/f/f7/Adolph_Tidemand_Norsk_juleskik.jpg"
                 alt=""
               />
@@ -81,7 +91,7 @@ const Calendar = () => {
         display: 'flex',
         flexDirection: 'column',
         width: 'auto',
-        height: '100vh',
+        height: '100%',
         backgroundColor: '#8c9eff',
         padding: '0% 5%',
       }}
