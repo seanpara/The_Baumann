@@ -10,20 +10,20 @@ import FacebookIcon from '@material-ui/icons/Facebook';
 import InstagramIcon from '@material-ui/icons/Instagram';
 import { useMediaQuery } from 'react-responsive';
 
-export default () => {
+const Header = (): JSX.Element => {
   // hover pseudo selector refuses to work so this is a workaround
   // hopefully remove later
   const [hoveringEl, setHoveringEl] = useState('');
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1224px)' });
   const history = useHistory();
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
-  const handleClick = (currentTarget) => {
+  const handleClick = (currentTarget: HTMLElement): void => {
     setAnchorEl(currentTarget);
   };
 
-  const handleClose = () => {
+  const handleClose = (): void => {
     setAnchorEl(null);
     history.push('contact');
   };
@@ -31,14 +31,14 @@ export default () => {
   return (
     <div
       style={{
-        width: isTabletOrMobile && '100%',
-        height: !isTabletOrMobile && '10vh',
+        width: isTabletOrMobile ? '100%' : '',
+        height: !isTabletOrMobile ? '10vh' : '',
       }}
     >
       <AppBar
         position="sticky"
         style={{
-          width: isTabletOrMobile && '100%',
+          width: isTabletOrMobile ? '100%' : '',
           backgroundColor: 'white',
         }}
       >
@@ -54,15 +54,15 @@ export default () => {
               style={{
                 fontSize: '25px',
                 borderBottom:
-                  hoveringEl === 'homeButton' && '5px solid #8c9eff',
+                  hoveringEl === 'homeButton' ? '5px solid #8c9eff' : '',
               }}
-              onMouseEnter={() => {
+              onMouseEnter={(): void => {
                 setHoveringEl('homeButton');
               }}
-              onMouseLeave={() => {
+              onMouseLeave={(): void => {
                 setHoveringEl('');
               }}
-              onClick={() => {
+              onClick={(): void => {
                 history.push('/');
               }}
             >
@@ -81,15 +81,15 @@ export default () => {
                   style={{
                     fontSize: '18px',
                     borderBottom:
-                      hoveringEl === routeName && '5px solid #8c9eff',
+                      hoveringEl === routeName ? '5px solid #8c9eff' : '',
                   }}
-                  onMouseEnter={() => {
+                  onMouseEnter={(): void => {
                     setHoveringEl(routeName);
                   }}
-                  onMouseLeave={() => {
+                  onMouseLeave={(): void => {
                     setHoveringEl('');
                   }}
-                  onClick={({ currentTarget }) => {
+                  onClick={({ currentTarget }): void => {
                     routeName === 'contact'
                       ? handleClick(currentTarget)
                       : history.push(`/${routeName}`);
@@ -101,17 +101,18 @@ export default () => {
               <div
                 style={{
                   fontSize: '18px',
-                  borderBottom: hoveringEl === 'rentals' && '5px solid #8c9eff',
+                  borderBottom:
+                    hoveringEl === 'rentals' ? '5px solid #8c9eff' : '',
                 }}
-                onMouseEnter={() => {
+                onMouseEnter={(): void => {
                   setHoveringEl('rentals');
                 }}
-                onMouseLeave={() => {
+                onMouseLeave={(): void => {
                   setHoveringEl('');
                 }}
-                onClick={() =>
-                  window.open('baumannrentals.com/s/order', '_blank')
-                }
+                onClick={(): void => {
+                  window.open('https://www.baumannrentals.com/s/order');
+                }}
               >
                 EQUIPMENT
               </div>
@@ -144,9 +145,9 @@ export default () => {
                 edge="end"
                 aria-label="home"
                 color="secondary"
-                onClick={() =>
-                  window.open('https://www.facebook.com/BaumannNY/', '_blank')
-                }
+                onClick={(): void => {
+                  window.open('https://www.facebook.com/BaumannNY/', '_blank');
+                }}
               >
                 <FacebookIcon />
               </IconButton>
@@ -155,9 +156,12 @@ export default () => {
                 edge="end"
                 aria-label="home"
                 color="secondary"
-                onClick={() =>
-                  window.open('https://www.instagram.com/baumannnyc/', '_blank')
-                }
+                onClick={(): void => {
+                  window.open(
+                    'https://www.instagram.com/baumannnyc/',
+                    '_blank',
+                  );
+                }}
               >
                 <InstagramIcon />
               </IconButton>
@@ -168,3 +172,5 @@ export default () => {
     </div>
   );
 };
+
+export default Header;
