@@ -4,7 +4,7 @@ import { useMediaQuery } from 'react-responsive';
 
 import { useAboutPageStyles } from '../styles';
 
-const AboutPage = () => {
+const AboutPage = (): JSX.Element => {
   const classes = useAboutPageStyles();
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1224px)' });
 

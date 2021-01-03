@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Carousel } from 'react-responsive-carousel';
 import Paper from '@material-ui/core/Paper';
-import IconButton from '@material-ui/core/IconButton';
-import TheatersIcon from '@material-ui/icons/Theaters';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 import { useHomePageStyles } from '../styles';
@@ -15,13 +13,13 @@ export default () => {
 
   const isTabletOrMobile = useMediaQuery('(max-width: 1224px)');
 
-  const updateCurrentSlide = (index) => {
+  const updateCurrentSlide = (index: number): void => {
     if (currentSlide !== index) {
       setCurrentSlide(index);
     }
   };
 
-  const renderCarouselImages = () => [
+  const renderCarouselImages = (): JSX.Element[] => [
     <div
       style={{
         width: '100%',
@@ -52,7 +50,7 @@ export default () => {
     )),
   ];
 
-  const renderEventList = () => (
+  const renderEventList = (): JSX.Element => (
     <div
       style={{
         display: 'flex',
@@ -64,41 +62,28 @@ export default () => {
         overflowY: 'auto',
       }}
     >
-      {siteImages.map(({ src }) => {
-        return (
-          <Paper
-            className={classes.paper}
-            square
-            key={src}
+      {siteImages.map(({ src }) => (
+        <Paper
+          className={classes.paper}
+          square
+          key={src}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            width: isTabletOrMobile ? '80%' : '18%',
+          }}
+        >
+          <img
+            alt=""
+            src={src}
             style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              width: isTabletOrMobile ? '80%' : '18%',
+              width: '100%',
+              height: 'auto',
             }}
-          >
-            {isTabletOrMobile ? (
-              <img
-                alt=""
-                src={src}
-                style={{
-                  width: '100%',
-                  height: 'auto',
-                }}
-              />
-            ) : (
-              <IconButton
-                size="small"
-                edge="end"
-                aria-label="home"
-                className={classes.icon}
-              >
-                <TheatersIcon style={{ fontSize: 100 }} />
-              </IconButton>
-            )}
-          </Paper>
-        );
-      })}
+          />
+        </Paper>
+      ))}
     </div>
   );
 
@@ -112,21 +97,20 @@ export default () => {
         width: '100vw',
       }}
     >
-      {!isTabletOrMobile && (
-        <>
-          <Carousel
-            showThumbs={false}
-            onChange={updateCurrentSlide}
-            selectedItem={currentSlide}
-            infiniteLoop
-            autoPlay
-            interval={5000}
-          >
-            {renderCarouselImages()}
-          </Carousel>
-        </>
+      {!isTabletOrMobile ? (
+        <Carousel
+          showThumbs={false}
+          onChange={updateCurrentSlide}
+          selectedItem={currentSlide}
+          infiniteLoop
+          autoPlay
+          interval={5000}
+        >
+          {renderCarouselImages()}
+        </Carousel>
+      ) : (
+        renderEventList()
       )}
-      {isTabletOrMobile && <>{renderEventList()}</>}
     </div>
   );
 };

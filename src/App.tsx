@@ -9,7 +9,7 @@ import Calendar from './Views/Calendar';
 import Header from './Components/Header';
 import { theme } from './styles';
 
-const App = () => (
+const App = (): JSX.Element => (
   <Router>
     <ThemeProvider theme={theme}>
       <Header />

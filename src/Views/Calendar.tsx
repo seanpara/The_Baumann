@@ -1,13 +1,24 @@
 import React, { useState, useEffect } from 'react';
 
-const Calendar = () => {
-  const [calendarEvents, setCalendarEvents] = useState([]);
+interface Event {
+  date: string;
+  month: string;
+  description: string;
+  name: string;
+}
+interface EventMap {
+  [month: string]: Event[];
+}
+
+const Calendar = (): JSX.Element => {
+  const [calendarEvents, setCalendarEvents] = useState<EventMap>({});
+
   useEffect(() => {
     fetch(
       'https://us-central1-baumann-firebase.cloudfunctions.net/getCalendarEvents',
     )
       .then((r) => r.json())
-      .then((r) => {
+      .then((r: Event[][]) => {
         setCalendarEvents(
           r
             .sort(
@@ -15,20 +26,63 @@ const Calendar = () => {
                 Date.parse(monthDateA) - Date.parse(monthDateB),
             )
             .reduce(
-              (acc, cur) => ({
+              (acc: EventMap, cur): EventMap => ({
                 ...acc,
                 [cur[0].month]: [...cur].sort(
                   ({ date: dateA }, { date: dateB }) =>
                     Date.parse(dateA) - Date.parse(dateB),
                 ),
               }),
-              {},
+              {} as EventMap,
             ),
         );
       });
   }, []);
 
-  const renderEvents = () =>
+  const renderSingleEvent = ({
+    date,
+    description,
+    name,
+  }: Event): JSX.Element => (
+    <div
+      style={{
+        display: 'flex',
+        width: '100%',
+        height: '10%',
+        alignItems: 'center',
+      }}
+    >
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          width: 'auto',
+          height: '100%',
+          justifyContent: 'space-apart',
+        }}
+      >
+        <div style={{ fontSize: '25px' }}>{date}</div>
+        <div style={{ fontSize: '35px' }}>{name.toUpperCase()}</div>
+        <div style={{ width: '90%', alignSelf: 'left' }}>{description}</div>
+        <div
+          style={{
+            borderTop: 'solid black',
+
+            width: '60%',
+          }}
+        >
+          Lasts All Day: Free Admission
+        </div>
+      </div>
+      <img
+        style={{ width: 'auto', height: '10%' }}
+        src="https://upload.wikimedia.org/wikipedia/commons/f/f7/Adolph_Tidemand_Norsk_juleskik.jpg"
+        alt=""
+      />
+    </div>
+  );
+
+  const renderEvents = (): JSX.Element[] =>
     Object.keys(calendarEvents).map((month) => (
       <>
         <div
@@ -43,52 +97,9 @@ const Calendar = () => {
             backgroundColor: '#8c9eff',
           }}
         >
-          <div style={{ fontSize: '70px' }}> {month.toUpperCase()}</div>
+          <div style={{ fontSize: '70px' }}>{month.toUpperCase()}</div>
         </div>
-
-        {calendarEvents[month].map(({ date, description, name }) => {
-          return (
-            <div
-              style={{
-                display: 'flex',
-                width: '100%',
-              }}
-            >
-              <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  width: 'auto',
-                  height: '100%',
-                  justifyContent: 'space-apart',
-                }}
-              >
-                <div style={{ fontSize: '25px' }}>{date}</div>
-                <div style={{ fontSize: '35px' }}>{name.toUpperCase()}</div>
-
-                <div style={{ width: '90%', alignSelf: 'left' }}>
-                  {description}
-                </div>
-
-                <div
-                  style={{
-                    borderTop: 'solid black',
-
-                    width: '60%',
-                  }}
-                >
-                  Lasts All Day: Free Admission
-                </div>
-              </div>
-
-              <img
-                style={{ width: 'auto', height: '90%' }}
-                src="https://upload.wikimedia.org/wikipedia/commons/f/f7/Adolph_Tidemand_Norsk_juleskik.jpg"
-                alt=""
-              />
-            </div>
-          );
-        })}
+        {calendarEvents[month].map(renderSingleEvent)}
       </>
     ));
 

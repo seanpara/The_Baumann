@@ -4,10 +4,10 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Button from '@material-ui/core/Button';
-import Paper from '@material-ui/core/Paper';
 
 import { useHomePageStyles } from '../styles';
 
+/// typing will be corrected when this is refactored with the new mock ups
 const intialFormState = {
   name: '',
   email: '',
@@ -19,8 +19,8 @@ const intialFormState = {
 const SET_FIELD = 'SET_FIELD';
 const RESET_FORM = 'RESET_FORM';
 const formReducer = (
-  state,
-  { type, payload: { field = '', value = '' } = {} },
+  state: any,
+  { type, payload: { field = '', value = '' } = {} }: any,
 ) => {
   switch (type) {
     case SET_FIELD:
@@ -40,7 +40,7 @@ const ContactPage = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const classes = useHomePageStyles();
 
-  const handleFieldChange = ({ target: { value } }, field) =>
+  const handleFieldChange = ({ target: { value } }: any, field: any) =>
     // @ts-ignore
     dispatchFormAction({
       type: SET_FIELD,
