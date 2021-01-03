@@ -9,16 +9,21 @@ const Calendar = () => {
       .then((r) => r.json())
       .then((r) => {
         setCalendarEvents(
-          r.reduce(
-            (acc, cur) => ({
-              ...acc,
-              [cur[0].month]: [...cur].sort(
-                ({ date: dateA }, { date: dateB }) =>
-                  Date.parse(dateA) - Date.parse(dateB),
-              ),
-            }),
-            {},
-          ),
+          r
+            .sort(
+              ([{ date: monthDateA }], [{ date: monthDateB }]) =>
+                Date.parse(monthDateA) - Date.parse(monthDateB),
+            )
+            .reduce(
+              (acc, cur) => ({
+                ...acc,
+                [cur[0].month]: [...cur].sort(
+                  ({ date: dateA }, { date: dateB }) =>
+                    Date.parse(dateA) - Date.parse(dateB),
+                ),
+              }),
+              {},
+            ),
         );
       });
   }, []);
@@ -34,6 +39,8 @@ const Calendar = () => {
             marginBottom: '1%',
             position: 'sticky',
             top: '0px',
+            zIndex: 1,
+            backgroundColor: '#8c9eff',
           }}
         >
           <div style={{ fontSize: '70px' }}> {month.toUpperCase()}</div>
