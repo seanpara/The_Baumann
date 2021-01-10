@@ -48,8 +48,7 @@ const Calendar = (): JSX.Element => {
       style={{
         display: 'flex',
         width: '100%',
-        height: '10%',
-        alignItems: 'center',
+        height: '50%',
       }}
     >
       <div
@@ -58,7 +57,7 @@ const Calendar = (): JSX.Element => {
           flexDirection: 'column',
           width: 'auto',
           height: '100%',
-          justifyContent: 'space-apart',
+          justifyContent: 'space-between',
         }}
       >
         <div style={{ fontSize: '25px' }}>{date}</div>
@@ -95,6 +94,7 @@ const Calendar = (): JSX.Element => {
             top: '0px',
             zIndex: 1,
             backgroundColor: '#8c9eff',
+            cursor: 'pointer',
           }}
         >
           <div style={{ fontSize: '70px' }}>{month.toUpperCase()}</div>
