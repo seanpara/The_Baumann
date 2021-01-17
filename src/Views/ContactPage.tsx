@@ -11,30 +11,26 @@ import { useHomePageStyles } from '../styles';
 const intialFormState = {
   name: '',
   email: '',
-  website: '',
-  source: '',
-  message: '',
+  phoneNumber: '',
+  websiteOrSocialMedia: '',
+  useOfSpace: '',
 };
 
 const SET_FIELD = 'SET_FIELD';
 const RESET_FORM = 'RESET_FORM';
-const formReducer = (
-  state: any,
-  { type, payload: { field = '', value = '' } = {} }: any,
-) => {
-  switch (type) {
-    case SET_FIELD:
-      return { ...state, [field]: value };
-    case RESET_FORM:
-      return intialFormState;
-    default:
-      return state;
-  }
-};
 
 const ContactPage = () => {
   const [formState, dispatchFormAction] = useReducer(
-    formReducer,
+    (state: any, { type, payload: { field = '', value = '' } = {} }: any) => {
+      switch (type) {
+        case SET_FIELD:
+          return { ...state, [field]: value };
+        case RESET_FORM:
+          return intialFormState;
+        default:
+          return state;
+      }
+    },
     intialFormState,
   );
   const [errorMessage, setErrorMessage] = useState('');
@@ -65,38 +61,46 @@ const ContactPage = () => {
     }
   };
 
-  const renderForm = () =>
-    Object.keys(formState).map((stateKey) =>
-      stateKey !== 'source' ? (
-        <TextField
-          key={stateKey}
-          required={stateKey === 'name' || stateKey === 'email'}
-          label={stateKey.charAt(0).toUpperCase() + stateKey.slice(1)}
-          value={formState[stateKey]}
-          onChange={(e) => handleFieldChange(e, stateKey)}
-          error={Boolean(errorMessage)}
-          helperText={errorMessage}
-        />
-      ) : (
-        <div
-          key={stateKey}
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            height: '20%',
-            justifyContent: 'space-apart',
-          }}
-        >
-          <FormHelperText>How Did you hear about us?</FormHelperText>
-          <Select
+  const renderForm = (): JSX.Element[] =>
+    Object.keys(formState).map(
+      (stateKey: string): JSX.Element =>
+        stateKey !== 'useOfSpace' ? (
+          <TextField
+            key={stateKey}
+            required={stateKey === 'name' || stateKey === 'email'}
+            style={{
+              width: '90%',
+            }}
+            label={stateKey.charAt(0).toUpperCase() + stateKey.slice(1)}
             value={formState[stateKey]}
             onChange={(e) => handleFieldChange(e, stateKey)}
+            error={Boolean(errorMessage)}
+            helperText={errorMessage}
+          />
+        ) : (
+          <div
+            key={stateKey}
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              height: '20%',
+              justifyContent: 'space-apart',
+              width: '90%',
+            }}
           >
-            <MenuItem value={'friend'}>Friend</MenuItem>
-            <MenuItem value={'online'}>Online</MenuItem>
-          </Select>
-        </div>
-      ),
+            <FormHelperText>
+              How Would You Like to Use our Space?
+            </FormHelperText>
+            <Select
+              value={formState[stateKey]}
+              onChange={(e) => handleFieldChange(e, stateKey)}
+            >
+              <MenuItem value={'event'}>Friend</MenuItem>
+              <MenuItem value={'rental'}>Online</MenuItem>
+              <MenuItem value={'both'}>Both</MenuItem>
+            </Select>
+          </div>
+        ),
     );
   const { name, email } = formState;
   return (
@@ -109,11 +113,13 @@ const ContactPage = () => {
         justifyContent: 'flex-start',
       }}
     >
-      <h1>How Can We Help You?</h1>
-
       {renderForm()}
-      <Button onClick={handleFormSubmit} variant="contained">
-        Work With Us
+      <Button
+        disabled={!name || !email}
+        onClick={handleFormSubmit}
+        variant="contained"
+      >
+        Submit
       </Button>
     </div>
   );
