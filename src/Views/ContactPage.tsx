@@ -6,6 +6,7 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import Button from '@material-ui/core/Button';
 
 import { useHomePageStyles } from '../styles';
+import { TextareaAutosize } from '@material-ui/core';
 
 /// typing will be corrected when this is refactored with the new mock ups
 const intialFormState = {
@@ -14,6 +15,14 @@ const intialFormState = {
   phoneNumber: '',
   websiteOrSocialMedia: '',
   useOfSpace: '',
+  message: '',
+};
+
+const fieldNameToPlaceholderTextMapping: { [key: string]: string } = {
+  name: 'Name',
+  email: 'Email',
+  phoneNumber: 'Phone Number',
+  websiteOrSocialMedia: 'Website or Social Media Link',
 };
 
 const SET_FIELD = 'SET_FIELD';
@@ -61,63 +70,79 @@ const ContactPage = () => {
     }
   };
 
-  const renderForm = (): JSX.Element[] =>
-    Object.keys(formState).map(
-      (stateKey: string): JSX.Element =>
-        stateKey !== 'useOfSpace' ? (
-          <TextField
-            key={stateKey}
-            required={stateKey === 'name' || stateKey === 'email'}
-            style={{
-              width: '90%',
-            }}
-            label={stateKey.charAt(0).toUpperCase() + stateKey.slice(1)}
+  const renderFormField = (stateKey: string): JSX.Element => {
+    if (stateKey === 'useOfSpace') {
+      return (
+        <div
+          key={stateKey}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-apart',
+            width: '80%',
+          }}
+        >
+          <FormHelperText>How Would You Like to Use our Space?</FormHelperText>
+          <Select
+            variant="filled"
             value={formState[stateKey]}
             onChange={(e) => handleFieldChange(e, stateKey)}
-            error={Boolean(errorMessage)}
-            helperText={errorMessage}
-          />
-        ) : (
-          <div
-            key={stateKey}
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              height: '20%',
-              justifyContent: 'space-apart',
-              width: '90%',
-            }}
           >
-            <FormHelperText>
-              How Would You Like to Use our Space?
-            </FormHelperText>
-            <Select
-              value={formState[stateKey]}
-              onChange={(e) => handleFieldChange(e, stateKey)}
-            >
-              <MenuItem value={'event'}>Friend</MenuItem>
-              <MenuItem value={'rental'}>Online</MenuItem>
-              <MenuItem value={'both'}>Both</MenuItem>
-            </Select>
-          </div>
-        ),
+            <MenuItem value={'event'}>Event</MenuItem>
+            <MenuItem value={'rental'}>Rental</MenuItem>
+            <MenuItem value={'both'}>Both</MenuItem>
+          </Select>
+        </div>
+      );
+    }
+
+    if (stateKey === 'message') {
+      return (
+        <TextareaAutosize
+          onChange={(e) => handleFieldChange(e, stateKey)}
+          placeholder="Enter a Message Here"
+        />
+      );
+    }
+
+    return (
+      <TextField
+        key={stateKey}
+        required={stateKey === 'name' || stateKey === 'email'}
+        style={{
+          width: '80%',
+        }}
+        variant="filled"
+        label={fieldNameToPlaceholderTextMapping[stateKey]}
+        value={formState[stateKey]}
+        onChange={(e) => handleFieldChange(e, stateKey)}
+        error={Boolean(errorMessage)}
+        helperText={errorMessage}
+      />
     );
+  };
+
+  const renderForm = (): JSX.Element[] =>
+    Object.keys(formState).map(renderFormField);
+
   const { name, email } = formState;
   return (
     <div
       className={classes.root}
       style={{
-        height: '100vh',
+        height: '90vh',
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'flex-start',
+        justifyContent: 'space-between',
       }}
     >
+      <h1>Book with Us!</h1>
       {renderForm()}
       <Button
         disabled={!name || !email}
         onClick={handleFormSubmit}
         variant="contained"
+        style={{ width: '40%' }}
       >
         Submit
       </Button>
