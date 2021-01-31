@@ -43,6 +43,8 @@ const ContactPage = () => {
     intialFormState,
   );
   const [errorMessage, setErrorMessage] = useState('');
+  const [bookingType, setBookingType] = useState('');
+
   const classes = useHomePageStyles();
 
   const handleFieldChange = ({ target: { value } }: any, field: any) =>
@@ -86,7 +88,10 @@ const ContactPage = () => {
           <Select
             variant="filled"
             value={formState[stateKey]}
-            onChange={(e) => handleFieldChange(e, stateKey)}
+            onChange={(e): void => {
+              handleFieldChange(e, stateKey);
+              setBookingType(e.target.value as string);
+            }}
           >
             <MenuItem value={'event'}>Event</MenuItem>
             <MenuItem value={'rental'}>Rental</MenuItem>
