@@ -1,4 +1,6 @@
-import React, { useReducer, useState } from 'react';
+import React, { useReducer, useState, useEffect } from 'react';
+import { useRecoilState } from 'recoil';
+
 import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -6,9 +8,10 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import Button from '@material-ui/core/Button';
 
 import { useHomePageStyles } from '../styles';
+import { contactState } from '../atoms';
 
 /// typing will be corrected when this is refactored with the new mock ups
-const intialFormState = {
+const bookingFields = {
   name: '',
   email: '',
   phoneNumber: '',
@@ -16,28 +19,12 @@ const intialFormState = {
   estimatedAttendance: null,
   date: '',
 };
-// Event App:
 
-// 1. Description of event*
-// 2. Estimated attendance*
-// 3. Desired date(s) of event*
-// 4. Estimated duration of event
-// 5. Technical requirements
-// 6. Additional details, comments, questions
-
-// Rental App:
-
-// 1. Description of rehearsal/use*
-// 2. Number in party*
-// 3. Date(s
-
-// const fieldNameToPlaceholderTextMapping: { [key: string]: string | number } = {
-//   name: 'Name',
-//   email: 'Email',
-//   phoneNumber: 'Phone Number',
-//   description: '',
-//   date: '',
-// };
+const generalContactFields = {
+  name: '',
+  email: '',
+  message: '',
+};
 
 const fieldNameToPlaceholderTextMapping: { [key: string]: string } = {
   name: 'Name',
@@ -47,6 +34,8 @@ const fieldNameToPlaceholderTextMapping: { [key: string]: string } = {
 };
 
 const SET_FIELD = 'SET_FIELD';
+const SET_ALL_FIELDS = 'SET_ALL_FIELDS';
+
 const RESET_FORM = 'RESET_FORM';
 
 const ContactPage = () => {
@@ -57,18 +46,34 @@ const ContactPage = () => {
           const { field = '', value = '' } = payload;
           return { ...state, [field]: value };
         }
+        case SET_ALL_FIELDS: {
+          return payload;
+        }
         case RESET_FORM:
-          return intialFormState;
+          return generalContactFields;
         default:
           return state;
       }
     },
-    intialFormState,
+    generalContactFields,
   );
   const [errorMessage, setErrorMessage] = useState('');
 
   const classes = useHomePageStyles();
 
+  const [contactType, setContactType] = useRecoilState(contactState);
+
+  useEffect(() => {
+    if (contactType) {
+      dispatchFormAction({
+        type: SET_ALL_FIELDS,
+        payload:
+          contactType === 'general' ? generalContactFields : bookingFields,
+      });
+    }
+  }, [contactType]);
+  console.log('contactType:', contactType);
+  console.log('did this work?', contactType);
   const makeASentence = (word: string): string =>
     word.replace(/^[a-z]|[A-Z]/g, (v, i) =>
       i === 0 ? v.toUpperCase() : ' ' + v.toLowerCase(),

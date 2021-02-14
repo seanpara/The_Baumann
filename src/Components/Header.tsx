@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
+
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Menu from '@material-ui/core/Menu';
@@ -10,6 +12,8 @@ import FacebookIcon from '@material-ui/icons/Facebook';
 import InstagramIcon from '@material-ui/icons/Instagram';
 import { useMediaQuery } from 'react-responsive';
 
+import { contactState } from '../atoms';
+
 const Header = (): JSX.Element => {
   // hover pseudo selector refuses to work so this is a workaround
   // hopefully remove later
@@ -19,13 +23,18 @@ const Header = (): JSX.Element => {
 
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
+  const [, setContactType] = useRecoilState(contactState);
+
   const handleClick = (currentTarget: HTMLElement): void => {
     setAnchorEl(currentTarget);
   };
 
-  const handleClose = (): void => {
+  const handleClose = (contactType?: string): void => {
+    if (contactType) {
+      setContactType(contactType);
+      history.push('contact');
+    }
     setAnchorEl(null);
-    history.push('contact');
   };
 
   return (
@@ -121,7 +130,7 @@ const Header = (): JSX.Element => {
                 anchorEl={anchorEl}
                 keepMounted
                 open={Boolean(anchorEl)}
-                onClose={handleClose}
+                onClose={() => handleClose()}
                 getContentAnchorEl={null}
                 PaperProps={{
                   style: {
@@ -137,8 +146,12 @@ const Header = (): JSX.Element => {
                   horizontal: 'center',
                 }}
               >
-                <MenuItem onClick={handleClose}>Book With Us</MenuItem>
-                <MenuItem onClick={handleClose}>General Contact</MenuItem>
+                <MenuItem onClick={() => handleClose('booking')}>
+                  Book With Us
+                </MenuItem>
+                <MenuItem onClick={() => handleClose('general')}>
+                  General Contact
+                </MenuItem>
               </Menu>
               <IconButton
                 size="small"
