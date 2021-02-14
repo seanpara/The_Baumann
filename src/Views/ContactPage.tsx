@@ -2,9 +2,6 @@ import React, { useReducer, useState, useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 
 import TextField from '@material-ui/core/TextField';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import Button from '@material-ui/core/Button';
 
 import { useHomePageStyles } from '../styles';
@@ -38,9 +35,13 @@ const SET_ALL_FIELDS = 'SET_ALL_FIELDS';
 
 const RESET_FORM = 'RESET_FORM';
 
+interface FormState {
+  [key: string]: string | number | null;
+}
+
 const ContactPage = () => {
   const [formState, dispatchFormAction] = useReducer(
-    (state: any, { type, payload }: any) => {
+    (state: FormState, { type, payload }: { type: string; payload?: any }) => {
       switch (type) {
         case SET_FIELD: {
           const { field = '', value = '' } = payload;
@@ -61,7 +62,7 @@ const ContactPage = () => {
 
   const classes = useHomePageStyles();
 
-  const [contactType, setContactType] = useRecoilState(contactState);
+  const [contactType] = useRecoilState(contactState);
 
   useEffect(() => {
     if (contactType) {
@@ -72,33 +73,29 @@ const ContactPage = () => {
       });
     }
   }, [contactType]);
-  console.log('contactType:', contactType);
-  console.log('did this work?', contactType);
+
   const makeASentence = (word: string): string =>
     word.replace(/^[a-z]|[A-Z]/g, (v, i) =>
       i === 0 ? v.toUpperCase() : ' ' + v.toLowerCase(),
     );
 
   const handleFieldChange = ({ target: { value } }: any, field: any) =>
-    // @ts-ignore
     dispatchFormAction({
       type: SET_FIELD,
       payload: { field, value },
     });
 
   const handleFormSubmit = async () => {
-    // @ts-ignore
     dispatchFormAction({ type: RESET_FORM });
 
-    const res = await fetch(
+    const { status, error } = await fetch(
       'https://us-central1-baumann-firebase.cloudfunctions.net/sendMail',
       {
         method: 'POST',
         body: JSON.stringify(formState),
       },
-    );
-    // @ts-ignore
-    const { status, error } = res.json();
+    ).then((r): Promise<{ status: number; error: string }> => r.json());
+
     if (status !== 200) {
       setErrorMessage(error);
     }
@@ -127,22 +124,16 @@ const ContactPage = () => {
 
   const { name, email } = formState;
   return (
-    <div
-      className={classes.root}
-      style={{
-        height: '90vh',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-      }}
-    >
-      <h1>Book with Us!</h1>
+    <div className={classes.contactPage}>
+      <h1>
+        {contactType === 'booking' ? 'Book with Us!' : 'Send Us a Message!'}
+      </h1>
       {renderForm()}
       <Button
         disabled={!name || !email}
         onClick={handleFormSubmit}
         variant="contained"
-        style={{ width: '40%' }}
+        style={{ width: '40%', marginTop: '5%' }}
       >
         Submit
       </Button>

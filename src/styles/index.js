@@ -29,6 +29,14 @@ export const useHomePageStyles = makeStyles((theme) => ({
     alignItems: 'center',
     background: theme.palette.secondary.main,
   },
+  contactPage: {
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    height: '100vh',
+    background: theme.palette.secondary.main,
+  },
   eventDetailPaper: {
     margin: '1%',
     padding: '0.5%',
