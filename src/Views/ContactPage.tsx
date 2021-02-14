@@ -12,8 +12,9 @@ const intialFormState = {
   name: '',
   email: '',
   phoneNumber: '',
-  websiteOrSocialMedia: '',
-  useOfSpace: '',
+  description: '',
+  estimatedAttendance: null,
+  date: '',
 };
 // Event App:
 
@@ -30,20 +31,13 @@ const intialFormState = {
 // 2. Number in party*
 // 3. Date(s
 
-const eventFields = {
-  description: '',
-  estimatedAttendance: 0,
-  date: '',
-  duration: '',
-  technicalRequirements: '',
-  additionalDetails: '',
-};
-
-const rentalFields = {
-  description: '',
-  numberInParty: '',
-  date: '',
-};
+// const fieldNameToPlaceholderTextMapping: { [key: string]: string | number } = {
+//   name: 'Name',
+//   email: 'Email',
+//   phoneNumber: 'Phone Number',
+//   description: '',
+//   date: '',
+// };
 
 const fieldNameToPlaceholderTextMapping: { [key: string]: string } = {
   name: 'Name',
@@ -54,7 +48,6 @@ const fieldNameToPlaceholderTextMapping: { [key: string]: string } = {
 
 const SET_FIELD = 'SET_FIELD';
 const RESET_FORM = 'RESET_FORM';
-const ADD_NEW_FIELDS = 'ADD_NEW_FIELDS';
 
 const ContactPage = () => {
   const [formState, dispatchFormAction] = useReducer(
@@ -64,11 +57,8 @@ const ContactPage = () => {
           const { field = '', value = '' } = payload;
           return { ...state, [field]: value };
         }
-
         case RESET_FORM:
           return intialFormState;
-        case ADD_NEW_FIELDS:
-          return { ...state, ...payload };
         default:
           return state;
       }
@@ -76,7 +66,6 @@ const ContactPage = () => {
     intialFormState,
   );
   const [errorMessage, setErrorMessage] = useState('');
-  const [bookingType, setBookingType] = useState('');
 
   const classes = useHomePageStyles();
 
@@ -110,57 +99,23 @@ const ContactPage = () => {
     }
   };
 
-  const renderFormField = (stateKey: string): JSX.Element => {
-    if (stateKey === 'useOfSpace') {
-      return (
-        <div
-          key={stateKey}
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-apart',
-            width: '80%',
-          }}
-        >
-          <FormHelperText>How Would You Like to Use our Space?</FormHelperText>
-          <Select
-            variant="filled"
-            value={formState[stateKey]}
-            onChange={(e): void => {
-              handleFieldChange(e, stateKey);
-              dispatchFormAction({
-                type: ADD_NEW_FIELDS,
-                payload:
-                  e.target.value === 'event' ? eventFields : rentalFields,
-              });
-            }}
-          >
-            <MenuItem value={'event'}>Event</MenuItem>
-            <MenuItem value={'rental'}>Rental</MenuItem>
-            <MenuItem value={'both'}>Both</MenuItem>
-          </Select>
-        </div>
-      );
-    }
-
-    return (
-      <TextField
-        key={stateKey}
-        required={stateKey === 'name' || stateKey === 'email'}
-        style={{
-          width: '80%',
-        }}
-        variant="filled"
-        label={
-          fieldNameToPlaceholderTextMapping[stateKey] ?? makeASentence(stateKey)
-        }
-        value={formState[stateKey]}
-        onChange={(e) => handleFieldChange(e, stateKey)}
-        error={Boolean(errorMessage)}
-        helperText={errorMessage}
-      />
-    );
-  };
+  const renderFormField = (stateKey: string): JSX.Element => (
+    <TextField
+      key={stateKey}
+      required={stateKey === 'name' || stateKey === 'email'}
+      style={{
+        width: '80%',
+      }}
+      variant="filled"
+      label={
+        fieldNameToPlaceholderTextMapping[stateKey] ?? makeASentence(stateKey)
+      }
+      value={formState[stateKey]}
+      onChange={(e) => handleFieldChange(e, stateKey)}
+      error={Boolean(errorMessage)}
+      helperText={errorMessage}
+    />
+  );
 
   const renderForm = (): JSX.Element[] =>
     Object.keys(formState).map(renderFormField);
