@@ -13,7 +13,6 @@ const bookingFields = {
   email: '',
   phoneNumber: '',
   description: '',
-  estimatedAttendance: null,
   date: '',
 };
 
@@ -27,6 +26,8 @@ const fieldNameToPlaceholderTextMapping: { [key: string]: string } = {
   name: 'Name',
   email: 'Email',
   phoneNumber: 'Phone Number',
+  description: 'Description of Booking',
+  date: 'Desired Date(s)',
   websiteOrSocialMedia: 'Website or Social Media Link',
 };
 
