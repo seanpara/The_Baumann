@@ -23,7 +23,7 @@ const AboutPage = (): JSX.Element => {
           padding: '5% 3% 0% 3%',
         }}
       >
-        <div style={{ fontSize: '80px' }}>About Us</div>
+        <div style={{ fontSize: '80px' }}>Who Are We?</div>
 
         <div style={{ marginTop: '1%' }}>
           The Baumann performance venue was founded in September 2017 by Zivon
