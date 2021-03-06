@@ -1,24 +1,24 @@
-import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
+import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
+import { useRecoilState } from "recoil";
 
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
 
-import IconButton from '@material-ui/core/IconButton';
-import FacebookIcon from '@material-ui/icons/Facebook';
-import InstagramIcon from '@material-ui/icons/Instagram';
-import { useMediaQuery } from 'react-responsive';
+import IconButton from "@material-ui/core/IconButton";
+import FacebookIcon from "@material-ui/icons/Facebook";
+import InstagramIcon from "@material-ui/icons/Instagram";
+import { useMediaQuery } from "react-responsive";
 
-import { contactState } from '../atoms';
+import { contactState } from "../atoms";
 
 const Header = (): JSX.Element => {
   // hover pseudo selector refuses to work so this is a workaround
   // hopefully remove later
-  const [hoveringEl, setHoveringEl] = useState('');
-  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1224px)' });
+  const [hoveringEl, setHoveringEl] = useState("");
+  const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1224px)" });
   const history = useHistory();
 
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
@@ -32,7 +32,7 @@ const Header = (): JSX.Element => {
   const handleClose = (contactType?: string): void => {
     if (contactType) {
       setContactType(contactType);
-      history.push('contact');
+      history.push("contact");
     }
     setAnchorEl(null);
   };
@@ -40,66 +40,67 @@ const Header = (): JSX.Element => {
   return (
     <div
       style={{
-        width: isTabletOrMobile ? '100%' : '',
-        height: !isTabletOrMobile ? '10vh' : '',
+        width: isTabletOrMobile ? "100%" : "",
+        height: !isTabletOrMobile ? "10%" : "",
       }}
     >
       <AppBar
         position="sticky"
         style={{
-          width: isTabletOrMobile ? '100%' : '',
-          backgroundColor: 'white',
+          width: isTabletOrMobile ? "100%" : "",
+          backgroundColor: "white",
         }}
       >
         <Toolbar>
           <div
             style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              width: '100%',
+              display: "flex",
+              justifyContent: "space-between",
+              width: "100%",
             }}
           >
             <div
               style={{
-                fontSize: '25px',
+                fontSize: "25px",
                 borderBottom:
-                  hoveringEl === 'homeButton' ? '5px solid #8c9eff' : '',
+                  hoveringEl === "homeButton" ? "5px solid #8c9eff" : "",
               }}
               onMouseEnter={(): void => {
-                setHoveringEl('homeButton');
+                setHoveringEl("homeButton");
               }}
               onMouseLeave={(): void => {
-                setHoveringEl('');
+                setHoveringEl("");
               }}
               onClick={(): void => {
-                history.push('/');
+                history.push("/");
               }}
             >
               THE BAUMANN
             </div>
             <div
               style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                width: '35%',
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                width: "35%",
               }}
             >
-              {['about', 'events', 'contact'].map((routeName) => (
+              {["about", "events", "contact"].map((routeName) => (
                 <div
+                  key={routeName}
                   style={{
-                    fontSize: '18px',
+                    fontSize: "18px",
                     borderBottom:
-                      hoveringEl === routeName ? '5px solid #8c9eff' : '',
+                      hoveringEl === routeName ? "5px solid #8c9eff" : "",
                   }}
                   onMouseEnter={(): void => {
                     setHoveringEl(routeName);
                   }}
                   onMouseLeave={(): void => {
-                    setHoveringEl('');
+                    setHoveringEl("");
                   }}
                   onClick={({ currentTarget }): void => {
-                    routeName === 'contact'
+                    routeName === "contact"
                       ? handleClick(currentTarget)
                       : history.push(`/${routeName}`);
                   }}
@@ -109,18 +110,18 @@ const Header = (): JSX.Element => {
               ))}
               <div
                 style={{
-                  fontSize: '18px',
+                  fontSize: "18px",
                   borderBottom:
-                    hoveringEl === 'rentals' ? '5px solid #8c9eff' : '',
+                    hoveringEl === "rentals" ? "5px solid #8c9eff" : "",
                 }}
                 onMouseEnter={(): void => {
-                  setHoveringEl('rentals');
+                  setHoveringEl("rentals");
                 }}
                 onMouseLeave={(): void => {
-                  setHoveringEl('');
+                  setHoveringEl("");
                 }}
                 onClick={(): void => {
-                  window.open('https://www.baumannrentals.com/s/order');
+                  window.open("https://www.baumannrentals.com/s/order");
                 }}
               >
                 EQUIPMENT
@@ -134,22 +135,22 @@ const Header = (): JSX.Element => {
                 getContentAnchorEl={null}
                 PaperProps={{
                   style: {
-                    width: '20ch',
+                    width: "20ch",
                   },
                 }}
                 anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'center',
+                  vertical: "bottom",
+                  horizontal: "center",
                 }}
                 transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'center',
+                  vertical: "top",
+                  horizontal: "center",
                 }}
               >
-                <MenuItem onClick={() => handleClose('booking')}>
+                <MenuItem onClick={() => handleClose("booking")}>
                   Book With Us
                 </MenuItem>
-                <MenuItem onClick={() => handleClose('general')}>
+                <MenuItem onClick={() => handleClose("general")}>
                   General Contact
                 </MenuItem>
               </Menu>
@@ -159,7 +160,7 @@ const Header = (): JSX.Element => {
                 aria-label="home"
                 color="secondary"
                 onClick={(): void => {
-                  window.open('https://www.facebook.com/BaumannNY/', '_blank');
+                  window.open("https://www.facebook.com/BaumannNY/", "_blank");
                 }}
               >
                 <FacebookIcon />
@@ -171,8 +172,8 @@ const Header = (): JSX.Element => {
                 color="secondary"
                 onClick={(): void => {
                   window.open(
-                    'https://www.instagram.com/baumannnyc/',
-                    '_blank',
+                    "https://www.instagram.com/baumannnyc/",
+                    "_blank"
                   );
                 }}
               >
