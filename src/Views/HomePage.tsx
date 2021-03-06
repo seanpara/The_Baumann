@@ -64,6 +64,7 @@ export default () => {
         alignItems: "center",
         flexWrap: "nowrap",
         width: "100%",
+        height: "100%",
         overflowY: "auto",
       }}
     >
@@ -98,8 +99,8 @@ export default () => {
       style={{
         display: "flex",
         overflow: "auto",
-        height: "100vh",
-        width: "100vw",
+        height: "100%",
+        width: "100",
       }}
     >
       {!isTabletOrMobile ? (
