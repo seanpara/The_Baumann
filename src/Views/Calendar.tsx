@@ -24,7 +24,7 @@ const Calendar = (): JSX.Element => {
     <div
       style={{
         display: "flex",
-        height: "50vh",
+        height: "50%",
         justifyContent: "space-between",
         marginBottom: "3%",
       }}
@@ -33,7 +33,7 @@ const Calendar = (): JSX.Element => {
         style={{
           display: "flex",
           flexDirection: "column",
-          width: "50%",
+          width: "65%",
           justifyContent: "flex-start",
         }}
       >
@@ -72,6 +72,7 @@ const Calendar = (): JSX.Element => {
           style={{
             borderBottom: "solid black",
             width: "100%",
+            height: "10",
             marginTop: "5%",
             marginBottom: "1%",
             position: "sticky",
