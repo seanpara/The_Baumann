@@ -6,6 +6,8 @@ import { ThemeProvider } from "@material-ui/core/styles";
 import HomePage from "./Views/HomePage";
 import AboutPage from "./Views/AboutPage";
 import ContactPage from "./Views/ContactPage";
+import AdminView from "./Views/Admin";
+
 import Calendar from "./Views/Calendar";
 import Header from "./Components/Header";
 import { eventState } from "./atoms";
@@ -43,7 +45,7 @@ const App = (): JSX.Element => {
               <Calendar />
             </Route>
             <Route exact path="/admin">
-              <div>This will be a secret admin page</div>
+              <AdminView />
             </Route>
           </div>
         </Switch>
