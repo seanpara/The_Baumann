@@ -121,7 +121,9 @@ const Header = (): JSX.Element => {
                   setHoveringEl("");
                 }}
                 onClick={(): void => {
-                  window.open("https://www.baumannrentals.com/s/order");
+                  window.open(
+                    "https://www.sharegrid.com/p/fergus_baumann?type=rent"
+                  );
                 }}
               >
                 EQUIPMENT
