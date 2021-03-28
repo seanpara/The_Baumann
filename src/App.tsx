@@ -22,6 +22,7 @@ const App = (): JSX.Element => {
       .then((eventMap: EventMap): void => {
         setEvents(eventMap);
       });
+    console.log("test:", process.env.REACT_APP_EXAMPLE_ENV_VAR);
   }, []);
   return (
     <Router>

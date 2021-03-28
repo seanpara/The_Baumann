@@ -108,7 +108,6 @@ const ContactPage = () => {
       required={stateKey === "name" || stateKey === "email"}
       style={{
         width: "80%",
-        backgroundColor: "white",
       }}
       variant="filled"
       label={
