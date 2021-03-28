@@ -9,6 +9,5 @@ ReactDOM.render(
   <RecoilRoot>
     <App />
   </RecoilRoot>,
-
   document.getElementById("root")
 );
