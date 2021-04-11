@@ -3,6 +3,7 @@ import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import firebase, { User } from "firebase";
 
 import { firebaseConfig } from "../firebaseConfig";
+import { Divider } from "@material-ui/core";
 firebase.initializeApp(firebaseConfig);
 
 // Configure FirebaseUI.
@@ -18,7 +19,10 @@ const uiConfig = {
 };
 
 const AdminView = (): JSX.Element => {
-  const [isSignedIn, setIsSignedIn] = useState(false); // Local signed-in state.
+  const [authData, setAuthData] = useState({
+    isSignedIn: false,
+    isValid: false,
+  }); // Local signed-in state.
 
   const validateUser = async (user: User | null): Promise<void> => {
     const { isValid } = await fetch(
@@ -29,11 +33,12 @@ const AdminView = (): JSX.Element => {
       }
     ).then((r) => r.json());
     if (isValid) {
-      setIsSignedIn(true);
+      setAuthData({ isSignedIn: true, isValid: true });
     } else {
-      console.log("invalid user!");
+      setAuthData({ isSignedIn: true, isValid: false });
     }
   };
+  const { isSignedIn, isValid } = authData;
   // Listen to the Firebase Auth state and set the local state.
   useEffect(() => {
     const unregisterAuthObserver = firebase
@@ -46,20 +51,30 @@ const AdminView = (): JSX.Element => {
 
   return (
     <div>
-      {isSignedIn ? (
-        <button
-          onClick={() => {
-            setIsSignedIn(false);
-            firebase.auth().signOut();
-          }}
-        >
-          Sign-out
-        </button>
-      ) : (
+      {isSignedIn && isValid && (
+        <>
+          <h1>You Are Signed In!</h1>
+          <button
+            onClick={() => {
+              setAuthData({ isSignedIn: false, isValid: false });
+              firebase.auth().signOut();
+            }}
+          >
+            Sign-out
+          </button>
+        </>
+      )}
+      {!isSignedIn && !isValid && (
         <StyledFirebaseAuth
           uiConfig={uiConfig}
           firebaseAuth={firebase.auth()}
         />
+      )}
+      {isSignedIn && !isValid && (
+        <h1>
+          You Have Signed in But Aren't Registed, Please Contact Sean Para for
+          Admin Privileges{" "}
+        </h1>
       )}
     </div>
   );
