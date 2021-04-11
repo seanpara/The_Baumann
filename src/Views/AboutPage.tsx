@@ -24,7 +24,6 @@ const AboutPage = (): JSX.Element => {
         }}
       >
         <div style={{ fontSize: "80px" }}>Who Are We?</div>
-
         <div style={{ marginTop: "1%" }}>
           The Baumann performance venue was founded in September 2017 by Zivon
           Toplin, Owen Campbell, and Fergus Baumann, members of the Zoo City
