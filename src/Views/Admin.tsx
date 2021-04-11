@@ -21,8 +21,6 @@ const AdminView = (): JSX.Element => {
   const [isSignedIn, setIsSignedIn] = useState(false); // Local signed-in state.
 
   const validateUser = async (user: User | null): Promise<void> => {
-    console.log(user?.uid);
-
     const { isValid } = await fetch(
       "https://us-central1-baumann-firebase.cloudfunctions.net/validateUser",
       {
