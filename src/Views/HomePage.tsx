@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import Paper from "@material-ui/core/Paper";
@@ -12,6 +12,16 @@ export default () => {
   const classes = useHomePageStyles();
 
   const isTabletOrMobile = useMediaQuery("(max-width: 1224px)");
+  const [artBoxText, setArtBoxText] = useState("");
+  useEffect(() => {
+    fetch(
+      "https://us-central1-baumann-firebase.cloudfunctions.net/getHomePageText"
+    )
+      .then((r) => r.json())
+      .then((r) => {
+        setArtBoxText(r.artBoxText.text);
+      });
+  }, []);
 
   const updateCurrentSlide = (index: number): void => {
     if (currentSlide !== index) {
@@ -33,14 +43,18 @@ export default () => {
       <div
         style={{
           fontSize: "100px",
+          width: "100%",
+          overflowWrap: "normal",
+          display: "flex",
+          justifyContent: "center",
         }}
       >
         <a
-          style={{ color: "inherit" }}
+          style={{ color: "inherit", width: "90%" }}
           target="_blank"
           href="https://www.baumannartsbox.com/products/monthly-artsbox"
         >
-          Subscribe to Our Monthly Artsbox
+          {artBoxText}
         </a>
       </div>
     </div>,
@@ -52,6 +66,7 @@ export default () => {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
+        alignItems: "center",
       }}
     >
       <div
@@ -133,7 +148,7 @@ export default () => {
           onChange={updateCurrentSlide}
           selectedItem={currentSlide}
           infiniteLoop
-          autoPlay
+          autoPlay={false}
           interval={5000}
         >
           {renderCarouselImages()}

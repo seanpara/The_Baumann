@@ -3,7 +3,9 @@ import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import firebase, { User } from "firebase";
 
 import { firebaseConfig } from "../firebaseConfig";
-import { Divider } from "@material-ui/core";
+import TextField from "@material-ui/core/TextField";
+import Button from "@material-ui/core/Button";
+
 firebase.initializeApp(firebaseConfig);
 
 // Configure FirebaseUI.
@@ -23,6 +25,7 @@ const AdminView = (): JSX.Element => {
     isSignedIn: false,
     isValid: false,
   }); // Local signed-in state.
+  const [artBoxText, setArtBoxText] = useState("");
 
   const validateUser = async (user: User | null): Promise<void> => {
     const { isValid } = await fetch(
@@ -49,20 +52,60 @@ const AdminView = (): JSX.Element => {
     return () => unregisterAuthObserver(); // Make sure we un-register Firebase observers when the component unmounts.
   }, []);
 
+  const handleSubmit = () => {
+    fetch(
+      "https://us-central1-baumann-firebase.cloudfunctions.net/setHomePageText",
+      { method: "POST", body: JSON.stringify(artBoxText) }
+    ).then((r) => {
+      setArtBoxText(r.status === 200 ? "" : "Something Went Wrong, tell Sean!");
+    });
+  };
+
   return (
     <div>
       {isSignedIn && isValid && (
-        <>
-          <h1>You Are Signed In!</h1>
-          <button
-            onClick={() => {
-              setAuthData({ isSignedIn: false, isValid: false });
-              firebase.auth().signOut();
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
             }}
           >
-            Sign-out
-          </button>
-        </>
+            {" "}
+            <h1>You Are Signed In!</h1>{" "}
+            <button
+              onClick={() => {
+                setAuthData({ isSignedIn: false, isValid: false });
+                firebase.auth().signOut();
+              }}
+            >
+              Sign-out
+            </button>
+          </div>
+
+          <TextField
+            variant="filled"
+            color="secondary"
+            style={{ width: "50%" }}
+            value={artBoxText}
+            onChange={({ target: { value } }) => {
+              setArtBoxText(value);
+            }}
+          />
+          <Button
+            variant="contained"
+            disabled={!artBoxText}
+            onClick={handleSubmit}
+          >
+            submit
+          </Button>
+        </div>
       )}
       {!isSignedIn && !isValid && (
         <StyledFirebaseAuth
