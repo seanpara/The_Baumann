@@ -35,6 +35,30 @@ export default () => {
           fontSize: "100px",
         }}
       >
+        <a
+          style={{ color: "inherit" }}
+          target="_blank"
+          href="https://www.baumannartsbox.com/products/monthly-artsbox"
+        >
+          Subscribe to Our Monthly Artsbox
+        </a>
+      </div>
+    </div>,
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        backgroundColor: "#8c9eff",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+      }}
+    >
+      <div
+        style={{
+          fontSize: "100px",
+        }}
+      >
         A NEW BAUMANN
       </div>
       <div
