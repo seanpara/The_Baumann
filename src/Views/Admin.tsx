@@ -25,7 +25,13 @@ const AdminView = (): JSX.Element => {
     isSignedIn: false,
     isValid: false,
   }); // Local signed-in state.
+  const { isSignedIn, isValid } = authData;
+
   const [artBoxText, setArtBoxText] = useState("");
+  const [imageAsFile, setImageAsFile] = useState<File | null>(null);
+  const [imageAsUrl, setImageAsUrl] = useState<{ imgUrl: string }>({
+    imgUrl: "",
+  });
 
   const validateUser = async (user: User | null): Promise<void> => {
     const { isValid } = await fetch(
@@ -41,7 +47,6 @@ const AdminView = (): JSX.Element => {
       setAuthData({ isSignedIn: true, isValid: false });
     }
   };
-  const { isSignedIn, isValid } = authData;
   // Listen to the Firebase Auth state and set the local state.
   useEffect(() => {
     const unregisterAuthObserver = firebase
@@ -52,6 +57,9 @@ const AdminView = (): JSX.Element => {
     return () => unregisterAuthObserver(); // Make sure we un-register Firebase observers when the component unmounts.
   }, []);
 
+  useEffect(() => {
+    console.log({ imageAsUrl });
+  }, [imageAsUrl]);
   const handleSubmit = () => {
     fetch(
       "https://us-central1-baumann-firebase.cloudfunctions.net/setHomePageText",
@@ -60,7 +68,49 @@ const AdminView = (): JSX.Element => {
       setArtBoxText(r.status === 200 ? "" : "Something Went Wrong, tell Sean!");
     });
   };
+  const handleFireBaseUpload = (e: any) => {
+    e.preventDefault();
 
+    if (!imageAsFile) {
+      throw new Error("No file to Submit!");
+    }
+
+    const storage = firebase.storage();
+    const uploadTask = storage
+      .ref(`/images/${imageAsFile.name}`)
+      .put(imageAsFile);
+
+    //initiates the firebase side uploading
+    uploadTask.on(
+      "state_changed",
+      (snapShot) => {
+        //takes a snap shot of the process as it is happening
+        console.log(snapShot);
+      },
+      (err) => {
+        //catches the errors
+        console.log(err);
+      },
+      () => {
+        // gets the functions from storage refences the image storage in firebase by the children
+        // gets the download url then sets the image from firebase as the value for the imgUrl key:
+        storage
+          .ref("images")
+          .child(imageAsFile.name)
+          .getDownloadURL()
+          .then((fireBaseUrl) => {
+            setImageAsUrl((prevObject: any) => ({
+              ...prevObject,
+              imgUrl: fireBaseUrl,
+            }));
+          });
+      }
+    );
+  };
+  const handleImageAsFile = (e: any) => {
+    const image = e.target.files[0];
+    setImageAsFile(() => image);
+  };
   return (
     <div>
       {isSignedIn && isValid && (
@@ -77,8 +127,7 @@ const AdminView = (): JSX.Element => {
               alignItems: "center",
             }}
           >
-            {" "}
-            <h1>You Are Signed In!</h1>{" "}
+            <h1>You Are Signed In!</h1>
             <button
               onClick={() => {
                 setAuthData({ isSignedIn: false, isValid: false });
@@ -105,6 +154,15 @@ const AdminView = (): JSX.Element => {
           >
             submit
           </Button>
+
+          <Button variant="contained" component="label">
+            Upload File
+            <input type="file" hidden onChange={handleImageAsFile} />
+          </Button>
+          <Button onClick={handleFireBaseUpload} variant="contained">
+            Submit Upload
+          </Button>
+          {imageAsUrl.imgUrl && <img src={imageAsUrl.imgUrl}></img>}
         </div>
       )}
       {!isSignedIn && !isValid && (
@@ -116,7 +174,7 @@ const AdminView = (): JSX.Element => {
       {isSignedIn && !isValid && (
         <h1>
           You Have Signed in But Aren't Registed, Please Contact Sean Para for
-          Admin Privileges{" "}
+          Admin Privileges
         </h1>
       )}
     </div>
