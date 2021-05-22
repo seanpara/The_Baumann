@@ -23,9 +23,6 @@ const AdminView = (): JSX.Element => {
     file: File;
     name: string;
   } | null>(null);
-  const [imageAsUrl, setImageAsUrl] = useState<{ imgUrl: string }>({
-    imgUrl: "",
-  });
 
   const validateUser = async (user: User | null): Promise<void> => {
     const { isValid } = await fetch(
@@ -51,19 +48,6 @@ const AdminView = (): JSX.Element => {
     return () => unregisterAuthObserver(); // Make sure we un-register Firebase observers when the component unmounts.
   }, []);
 
-  useEffect(() => {
-    storage
-      .ref("images")
-      .child("testingtesting")
-      .getDownloadURL()
-      .then((fireBaseUrl) => {
-        setImageAsUrl((prevObject: any) => ({
-          ...prevObject,
-          imgUrl: fireBaseUrl,
-        }));
-      });
-  }, []);
-
   const handleSubmit = () => {
     fetch(
       "https://us-central1-baumann-firebase.cloudfunctions.net/setHomePageText",
@@ -82,33 +66,6 @@ const AdminView = (): JSX.Element => {
     const uploadTask = storage
       .ref(`/images/${imageAsFile.name}`)
       .put(imageAsFile.file);
-
-    // //initiates the firebase side uploading
-    // uploadTask.on(
-    //   "state_changed",
-    //   (snapShot) => {
-    //     //takes a snap shot of the process as it is happening
-    //     console.log(snapShot);
-    //   },
-    //   (err) => {
-    //     //catches the errors
-    //     console.log(err);
-    //   },
-    //   () => {
-    //     // gets the functions from storage refences the image storage in firebase by the children
-    //     // gets the download url then sets the image from firebase as the value for the imgUrl key:
-    //     storage
-    //       .ref("images")
-    //       .child(imageAsFile.name)
-    //       .getDownloadURL()
-    //       .then((fireBaseUrl) => {
-    //         setImageAsUrl((prevObject: any) => ({
-    //           ...prevObject,
-    //           imgUrl: fireBaseUrl,
-    //         }));
-    //       });
-    //   }
-    // );
   };
   const handleImageAsFile = (
     e: ChangeEvent<HTMLInputElement>,

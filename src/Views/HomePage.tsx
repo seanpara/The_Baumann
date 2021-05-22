@@ -7,7 +7,6 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { storage } from "../firebase";
 import { useHomePageStyles } from "../styles";
 import { imageNames } from "./Admin";
-// import { siteImages } from "../images";
 
 export default () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -15,14 +14,14 @@ export default () => {
   const classes = useHomePageStyles();
 
   const isTabletOrMobile = useMediaQuery("(max-width: 1224px)");
-  const [artBoxText, setArtBoxText] = useState("");
+  const [slideOneData, setSlideOneData] = useState({ text: "", link: "" });
   useEffect(() => {
     fetch(
       "https://us-central1-baumann-firebase.cloudfunctions.net/getHomePageText"
     )
       .then((r) => r.json())
       .then((r) => {
-        setArtBoxText(r.artBoxText.text);
+        setSlideOneData(r.artBoxText);
       });
     const setImages = async () => {
       const imageUrls = await Promise.all(
@@ -43,7 +42,6 @@ export default () => {
       setCurrentSlide(index);
     }
   };
-  console.log({ siteImages });
 
   const renderCarouselImages = (): JSX.Element[] => [
     <div
@@ -68,9 +66,9 @@ export default () => {
         <a
           style={{ color: "inherit", width: "90%" }}
           target="_blank"
-          href="https://www.baumannartsbox.com/products/monthly-artsbox"
+          href={slideOneData.link}
         >
-          {artBoxText}
+          {slideOneData.text}
         </a>
       </div>
     </div>,
