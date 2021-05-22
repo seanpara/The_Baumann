@@ -7,7 +7,7 @@ export const lightsImage =
 export const siteImages = [
   {
     src:
-      "https://firebasestorage.googleapis.com/v0/b/baumann-firebase.appspot.com/o/images%2Fimage1?alt=media&token=075cc758-9a88-452d-b03c-373c9e4c4e68",
+      "https://firebasestorage.googleapis.com/v0/b/baumann-firebase.appspot.com/o/images%2Fimage1?alt=media&token=d7ca7af7-d457-47c4-8c95-c682e5700b7e",
   },
   {
     src:

@@ -6,11 +6,12 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 import { storage } from "../firebase";
 import { useHomePageStyles } from "../styles";
-import { siteImages } from "../images";
+import { imageNames } from "./Admin";
+// import { siteImages } from "../images";
 
 export default () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [image1, setImage1] = useState("");
+  const [siteImages, setSiteImages] = useState<string[]>([]);
   const classes = useHomePageStyles();
 
   const isTabletOrMobile = useMediaQuery("(max-width: 1224px)");
@@ -23,15 +24,18 @@ export default () => {
       .then((r) => {
         setArtBoxText(r.artBoxText.text);
       });
-    const setImage = async () => {
-      const image1Url = await storage
-        .ref("images")
-        .child("image1")
-        .getDownloadURL();
-      setImage1(image1Url);
+    const setImages = async () => {
+      const imageUrls = await Promise.all(
+        imageNames.map(
+          async (imageName: string): Promise<string> =>
+            await storage.ref("images").child(imageName).getDownloadURL()
+        )
+      );
+
+      setSiteImages(imageUrls);
     };
 
-    setImage();
+    setImages();
   }, []);
 
   const updateCurrentSlide = (index: number): void => {
@@ -96,7 +100,7 @@ export default () => {
         IS COMING
       </div>
     </div>,
-    ...siteImages.map(({ src }) => (
+    ...siteImages.map((src) => (
       <img
         key={src}
         style={{ width: "100%", height: "auto" }}
@@ -119,7 +123,7 @@ export default () => {
         overflowY: "auto",
       }}
     >
-      {siteImages.map(({ src }) => (
+      {siteImages.map((src) => (
         <Paper
           className={classes.paper}
           square

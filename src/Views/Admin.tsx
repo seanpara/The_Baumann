@@ -9,7 +9,7 @@ import Button from "@material-ui/core/Button";
 
 // TO DO - clean the hell up
 
-const imageNames = ["image1", "image2", "image3"];
+export const imageNames = ["image1", "image2", "image3"];
 
 const AdminView = (): JSX.Element => {
   const [authData, setAuthData] = useState({
