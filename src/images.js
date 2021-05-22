@@ -6,13 +6,23 @@ export const lightsImage =
 
 export const siteImages = [
   {
-    src: "https://baumann-pics.s3.us-east-2.amazonaws.com/baumann_dancer.jpeg",
-  },
-  {
-    src: "https://baumann-pics.s3.us-east-2.amazonaws.com/baumann_poet.jpeg",
+    src:
+      "https://firebasestorage.googleapis.com/v0/b/baumann-firebase.appspot.com/o/images%2Fimage1?alt=media&token=075cc758-9a88-452d-b03c-373c9e4c4e68",
   },
   {
     src:
-      "https://firebasestorage.googleapis.com/v0/b/baumann-firebase.appspot.com/o/North_America_Map%20copy.jpg?alt=media&token=09dedcec-45d3-4cc8-995f-6da6b75088aa",
+      "https://firebasestorage.googleapis.com/v0/b/baumann-firebase.appspot.com/o/images%2Fimage2?alt=media&token=cd388a5c-25a6-4645-ad01-bc33d7d5f562",
+  },
+  {
+    src:
+      "https://firebasestorage.googleapis.com/v0/b/baumann-firebase.appspot.com/o/images%2Fimage3?alt=media&token=8c3df870-6b1c-4c6f-a314-a00c17fac098",
   },
 ];
+
+// {
+//   src:
+//     "https://firebasestorage.googleapis.com/v0/b/baumann-firebase.appspot.com/o/images%2Fimage2?alt=media&token=cd388a5c-25a6-4645-ad01-bc33d7d5f562",
+// },
+// {
+//   src: "gs://baumann-firebase.appspot.com/images/image3",
+// },

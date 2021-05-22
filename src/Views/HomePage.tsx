@@ -4,11 +4,13 @@ import { Carousel } from "react-responsive-carousel";
 import Paper from "@material-ui/core/Paper";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
+import { storage } from "../firebase";
 import { useHomePageStyles } from "../styles";
 import { siteImages } from "../images";
 
 export default () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [image1, setImage1] = useState("");
   const classes = useHomePageStyles();
 
   const isTabletOrMobile = useMediaQuery("(max-width: 1224px)");
@@ -21,6 +23,15 @@ export default () => {
       .then((r) => {
         setArtBoxText(r.artBoxText.text);
       });
+    const setImage = async () => {
+      const image1Url = await storage
+        .ref("images")
+        .child("image1")
+        .getDownloadURL();
+      setImage1(image1Url);
+    };
+
+    setImage();
   }, []);
 
   const updateCurrentSlide = (index: number): void => {
@@ -28,6 +39,7 @@ export default () => {
       setCurrentSlide(index);
     }
   };
+  console.log({ siteImages });
 
   const renderCarouselImages = (): JSX.Element[] => [
     <div
