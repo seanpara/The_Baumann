@@ -14,14 +14,17 @@ export default () => {
   const classes = useHomePageStyles();
 
   const isTabletOrMobile = useMediaQuery("(max-width: 1224px)");
-  const [slideOneData, setSlideOneData] = useState({ text: "", link: "" });
+  const [slideOneData, setSlideOneData] = useState({
+    text: "Please Subscribe to Our Monthly Artsbox!",
+    link: "",
+  });
   useEffect(() => {
     fetch(
       "https://us-central1-baumann-firebase.cloudfunctions.net/getHomePageText"
     )
       .then((r) => r.json())
-      .then((r) => {
-        setSlideOneData(r.artBoxText);
+      .then(({ slideOneData }) => {
+        setSlideOneData(slideOneData);
       });
     const setImages = async () => {
       const imageUrls = await Promise.all(
