@@ -19,11 +19,9 @@ const AdminView = (): JSX.Element => {
   const { isSignedIn, isValid } = authData;
 
   const [artBoxText, setArtBoxText] = useState("");
-  const [imageAsFile, setImageAsFile] =
-    useState<{
-      file: File;
-      name: string;
-    } | null>(null);
+  const [imageFiles, setImageFiles] = useState<{
+    [imageName: string]: File;
+  }>(imageNames.reduce((acc, imageName) => ({ ...acc, [imageName]: "" }), {}));
 
   const validateUser = async (user: User | null): Promise<void> => {
     const { isValid } = await fetch(
@@ -59,14 +57,11 @@ const AdminView = (): JSX.Element => {
   };
   const handleFireBaseUpload = (e: any) => {
     e.preventDefault();
-
-    if (!imageAsFile) {
-      throw new Error("No file to Submit!");
-    }
-
-    const uploadTask = storage
-      .ref(`/images/${imageAsFile.name}`)
-      .put(imageAsFile.file);
+    Object.entries(imageFiles)
+      .filter(([_, file]) => file)
+      .map(([imageName, imageFile]) =>
+        storage.ref(`/images/${imageName}`).put(imageFile)
+      );
   };
   const handleImageAsFile = (
     e: ChangeEvent<HTMLInputElement>,
@@ -77,7 +72,10 @@ const AdminView = (): JSX.Element => {
     const image: File | null = e?.target?.files[0];
 
     if (image) {
-      setImageAsFile(() => ({ file: image, name: imageName }));
+      setImageFiles((prevImageFiles) => ({
+        ...prevImageFiles,
+        [imageName]: image,
+      }));
     }
   };
   return (
@@ -132,9 +130,6 @@ const AdminView = (): JSX.Element => {
 
           <div
             style={{
-              borderColor: "black",
-              borderWidth: "10px",
-              borderStyle: "dotted",
               width: "60%",
               height: "50%",
               display: "flex",
@@ -142,19 +137,38 @@ const AdminView = (): JSX.Element => {
             }}
           >
             {imageNames.map((name) => (
-              <Button variant="contained" component="label">
-                Upload File {name}
-                <input
-                  type="file"
-                  hidden
-                  onChange={(event) => handleImageAsFile(event, name)}
-                />
-              </Button>
+              <div
+                style={{
+                  borderColor: "black",
+                  borderWidth: "10px",
+                  borderStyle: "dotted",
+                  display: "flex",
+                }}
+              >
+                <Button variant="contained" component="label">
+                  Upload File {name}
+                  <input
+                    type="file"
+                    hidden
+                    onChange={(event) => handleImageAsFile(event, name)}
+                  />
+                </Button>
+                {imageFiles[name] && (
+                  <img
+                    style={{ width: "40vw", height: "auto" }}
+                    src={URL.createObjectURL(imageFiles[name])}
+                  />
+                )}
+              </div>
             ))}
           </div>
 
-          <Button onClick={handleFireBaseUpload} variant="contained">
-            Submit Upload
+          <Button
+            onClick={handleFireBaseUpload}
+            variant="contained"
+            disabled={imageNames.filter((n) => imageFiles[n]).length === 0}
+          >
+            Upload Images
           </Button>
         </div>
       )}
