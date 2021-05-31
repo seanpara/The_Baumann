@@ -50,6 +50,32 @@ export default () => {
     <div
       style={{
         width: "100%",
+        height: "100vh",
+        backgroundColor: "#8c9eff",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <div
+        style={{
+          fontSize: "100px",
+        }}
+      >
+        A NEW BAUMANN
+      </div>
+      <div
+        style={{
+          fontSize: "100px",
+        }}
+      >
+        IS COMING
+      </div>
+    </div>,
+    <div
+      style={{
+        width: "100%",
         height: "100%",
         backgroundColor: "#8c9eff",
         display: "flex",
@@ -75,32 +101,7 @@ export default () => {
         </a>
       </div>
     </div>,
-    <div
-      style={{
-        width: "100%",
-        height: "100%",
-        backgroundColor: "#8c9eff",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <div
-        style={{
-          fontSize: "100px",
-        }}
-      >
-        A NEW BAUMANN
-      </div>
-      <div
-        style={{
-          fontSize: "100px",
-        }}
-      >
-        IS COMING
-      </div>
-    </div>,
+
     ...siteImages.map((src) => (
       <img
         key={src}
@@ -156,7 +157,7 @@ export default () => {
         display: "flex",
         overflow: "auto",
         height: "100%",
-        width: "100",
+        width: "100%",
       }}
     >
       {!isTabletOrMobile ? (
@@ -165,7 +166,8 @@ export default () => {
           onChange={updateCurrentSlide}
           selectedItem={currentSlide}
           infiniteLoop
-          autoPlay={false}
+          autoPlay
+          showStatus={false}
           interval={5000}
         >
           {renderCarouselImages()}
