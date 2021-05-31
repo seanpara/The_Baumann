@@ -10,7 +10,10 @@ import Button from "@material-ui/core/Button";
 // TO DO - clean the hell up
 
 export const imageNames = ["image1", "image2", "image3"];
-
+const initialImageState = imageNames.reduce(
+  (acc, imageName) => ({ ...acc, [imageName]: "" }),
+  {}
+);
 const AdminView = (): JSX.Element => {
   const [authData, setAuthData] = useState({
     isSignedIn: false,
@@ -19,9 +22,10 @@ const AdminView = (): JSX.Element => {
   const { isSignedIn, isValid } = authData;
 
   const [artBoxText, setArtBoxText] = useState("");
-  const [imageFiles, setImageFiles] = useState<{
-    [imageName: string]: File;
-  }>(imageNames.reduce((acc, imageName) => ({ ...acc, [imageName]: "" }), {}));
+  const [imageFiles, setImageFiles] =
+    useState<{
+      [imageName: string]: File;
+    }>(initialImageState);
 
   const validateUser = async (user: User | null): Promise<void> => {
     const { isValid } = await fetch(
@@ -62,6 +66,8 @@ const AdminView = (): JSX.Element => {
       .map(([imageName, imageFile]) =>
         storage.ref(`/images/${imageName}`).put(imageFile)
       );
+
+    setImageFiles(initialImageState);
   };
   const handleImageAsFile = (
     e: ChangeEvent<HTMLInputElement>,
