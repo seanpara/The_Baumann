@@ -19,10 +19,11 @@ const AdminView = (): JSX.Element => {
   const { isSignedIn, isValid } = authData;
 
   const [artBoxText, setArtBoxText] = useState("");
-  const [imageAsFile, setImageAsFile] = useState<{
-    file: File;
-    name: string;
-  } | null>(null);
+  const [imageAsFile, setImageAsFile] =
+    useState<{
+      file: File;
+      name: string;
+    } | null>(null);
 
   const validateUser = async (user: User | null): Promise<void> => {
     const { isValid } = await fetch(
@@ -105,23 +106,29 @@ const AdminView = (): JSX.Element => {
               Sign-out
             </button>
           </div>
-
-          <TextField
-            variant="filled"
-            color="secondary"
-            style={{ width: "50%" }}
-            value={artBoxText}
-            onChange={({ target: { value } }) => {
-              setArtBoxText(value);
-            }}
-          />
-          <Button
-            variant="contained"
-            disabled={!artBoxText}
-            onClick={handleSubmit}
+          <div
+            style={{ display: "flex", width: "100%", justifyContent: "center" }}
           >
-            submit
-          </Button>
+            <TextField
+              variant="filled"
+              color="secondary"
+              style={{ width: "50%" }}
+              value={artBoxText}
+              label="Set Slide 2 Text Here!"
+              onChange={({ target: { value } }) => {
+                setArtBoxText(value);
+              }}
+            />
+            {artBoxText && (
+              <Button
+                variant="contained"
+                disabled={!artBoxText}
+                onClick={handleSubmit}
+              >
+                Submit
+              </Button>
+            )}
+          </div>
 
           <div
             style={{
