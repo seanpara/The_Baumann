@@ -75,6 +75,7 @@ const AdminView = (): JSX.Element => {
       }
     ).then((r) => {
       setArtBoxText(r.status === 200 ? "" : "Something Went Wrong, tell Sean!");
+      setImageFiles(initialImageState);
     });
   };
 
@@ -142,17 +143,7 @@ const AdminView = (): JSX.Element => {
                 setArtBoxText(value);
               }}
             />
-            {artBoxText && (
-              <Button
-                variant="contained"
-                disabled={!artBoxText}
-                onClick={handleSubmit}
-              >
-                Submit
-              </Button>
-            )}
           </div>
-
           <div
             style={{
               width: "60%",
@@ -197,6 +188,7 @@ const AdminView = (): JSX.Element => {
                   color="secondary"
                   style={{ width: "50%" }}
                   label="Set Image Slide Link Here!"
+                  value={imageFiles[name].link}
                   onChange={({ target: { value } }) => {
                     setImageFiles((prevImageFiles) => ({
                       ...prevImageFiles,
@@ -207,14 +199,31 @@ const AdminView = (): JSX.Element => {
               </div>
             ))}
           </div>
-
-          <Button
-            onClick={handleFireBaseUpload}
-            variant="contained"
-            disabled={imageNames.filter((n) => imageFiles[n].file).length === 0}
+          <div
+            style={{
+              display: "flex",
+            }}
           >
-            Upload Images
-          </Button>
+            <Button
+              onClick={handleFireBaseUpload}
+              variant="contained"
+              disabled={
+                imageNames.filter((n) => imageFiles[n].file).length === 0
+              }
+            >
+              Upload Images
+            </Button>
+            <Button
+              variant="contained"
+              disabled={
+                !artBoxText &&
+                imageNames.filter((n) => imageFiles[n].link).length === 0
+              }
+              onClick={handleSubmit}
+            >
+              Upload Text or Links
+            </Button>
+          </div>
         </div>
       )}
       {!isSignedIn && !isValid && (
