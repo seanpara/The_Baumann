@@ -10,7 +10,9 @@ import { imageNames } from "./Admin";
 
 export default () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [siteImages, setSiteImages] = useState<string[]>([]);
+  const [siteImages, setSiteImages] = useState<{ src: string; link: string }[]>(
+    []
+  );
   const classes = useHomePageStyles();
 
   const isTabletOrMobile = useMediaQuery("(max-width: 1224px)");
@@ -19,25 +21,41 @@ export default () => {
     link: "",
   });
   useEffect(() => {
-    fetch(
-      "https://us-central1-baumann-firebase.cloudfunctions.net/getHomePageText"
-    )
-      .then((r) => r.json())
-      .then(({ slideOneData }) => {
-        setSlideOneData(slideOneData);
-      });
-    const setImages = async () => {
-      const imageUrls = await Promise.all(
-        imageNames.map(
-          async (imageName: string): Promise<string> =>
-            await storage.ref("images").child(imageName).getDownloadURL()
-        )
-      );
+    const setData = async () => {
+      const { slideTwoData, otherData } = await fetch(
+        "https://us-central1-baumann-firebase.cloudfunctions.net/getHomePageText"
+        // "http://localhost:5001/baumann-firebase/us-central1/getHomePageText"
+      ).then((r) => r.json());
 
-      setSiteImages(imageUrls);
+      const imageUrls = await Promise.all(
+        imageNames.map(async (imageName: string): Promise<{
+          [key: string]: string;
+        }> => {
+          const src = await storage
+            .ref("images")
+            .child(imageName)
+            .getDownloadURL();
+
+          return { [imageName]: src };
+        })
+      );
+      setSlideOneData(slideTwoData);
+
+      // i am not proud of myself . . .
+      setSiteImages(
+        imageUrls.map((obj) => {
+          const arO = Object.entries(obj).map(([name, src]) => ({
+            src,
+            link: otherData.find((obj2: any) =>
+              Object.keys(obj2).includes(name)
+            )[name].value,
+          }));
+          return arO[0];
+        })
+      );
     };
 
-    setImages();
+    setData();
   }, []);
 
   const updateCurrentSlide = (index: number): void => {
@@ -102,13 +120,19 @@ export default () => {
       </div>
     </div>,
 
-    ...siteImages.map((src) => (
-      <img
-        key={src}
-        style={{ width: "100%", height: "auto" }}
-        src={src}
-        alt=""
-      />
+    ...siteImages.map(({ src, link }) => (
+      <div
+        onClick={(): void => {
+          window.open(link);
+        }}
+      >
+        <img
+          key={src}
+          style={{ width: "100%", height: "auto" }}
+          src={src}
+          alt=""
+        />
+      </div>
     )),
   ];
 
@@ -125,7 +149,7 @@ export default () => {
         overflowY: "auto",
       }}
     >
-      {siteImages.map((src) => (
+      {siteImages.map(({ src }) => (
         <Paper
           className={classes.paper}
           square

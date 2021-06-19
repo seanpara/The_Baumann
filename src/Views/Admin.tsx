@@ -11,20 +11,21 @@ import Button from "@material-ui/core/Button";
 
 export const imageNames = ["image1", "image2", "image3"];
 const initialImageState = imageNames.reduce(
-  (acc, imageName) => ({ ...acc, [imageName]: "" }),
+  (acc, imageName) => ({ ...acc, [imageName]: { file: "", link: "" } }),
   {}
 );
 const AdminView = (): JSX.Element => {
   const [authData, setAuthData] = useState({
     isSignedIn: false,
     isValid: false,
-  }); // Local signed-in state.
+  });
+  // Local signed-in state.
   const { isSignedIn, isValid } = authData;
 
   const [artBoxText, setArtBoxText] = useState("");
   const [imageFiles, setImageFiles] =
     useState<{
-      [imageName: string]: File;
+      [imageName: string]: { file: File; link: string };
     }>(initialImageState);
 
   const validateUser = async (user: User | null): Promise<void> => {
@@ -48,23 +49,42 @@ const AdminView = (): JSX.Element => {
         validateUser(user);
       }
     );
-    return () => unregisterAuthObserver(); // Make sure we un-register Firebase observers when the component unmounts.
+    // Make sure we un-register Firebase observers when the component unmounts.
+    return () => unregisterAuthObserver();
   }, []);
 
   const handleSubmit = () => {
+    const {
+      image1: { link: image1Link },
+      image2: { link: image2Link },
+      image3: { link: image3Link },
+    } = imageFiles;
+    // TODO fix later sry
+    const slide2Text = artBoxText;
     fetch(
       "https://us-central1-baumann-firebase.cloudfunctions.net/setHomePageText",
-      { method: "POST", body: JSON.stringify(artBoxText) }
+      // "http://localhost:5001/baumann-firebase/us-central1/setHomePageText",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          ...(slide2Text && { slide2Text }),
+          ...(image1Link && { image1: image1Link }),
+          ...(image2Link && { image2: image2Link }),
+          ...(image3Link && { image3: image3Link }),
+        }),
+      }
     ).then((r) => {
       setArtBoxText(r.status === 200 ? "" : "Something Went Wrong, tell Sean!");
     });
   };
+
   const handleFireBaseUpload = (e: any) => {
     e.preventDefault();
+
     Object.entries(imageFiles)
-      .filter(([_, file]) => file)
-      .map(([imageName, imageFile]) =>
-        storage.ref(`/images/${imageName}`).put(imageFile)
+      .filter(([_, { file }]) => file)
+      .forEach(([imageName, { file }]) =>
+        storage.ref(`/images/${imageName}`).put(file)
       );
 
     setImageFiles(initialImageState);
@@ -73,14 +93,13 @@ const AdminView = (): JSX.Element => {
     e: ChangeEvent<HTMLInputElement>,
     imageName: string
   ) => {
-    console.log(imageName);
     // @ts-ignore
     const image: File | null = e?.target?.files[0];
 
     if (image) {
       setImageFiles((prevImageFiles) => ({
         ...prevImageFiles,
-        [imageName]: image,
+        [imageName]: { ...prevImageFiles[imageName], file: image },
       }));
     }
   };
@@ -149,22 +168,42 @@ const AdminView = (): JSX.Element => {
                   borderWidth: "10px",
                   borderStyle: "dotted",
                   display: "flex",
+                  flexDirection: "column",
                 }}
               >
-                <Button variant="contained" component="label">
-                  Upload File {name}
-                  <input
-                    type="file"
-                    hidden
-                    onChange={(event) => handleImageAsFile(event, name)}
-                  />
-                </Button>
-                {imageFiles[name] && (
-                  <img
-                    style={{ width: "40vw", height: "auto" }}
-                    src={URL.createObjectURL(imageFiles[name])}
-                  />
-                )}
+                <div
+                  style={{
+                    display: "flex",
+                  }}
+                >
+                  <Button variant="contained" component="label">
+                    Upload File {name}
+                    <input
+                      type="file"
+                      hidden
+                      onChange={(event) => handleImageAsFile(event, name)}
+                    />
+                  </Button>
+
+                  {imageFiles[name].file && (
+                    <img
+                      style={{ width: "40vw", height: "auto" }}
+                      src={URL.createObjectURL(imageFiles[name].file)}
+                    />
+                  )}
+                </div>
+                <TextField
+                  variant="filled"
+                  color="secondary"
+                  style={{ width: "50%" }}
+                  label="Set Image Slide Link Here!"
+                  onChange={({ target: { value } }) => {
+                    setImageFiles((prevImageFiles) => ({
+                      ...prevImageFiles,
+                      [name]: { ...prevImageFiles[name], link: value },
+                    }));
+                  }}
+                />
               </div>
             ))}
           </div>
@@ -172,7 +211,7 @@ const AdminView = (): JSX.Element => {
           <Button
             onClick={handleFireBaseUpload}
             variant="contained"
-            disabled={imageNames.filter((n) => imageFiles[n]).length === 0}
+            disabled={imageNames.filter((n) => imageFiles[n].file).length === 0}
           >
             Upload Images
           </Button>
