@@ -30,7 +30,7 @@ const App = (): JSX.Element => {
       <ThemeProvider theme={theme}>
         <Header />
         <Switch>
-          <div style={{ height: "90%" }}>
+          <div style={{ height: "90%", width: "100%" }}>
             <Route exact path="/">
               <HomePage />
             </Route>

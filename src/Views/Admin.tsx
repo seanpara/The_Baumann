@@ -205,23 +205,19 @@ const AdminView = (): JSX.Element => {
             }}
           >
             <Button
-              onClick={handleFireBaseUpload}
+              onClick={(event) => {
+                handleFireBaseUpload(event);
+
+                handleSubmit();
+              }}
               variant="contained"
               disabled={
-                imageNames.filter((n) => imageFiles[n].file).length === 0
-              }
-            >
-              Upload Images
-            </Button>
-            <Button
-              variant="contained"
-              disabled={
+                imageNames.filter((n) => imageFiles[n].file).length === 0 &&
                 !artBoxText &&
                 imageNames.filter((n) => imageFiles[n].link).length === 0
               }
-              onClick={handleSubmit}
             >
-              Upload Text or Links
+              Submit All
             </Button>
           </div>
         </div>

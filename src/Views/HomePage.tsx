@@ -91,6 +91,21 @@ export default () => {
         IS COMING
       </div>
     </div>,
+    ...siteImages.map(({ src, link }) => (
+      <div
+        style={{ width: "100%", height: "auto" }}
+        onClick={(): void => {
+          window.open(link);
+        }}
+      >
+        <img
+          key={src}
+          style={{ width: "100%", height: "auto" }}
+          src={src}
+          alt=""
+        />
+      </div>
+    )),
     <div
       style={{
         width: "100%",
@@ -119,21 +134,6 @@ export default () => {
         </a>
       </div>
     </div>,
-
-    ...siteImages.map(({ src, link }) => (
-      <div
-        onClick={(): void => {
-          window.open(link);
-        }}
-      >
-        <img
-          key={src}
-          style={{ width: "100%", height: "auto" }}
-          src={src}
-          alt=""
-        />
-      </div>
-    )),
   ];
 
   const renderEventList = (): JSX.Element => (
@@ -191,6 +191,7 @@ export default () => {
           selectedItem={currentSlide}
           infiniteLoop
           autoPlay
+          showArrows
           showStatus={false}
           interval={5000}
         >
