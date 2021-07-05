@@ -22,7 +22,9 @@ const AdminView = (): JSX.Element => {
   // Local signed-in state.
   const { isSignedIn, isValid } = authData;
 
-  const [artBoxText, setArtBoxText] = useState("");
+  const [slide2Text, setSlide2Text] = useState("");
+  const [slide2Link, setSlide2Link] = useState("");
+
   const [imageFiles, setImageFiles] =
     useState<{
       [imageName: string]: { file: File; link: string };
@@ -60,7 +62,6 @@ const AdminView = (): JSX.Element => {
       image3: { link: image3Link },
     } = imageFiles;
     // TODO fix later sry
-    const slide2Text = artBoxText;
     fetch(
       "https://us-central1-baumann-firebase.cloudfunctions.net/setHomePageText",
       // "http://localhost:5001/baumann-firebase/us-central1/setHomePageText",
@@ -68,13 +69,15 @@ const AdminView = (): JSX.Element => {
         method: "POST",
         body: JSON.stringify({
           ...(slide2Text && { slide2Text }),
+          ...(slide2Link && { slide2Link }),
           ...(image1Link && { image1: image1Link }),
           ...(image2Link && { image2: image2Link }),
           ...(image3Link && { image3: image3Link }),
         }),
       }
     ).then((r) => {
-      setArtBoxText(r.status === 200 ? "" : "Something Went Wrong, tell Sean!");
+      setSlide2Text(r.status === 200 ? "" : "Something Went Wrong, tell Sean!");
+      setSlide2Link(r.status === 200 ? "" : "Something Went Wrong, tell Sean!");
       setImageFiles(initialImageState);
     });
   };
@@ -90,6 +93,7 @@ const AdminView = (): JSX.Element => {
 
     setImageFiles(initialImageState);
   };
+
   const handleImageAsFile = (
     e: ChangeEvent<HTMLInputElement>,
     imageName: string
@@ -130,20 +134,7 @@ const AdminView = (): JSX.Element => {
               Sign-out
             </button>
           </div>
-          <div
-            style={{ display: "flex", width: "100%", justifyContent: "center" }}
-          >
-            <TextField
-              variant="filled"
-              color="secondary"
-              style={{ width: "50%" }}
-              value={artBoxText}
-              label="Set Slide 2 Text Here!"
-              onChange={({ target: { value } }) => {
-                setArtBoxText(value);
-              }}
-            />
-          </div>
+
           <div
             style={{
               width: "60%",
@@ -200,6 +191,34 @@ const AdminView = (): JSX.Element => {
             ))}
           </div>
           <div
+            style={{ display: "flex", width: "100%", justifyContent: "center" }}
+          >
+            <TextField
+              variant="filled"
+              color="secondary"
+              style={{ width: "50%" }}
+              value={slide2Text}
+              label="Set Slide 2 Text Here!"
+              onChange={({ target: { value } }) => {
+                setSlide2Text(value);
+              }}
+            />
+          </div>
+          <div
+            style={{ display: "flex", width: "100%", justifyContent: "center" }}
+          >
+            <TextField
+              variant="filled"
+              color="secondary"
+              style={{ width: "50%" }}
+              value={slide2Link}
+              label="Set Slide 2 Link Here!"
+              onChange={({ target: { value } }) => {
+                setSlide2Link(value);
+              }}
+            />
+          </div>
+          <div
             style={{
               display: "flex",
             }}
@@ -213,8 +232,8 @@ const AdminView = (): JSX.Element => {
               variant="contained"
               disabled={
                 imageNames.filter((n) => imageFiles[n].file).length === 0 &&
-                !artBoxText &&
-                imageNames.filter((n) => imageFiles[n].link).length === 0
+                !slide2Link &&
+                !slide2Text
               }
             >
               Submit All

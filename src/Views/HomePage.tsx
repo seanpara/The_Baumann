@@ -16,7 +16,7 @@ export default () => {
   const classes = useHomePageStyles();
 
   const isTabletOrMobile = useMediaQuery("(max-width: 1224px)");
-  const [slideOneData, setSlideOneData] = useState({
+  const [slide2Data, setSlide2Data] = useState({
     text: "Please Subscribe to Our Monthly Artsbox!",
     link: "",
   });
@@ -39,7 +39,13 @@ export default () => {
           return { [imageName]: src };
         })
       );
-      setSlideOneData(slideTwoData);
+
+      setSlide2Data({
+        link: otherData.find((o: any) => Object.keys(o).includes("slide2Link"))
+          .slide2Link.value,
+        text: otherData.find((o: any) => Object.keys(o).includes("slide2Text"))
+          .slide2Text.value,
+      });
 
       // i am not proud of myself . . .
       setSiteImages(
@@ -93,14 +99,13 @@ export default () => {
     </div>,
     ...siteImages.map(({ src, link }) => (
       <div
-        style={{ width: "100%", height: "auto" }}
         onClick={(): void => {
           window.open(link);
         }}
       >
         <img
           key={src}
-          style={{ width: "100%", height: "auto" }}
+          style={{ width: "auto", height: "100%" }}
           src={src}
           alt=""
         />
@@ -114,25 +119,16 @@ export default () => {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
+        alignItems: "center",
       }}
     >
-      <div
-        style={{
-          fontSize: "100px",
-          width: "100%",
-          overflowWrap: "normal",
-          display: "flex",
-          justifyContent: "center",
-        }}
+      <a
+        style={{ color: "inherit", width: "90%", fontSize: "70px" }}
+        target="_blank"
+        href={slide2Data.link}
       >
-        <a
-          style={{ color: "inherit", width: "90%" }}
-          target="_blank"
-          href={slideOneData.link}
-        >
-          {slideOneData.text}
-        </a>
-      </div>
+        {slide2Data.text}
+      </a>
     </div>,
   ];
 
