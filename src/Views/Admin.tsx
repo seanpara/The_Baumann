@@ -1,6 +1,9 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
+import { useRecoilState } from "recoil";
 import { User } from "firebase";
+
+import { authState } from "../atoms";
 
 import { storage, auth, uiConfig } from "../firebase";
 
@@ -15,12 +18,13 @@ const initialImageState = imageNames.reduce(
   {}
 );
 const AdminView = (): JSX.Element => {
-  const [authData, setAuthData] = useState({
-    isSignedIn: false,
-    isValid: false,
-  });
+  // const [authData, setAuthData] = useState({
+  //   isSignedIn: false,
+  //   isValid: false,
+  // });
+  const [{ isSignedIn, isValid }, setAuthData] = useRecoilState(authState);
+
   // Local signed-in state.
-  const { isSignedIn, isValid } = authData;
 
   const [slide2Text, setSlide2Text] = useState("");
   const [slide2Link, setSlide2Link] = useState("");
