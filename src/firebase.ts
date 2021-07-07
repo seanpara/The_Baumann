@@ -18,3 +18,4 @@ export const uiConfig = {
 
 export const storage = firebase.storage();
 export const auth = firebase.auth();
+export const database = firebase.database();

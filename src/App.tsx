@@ -18,8 +18,8 @@ const App = (): JSX.Element => {
   const [, setEvents] = useRecoilState(eventState);
   useEffect(() => {
     fetch(
-      // "https://us-central1-baumann-firebase.cloudfunctions.net/getCalendarEvents"
-      "http://localhost:5001/baumann-firebase/us-central1/getCalendarEvents"
+      "https://us-central1-baumann-firebase.cloudfunctions.net/getCalendarEvents"
+      // "http://localhost:5001/baumann-firebase/us-central1/getCalendarEvents"
     )
       .then((r) => r.json())
       .then((eventList: CalendarEvent[]): void => {

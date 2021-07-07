@@ -39,6 +39,25 @@ const formatDate = (date: string): string => {
   return [year, month, day].join("-");
 };
 
+const writeCalendarEventData = async (
+  eventId: string,
+  valueKey: string,
+  newValue: string
+): Promise<void> => {
+  await fetch(
+    // "https://us-central1-baumann-firebase.cloudfunctions.net/setCalendarEventData",
+    "http://localhost:5001/baumann-firebase/us-central1/setCalendarEventData",
+    {
+      method: "POST",
+      body: JSON.stringify({
+        calendarEventKey: valueKey,
+        calendarEventId: eventId,
+        newValue,
+      }),
+    }
+  );
+};
+
 const Calendar = (): JSX.Element => {
   const [events, setEvents] = useRecoilState(eventState);
   const [{ isSignedIn, isValid }] = useRecoilState(authState);
@@ -49,6 +68,7 @@ const Calendar = (): JSX.Element => {
     valueKey: string,
     eventId: string
   ): void => {
+    // debugger;
     setEvents((prevEvents) => ({
       ...prevEvents,
       [eventId]: { ...prevEvents[eventId], [valueKey]: newValue },
@@ -60,8 +80,10 @@ const Calendar = (): JSX.Element => {
     description,
     name: eventName,
     id,
+    imageSrc,
+    timeOfDay,
   }: CalendarEvent): JSX.Element => {
-    const isEventBeingEdited = eventBeingEdited === eventName;
+    const isEventBeingEdited = eventBeingEdited === id;
     return (
       <div
         style={{
@@ -79,26 +101,30 @@ const Calendar = (): JSX.Element => {
             justifyContent: "flex-start",
           }}
         >
-          {
+          {isSignedIn && isValid && (
             <Button
               onClick={() =>
-                setEventBeingEdited(isEventBeingEdited ? null : eventName)
+                setEventBeingEdited(isEventBeingEdited ? null : id)
               }
               style={{ backgroundColor: "grey" }}
             >
               Edit
             </Button>
-          }
+          )}
           <div style={{ fontSize: "35px" }}>
             {isEventBeingEdited ? (
               <TextField
                 variant="outlined"
                 type="text"
                 label={eventName}
+                helperText="Name"
                 value={eventName}
                 onChange={({ target: { value: newValue } }) =>
                   handleEventChange(newValue, "name", id)
                 }
+                onBlur={({ target: { value: newValue } }) => {
+                  writeCalendarEventData(id, "name", newValue);
+                }}
               />
             ) : (
               eventName.toUpperCase()
@@ -113,6 +139,9 @@ const Calendar = (): JSX.Element => {
                 onChange={({ target: { value: newValue } }) =>
                   handleEventChange(newValue, "date", id)
                 }
+                onBlur={({ target: { value: newValue } }) => {
+                  writeCalendarEventData(id, "date", newValue);
+                }}
               />
             ) : (
               date
@@ -127,6 +156,9 @@ const Calendar = (): JSX.Element => {
                 onChange={({ target: { value: newValue } }) =>
                   handleEventChange(newValue, "description", id)
                 }
+                onBlur={({ target: { value: newValue } }) => {
+                  writeCalendarEventData(id, "description", newValue);
+                }}
               />
             ) : (
               description
@@ -138,20 +170,34 @@ const Calendar = (): JSX.Element => {
             }}
           >
             {isEventBeingEdited ? (
-              <TextField style={{ width: "100%" }} value={"Time to go here"} />
+              <TextField
+                style={{ width: "100%" }}
+                value={timeOfDay}
+                onChange={({ target: { value: newValue } }) =>
+                  handleEventChange(newValue, "timeOfDay", id)
+                }
+                onBlur={({ target: { value: newValue } }) => {
+                  writeCalendarEventData(id, "timeOfDay", newValue);
+                }}
+              />
             ) : (
-              "Lasts All Day: Free Admission"
+              timeOfDay
             )}
           </div>
         </div>
         {isEventBeingEdited ? (
-          <TextField style={{ width: "100%" }} value={"Link to go here"} />
-        ) : (
-          <img
-            style={{ width: "30%", height: "auto" }}
-            src="https://upload.wikimedia.org/wikipedia/commons/f/f7/Adolph_Tidemand_Norsk_juleskik.jpg"
-            alt=""
+          <TextField
+            style={{ width: "100%" }}
+            value={imageSrc}
+            onChange={({ target: { value: newValue } }) =>
+              handleEventChange(newValue, "imageSrc", id)
+            }
+            onBlur={({ target: { value: newValue } }) => {
+              writeCalendarEventData(id, "imageSrc", newValue);
+            }}
           />
+        ) : (
+          <img style={{ width: "30%", height: "auto" }} src={imageSrc} alt="" />
         )}
       </div>
     );
