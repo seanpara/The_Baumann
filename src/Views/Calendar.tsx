@@ -3,15 +3,28 @@ import React, { useState } from "react";
 import { useRecoilState } from "recoil";
 
 import { eventState, authState } from "../atoms";
+// TO DO add proper types sry
+const groupBy = (objArry: any, keyToGroupBy: any) =>
+  objArry.reduce((mappedObjs: any, curentObject: any) => {
+    if (curentObject[keyToGroupBy]) {
+      (mappedObjs[curentObject[keyToGroupBy]] =
+        mappedObjs[curentObject[keyToGroupBy]] || []).push(curentObject);
+    }
 
-interface Event {
+    return mappedObjs;
+  }, {});
+
+export interface CalendarEvent {
   date: string;
   month: string;
   description: string;
   name: string;
+  imageSrc: string;
+  timeOfDay: string;
+  id: string;
 }
 export interface EventMap {
-  [month: string]: Event[];
+  [id: string]: CalendarEvent;
 }
 
 const formatDate = (date: string): string => {
@@ -30,28 +43,24 @@ const Calendar = (): JSX.Element => {
   const [events, setEvents] = useRecoilState(eventState);
   const [{ isSignedIn, isValid }] = useRecoilState(authState);
   const [eventBeingEdited, setEventBeingEdited] = useState<string | null>(null);
-  console.log({ events });
 
   const handleEventChange = (
     newValue: string,
     valueKey: string,
-    month: string,
-    eventName: string
+    eventId: string
   ): void => {
     setEvents((prevEvents) => ({
       ...prevEvents,
-      [month]: prevEvents[month].map((prevEvent) =>
-        prevEvent.name === eventName
-          ? { ...prevEvent, [valueKey]: newValue }
-          : prevEvent
-      ),
+      [eventId]: { ...prevEvents[eventId], [valueKey]: newValue },
     }));
   };
 
-  const renderSingleEvent = (
-    { date, description, name: eventName }: Event,
-    month: string
-  ): JSX.Element => {
+  const renderSingleEvent = ({
+    date,
+    description,
+    name: eventName,
+    id,
+  }: CalendarEvent): JSX.Element => {
     const isEventBeingEdited = eventBeingEdited === eventName;
     return (
       <div
@@ -88,7 +97,7 @@ const Calendar = (): JSX.Element => {
                 label={eventName}
                 value={eventName}
                 onChange={({ target: { value: newValue } }) =>
-                  handleEventChange(newValue, "name", month, eventName)
+                  handleEventChange(newValue, "name", id)
                 }
               />
             ) : (
@@ -102,7 +111,7 @@ const Calendar = (): JSX.Element => {
                 type="date"
                 value={formatDate(date)}
                 onChange={({ target: { value: newValue } }) =>
-                  handleEventChange(newValue, "date", month, eventName)
+                  handleEventChange(newValue, "date", id)
                 }
               />
             ) : (
@@ -116,7 +125,7 @@ const Calendar = (): JSX.Element => {
                 style={{ width: "100%" }}
                 value={description}
                 onChange={({ target: { value: newValue } }) =>
-                  handleEventChange(newValue, "description", month, eventName)
+                  handleEventChange(newValue, "description", id)
                 }
               />
             ) : (
@@ -147,10 +156,20 @@ const Calendar = (): JSX.Element => {
       </div>
     );
   };
-  console.log({ isSignedIn, isValid });
+
+  const getFormattedEvents = () =>
+    Object.entries(
+      groupBy(
+        Object.values(events).sort(
+          ({ date: dateA }, { date: dateB }) =>
+            Date.parse(dateA) - Date.parse(dateB)
+        ),
+        "month"
+      )
+    );
 
   const renderEvents = (): JSX.Element[] =>
-    Object.keys(events).map((month) => (
+    getFormattedEvents().map(([month, eventArray]) => (
       <div
         key={month}
         style={{
@@ -177,7 +196,9 @@ const Calendar = (): JSX.Element => {
         >
           {month.toUpperCase()}
         </div>
-        {events[month].map((event) => renderSingleEvent(event, month))}
+        {(eventArray as CalendarEvent[]).map((event) =>
+          renderSingleEvent(event)
+        )}
       </div>
     ));
 
@@ -192,7 +213,7 @@ const Calendar = (): JSX.Element => {
         padding: "0% 5%",
       }}
     >
-      {renderEvents()}
+      {Object.values(events).length ? renderEvents() : null}
     </div>
   );
 };
