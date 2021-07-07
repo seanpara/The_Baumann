@@ -45,8 +45,8 @@ const writeCalendarEventData = async (
   newValue: string
 ): Promise<void> => {
   await fetch(
-    // "https://us-central1-baumann-firebase.cloudfunctions.net/setCalendarEventData",
-    "http://localhost:5001/baumann-firebase/us-central1/setCalendarEventData",
+    "https://us-central1-baumann-firebase.cloudfunctions.net/setCalendarEventData",
+    // "http://localhost:5001/baumann-firebase/us-central1/setCalendarEventData",
     {
       method: "POST",
       body: JSON.stringify({
