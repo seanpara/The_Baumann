@@ -11,18 +11,27 @@ import AdminView from "./Views/Admin";
 import Calendar from "./Views/Calendar";
 import Header from "./Components/Header";
 import { eventState } from "./atoms";
-import { EventMap } from "./Views/Calendar";
+import { CalendarEvent } from "./Views/Calendar";
 import { theme } from "./styles";
 
 const App = (): JSX.Element => {
   const [, setEvents] = useRecoilState(eventState);
   useEffect(() => {
     fetch(
-      "https://us-central1-baumann-firebase.cloudfunctions.net/getCalendarEvents"
+      // "https://us-central1-baumann-firebase.cloudfunctions.net/getCalendarEvents"
+      "http://localhost:5001/baumann-firebase/us-central1/getCalendarEvents"
     )
       .then((r) => r.json())
-      .then((eventMap: EventMap): void => {
-        setEvents(eventMap);
+      .then((eventList: CalendarEvent[]): void => {
+        setEvents(
+          eventList.reduce(
+            (acc: { [id: string]: CalendarEvent }, cur: CalendarEvent) => {
+              acc[cur.id] = cur;
+              return acc;
+            },
+            {}
+          )
+        );
       });
   }, []);
   return (

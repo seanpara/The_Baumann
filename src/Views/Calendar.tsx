@@ -1,64 +1,175 @@
-import React from "react";
+import { Button, TextareaAutosize, TextField } from "@material-ui/core";
+import React, { useState } from "react";
 import { useRecoilState } from "recoil";
 
-import { eventState } from "../atoms";
+import { eventState, authState } from "../atoms";
+// TO DO add proper types sry
+const groupBy = (objArry: any, keyToGroupBy: any) =>
+  objArry.reduce((mappedObjs: any, curentObject: any) => {
+    if (curentObject[keyToGroupBy]) {
+      (mappedObjs[curentObject[keyToGroupBy]] =
+        mappedObjs[curentObject[keyToGroupBy]] || []).push(curentObject);
+    }
 
-interface Event {
+    return mappedObjs;
+  }, {});
+
+export interface CalendarEvent {
   date: string;
   month: string;
   description: string;
   name: string;
+  imageSrc: string;
+  timeOfDay: string;
+  id: string;
 }
 export interface EventMap {
-  [month: string]: Event[];
+  [id: string]: CalendarEvent;
 }
 
+const formatDate = (date: string): string => {
+  let d = new Date(date),
+    month = "" + (d.getMonth() + 1),
+    day = "" + d.getDate(),
+    year = d.getFullYear();
+
+  if (month.length < 2) month = "0" + month;
+  if (day.length < 2) day = "0" + day;
+
+  return [year, month, day].join("-");
+};
+
 const Calendar = (): JSX.Element => {
-  const [events] = useRecoilState(eventState);
+  const [events, setEvents] = useRecoilState(eventState);
+  const [{ isSignedIn, isValid }] = useRecoilState(authState);
+  const [eventBeingEdited, setEventBeingEdited] = useState<string | null>(null);
+
+  const handleEventChange = (
+    newValue: string,
+    valueKey: string,
+    eventId: string
+  ): void => {
+    setEvents((prevEvents) => ({
+      ...prevEvents,
+      [eventId]: { ...prevEvents[eventId], [valueKey]: newValue },
+    }));
+  };
 
   const renderSingleEvent = ({
     date,
     description,
-    name,
-  }: Event): JSX.Element => (
-    <div
-      style={{
-        display: "flex",
-        height: "50%",
-        justifyContent: "space-between",
-        marginBottom: "3%",
-      }}
-    >
+    name: eventName,
+    id,
+  }: CalendarEvent): JSX.Element => {
+    const isEventBeingEdited = eventBeingEdited === eventName;
+    return (
       <div
         style={{
           display: "flex",
-          flexDirection: "column",
-          width: "65%",
-          justifyContent: "flex-start",
+          height: "50%",
+          justifyContent: "space-between",
+          marginBottom: "3%",
         }}
       >
-        <div style={{ fontSize: "35px" }}>{name.toUpperCase()}</div>
-        <div style={{ fontSize: "25px" }}>{date}</div>
-
-        <div style={{ width: "90%", alignSelf: "left" }}>{description}</div>
         <div
           style={{
-            borderTop: "solid black",
+            display: "flex",
+            flexDirection: "column",
+            width: "65%",
+            justifyContent: "flex-start",
           }}
         >
-          Lasts All Day: Free Admission
+          {
+            <Button
+              onClick={() =>
+                setEventBeingEdited(isEventBeingEdited ? null : eventName)
+              }
+              style={{ backgroundColor: "grey" }}
+            >
+              Edit
+            </Button>
+          }
+          <div style={{ fontSize: "35px" }}>
+            {isEventBeingEdited ? (
+              <TextField
+                variant="outlined"
+                type="text"
+                label={eventName}
+                value={eventName}
+                onChange={({ target: { value: newValue } }) =>
+                  handleEventChange(newValue, "name", id)
+                }
+              />
+            ) : (
+              eventName.toUpperCase()
+            )}
+          </div>
+          <div style={{ fontSize: "25px" }}>
+            {isEventBeingEdited ? (
+              <TextField
+                variant="outlined"
+                type="date"
+                value={formatDate(date)}
+                onChange={({ target: { value: newValue } }) =>
+                  handleEventChange(newValue, "date", id)
+                }
+              />
+            ) : (
+              date
+            )}
+          </div>
+
+          <div style={{ width: "90%", alignSelf: "left" }}>
+            {isEventBeingEdited ? (
+              <TextareaAutosize
+                style={{ width: "100%" }}
+                value={description}
+                onChange={({ target: { value: newValue } }) =>
+                  handleEventChange(newValue, "description", id)
+                }
+              />
+            ) : (
+              description
+            )}
+          </div>
+          <div
+            style={{
+              borderTop: "solid black",
+            }}
+          >
+            {isEventBeingEdited ? (
+              <TextField style={{ width: "100%" }} value={"Time to go here"} />
+            ) : (
+              "Lasts All Day: Free Admission"
+            )}
+          </div>
         </div>
+        {isEventBeingEdited ? (
+          <TextField style={{ width: "100%" }} value={"Link to go here"} />
+        ) : (
+          <img
+            style={{ width: "30%", height: "auto" }}
+            src="https://upload.wikimedia.org/wikipedia/commons/f/f7/Adolph_Tidemand_Norsk_juleskik.jpg"
+            alt=""
+          />
+        )}
       </div>
-      <img
-        style={{ width: "30%", height: "auto" }}
-        src="https://upload.wikimedia.org/wikipedia/commons/f/f7/Adolph_Tidemand_Norsk_juleskik.jpg"
-        alt=""
-      />
-    </div>
-  );
+    );
+  };
+
+  const getFormattedEvents = () =>
+    Object.entries(
+      groupBy(
+        Object.values(events).sort(
+          ({ date: dateA }, { date: dateB }) =>
+            Date.parse(dateA) - Date.parse(dateB)
+        ),
+        "month"
+      )
+    );
 
   const renderEvents = (): JSX.Element[] =>
-    Object.keys(events).map((month) => (
+    getFormattedEvents().map(([month, eventArray]) => (
       <div
         key={month}
         style={{
@@ -85,7 +196,9 @@ const Calendar = (): JSX.Element => {
         >
           {month.toUpperCase()}
         </div>
-        {events[month].map(renderSingleEvent)}
+        {(eventArray as CalendarEvent[]).map((event) =>
+          renderSingleEvent(event)
+        )}
       </div>
     ));
 
@@ -100,7 +213,7 @@ const Calendar = (): JSX.Element => {
         padding: "0% 5%",
       }}
     >
-      {renderEvents()}
+      {Object.values(events).length ? renderEvents() : null}
     </div>
   );
 };
