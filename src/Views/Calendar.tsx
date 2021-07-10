@@ -1,14 +1,26 @@
-import { Button, TextareaAutosize, TextField } from "@material-ui/core";
 import React, { useState } from "react";
 import { useRecoilState } from "recoil";
+import {
+  Button,
+  TextareaAutosize,
+  TextField,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+} from "@material-ui/core";
 
 import { eventState, authState } from "../atoms";
-// TO DO add proper types sry
-const groupBy = (objArry: any, keyToGroupBy: any) =>
-  objArry.reduce((mappedObjs: any, curentObject: any) => {
+
+const groupBy = <K extends string, T extends { [key in K]: string }>(
+  objArry: T[],
+  keyToGroupBy: K
+) =>
+  objArry.reduce((mappedObjs: { [key: string]: T[] }, curentObject: T) => {
     if (curentObject[keyToGroupBy]) {
       (mappedObjs[curentObject[keyToGroupBy]] =
-        mappedObjs[curentObject[keyToGroupBy]] || []).push(curentObject);
+        mappedObjs[curentObject[keyToGroupBy]] ?? []).push(curentObject);
     }
 
     return mappedObjs;
@@ -26,6 +38,15 @@ export interface CalendarEvent {
 export interface EventMap {
   [id: string]: CalendarEvent;
 }
+
+const CalendarEventProperties = [
+  "date",
+  "month",
+  "description",
+  "name",
+  "imageSrc",
+  "timeOfDay",
+];
 
 const formatDate = (date: string): string => {
   let d = new Date(date),
@@ -57,23 +78,109 @@ const writeCalendarEventData = async (
     }
   );
 };
+type NonFinishedEvent = Omit<CalendarEvent, "id">;
+const createCalendarEvent = async (
+  eventObj: NonFinishedEvent
+): Promise<CalendarEvent> =>
+  await fetch(
+    // "https://us-central1-baumann-firebase.cloudfunctions.net/createCalendarEvent",
+    "http://localhost:5001/baumann-firebase/us-central1/createCalendarEvent",
+    {
+      method: "POST",
+      body: JSON.stringify(eventObj),
+    }
+  ).then((r) => r.json());
+
+const deleteCalendarEvent = async (evenIdToDelete: string): Promise<string> =>
+  await fetch(
+    // "https://us-central1-baumann-firebase.cloudfunctions.net/createCalendarEvent",
+    "http://localhost:5001/baumann-firebase/us-central1/deleteCalendarEvent",
+    {
+      method: "POST",
+      body: JSON.stringify(evenIdToDelete),
+    }
+  ).then((r) => r.json());
 
 const Calendar = (): JSX.Element => {
   const [events, setEvents] = useRecoilState(eventState);
   const [{ isSignedIn, isValid }] = useRecoilState(authState);
   const [eventBeingEdited, setEventBeingEdited] = useState<string | null>(null);
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [eventBeingCreated, setEventBeingCreated] = useState<{
+    [key: string]: string;
+  }>({
+    date: "",
+    month: "",
+    description: "",
+    name: "",
+    imageSrc: "",
+    timeOfDay: "",
+  });
 
   const handleEventChange = (
     newValue: string,
     valueKey: string,
     eventId: string
   ): void => {
-    // debugger;
     setEvents((prevEvents) => ({
       ...prevEvents,
       [eventId]: { ...prevEvents[eventId], [valueKey]: newValue },
     }));
   };
+
+  const toggleDialog = (): void => {
+    setIsCreateDialogOpen((o) => !o);
+  };
+
+  const renderCreateEventDialog = (): JSX.Element => (
+    <div>
+      <Button
+        variant="outlined"
+        style={{ color: "black" }}
+        onClick={toggleDialog}
+      >
+        Create Event
+      </Button>
+      <Dialog open={isCreateDialogOpen} onClose={toggleDialog}>
+        <DialogTitle>Make An Event</DialogTitle>
+        <DialogContent>
+          <DialogContentText>Make An Event Below!</DialogContentText>
+          {CalendarEventProperties.map((property) => (
+            <TextField
+              label={property}
+              required
+              value={eventBeingCreated[property]}
+              type="text"
+              fullWidth
+              onChange={({ target: { value } }) => {
+                setEventBeingCreated((prevEv) => ({
+                  ...prevEv,
+                  [property]: value,
+                }));
+              }}
+            />
+          ))}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={toggleDialog}>Cancel</Button>
+          <Button
+            disabled={
+              !CalendarEventProperties.every((key) => eventBeingCreated[key])
+            }
+            onClick={async () => {
+              const newEvent = (await createCalendarEvent(
+                eventBeingCreated as NonFinishedEvent
+              )) as CalendarEvent;
+              setEvents((p) => ({ ...p, [newEvent.id]: newEvent }));
+              toggleDialog();
+            }}
+          >
+            Create Event
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  );
 
   const renderSingleEvent = ({
     date,
@@ -102,14 +209,33 @@ const Calendar = (): JSX.Element => {
           }}
         >
           {isSignedIn && isValid && (
-            <Button
-              onClick={() =>
-                setEventBeingEdited(isEventBeingEdited ? null : id)
-              }
-              style={{ backgroundColor: "grey" }}
-            >
-              Edit
-            </Button>
+            <>
+              <Button
+                onClick={() =>
+                  setEventBeingEdited(isEventBeingEdited ? null : id)
+                }
+                style={{ backgroundColor: "grey" }}
+              >
+                {/* TO DO: SUBMIT DATA ON SUBMIT!*/}
+                {isEventBeingEdited ? "Submit" : "Edit"}
+              </Button>
+              {isEventBeingEdited && (
+                <Button
+                  onClick={() => {
+                    deleteCalendarEvent(id);
+                    setEventBeingEdited(null);
+                    setEvents((prevEvents) => {
+                      const { [id]: eToRemove, ...rest } = prevEvents;
+
+                      return rest;
+                    });
+                  }}
+                  style={{ backgroundColor: "red" }}
+                >
+                  DELETE
+                </Button>
+              )}
+            </>
           )}
           <div style={{ fontSize: "35px" }}>
             {isEventBeingEdited ? (
@@ -259,6 +385,7 @@ const Calendar = (): JSX.Element => {
         padding: "0% 5%",
       }}
     >
+      {renderCreateEventDialog()}
       {Object.values(events).length ? renderEvents() : null}
     </div>
   );
