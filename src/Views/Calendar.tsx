@@ -14,10 +14,23 @@ import {
   KeyboardDatePicker,
   MuiPickersUtilsProvider,
 } from "@material-ui/pickers";
-import Autocomplete from "@material-ui/lab/Autocomplete";
 import DateFnsUtils from "@date-io/date-fns";
 
 import { eventState, authState } from "../atoms";
+const months = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
 
 const groupBy = <K extends string, T extends { [key in K]: string }>(
   objArry: T[],
@@ -47,7 +60,6 @@ export interface EventMap {
 
 const CalendarEventProperties = [
   "date",
-  "month",
   "description",
   "name",
   "imageSrc",
@@ -87,8 +99,8 @@ const createCalendarEvent = async (
   eventObj: NonFinishedEvent
 ): Promise<CalendarEvent> =>
   await fetch(
-    // "https://us-central1-baumann-firebase.cloudfunctions.net/createCalendarEvent",
-    "http://localhost:5001/baumann-firebase/us-central1/createCalendarEvent",
+    "https://us-central1-baumann-firebase.cloudfunctions.net/createCalendarEvent",
+    // "http://localhost:5001/baumann-firebase/us-central1/createCalendarEvent",
     {
       method: "POST",
       body: JSON.stringify(eventObj),
@@ -114,7 +126,7 @@ const Calendar = (): JSX.Element => {
     [key: string]: string;
   }>({
     date: new Date().toDateString(),
-    month: "",
+    month: months[new Date().getMonth()],
     description: "",
     name: "",
     imageSrc: "",
@@ -165,34 +177,12 @@ const Calendar = (): JSX.Element => {
                     setEventBeingCreated((prevEv) => ({
                       ...prevEv,
                       [property]: newDate?.toDateString() as string,
+                      month: months[newDate?.getMonth() ?? 0],
                     }));
                   }}
                   KeyboardButtonProps={{
                     "aria-label": "change date",
                   }}
-                />
-              ) : property === "month" ? (
-                <Autocomplete
-                  id="combo-box-demo"
-                  options={[
-                    "January",
-                    "February",
-                    "March",
-                    "April",
-                    "May",
-                    "June",
-                    "July",
-                    "August",
-                    "September",
-                    "October",
-                    "November",
-                    "December",
-                  ]}
-                  getOptionLabel={(option) => option}
-                  style={{ width: 300 }}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Month" variant="outlined" />
-                  )}
                 />
               ) : (
                 <TextField
