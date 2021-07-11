@@ -62,8 +62,7 @@ const formatDate = (date: string): string => {
 
 const writeCalendarEventData = async (
   eventId: string,
-  valueKey: string,
-  newValue: string
+  newEventData: CalendarEvent
 ): Promise<void> => {
   await fetch(
     "https://us-central1-baumann-firebase.cloudfunctions.net/setCalendarEventData",
@@ -71,9 +70,8 @@ const writeCalendarEventData = async (
     {
       method: "POST",
       body: JSON.stringify({
-        calendarEventKey: valueKey,
         calendarEventId: eventId,
-        newValue,
+        newEventData,
       }),
     }
   );
@@ -83,8 +81,8 @@ const createCalendarEvent = async (
   eventObj: NonFinishedEvent
 ): Promise<CalendarEvent> =>
   await fetch(
-    // "https://us-central1-baumann-firebase.cloudfunctions.net/createCalendarEvent",
-    "http://localhost:5001/baumann-firebase/us-central1/createCalendarEvent",
+    "https://us-central1-baumann-firebase.cloudfunctions.net/createCalendarEvent",
+    // "http://localhost:5001/baumann-firebase/us-central1/createCalendarEvent",
     {
       method: "POST",
       body: JSON.stringify(eventObj),
@@ -93,8 +91,8 @@ const createCalendarEvent = async (
 
 const deleteCalendarEvent = async (evenIdToDelete: string): Promise<string> =>
   await fetch(
-    // "https://us-central1-baumann-firebase.cloudfunctions.net/createCalendarEvent",
-    "http://localhost:5001/baumann-firebase/us-central1/deleteCalendarEvent",
+    "https://us-central1-baumann-firebase.cloudfunctions.net/createCalendarEvent",
+    // "http://localhost:5001/baumann-firebase/us-central1/deleteCalendarEvent",
     {
       method: "POST",
       body: JSON.stringify(evenIdToDelete),
@@ -211,9 +209,13 @@ const Calendar = (): JSX.Element => {
           {isSignedIn && isValid && (
             <>
               <Button
-                onClick={() =>
-                  setEventBeingEdited(isEventBeingEdited ? null : id)
-                }
+                onClick={async () => {
+                  setEventBeingEdited(isEventBeingEdited ? null : id);
+
+                  if (isEventBeingEdited) {
+                    await writeCalendarEventData(id, events[id]);
+                  }
+                }}
                 style={{ backgroundColor: "grey" }}
               >
                 {/* TO DO: SUBMIT DATA ON SUBMIT!*/}
@@ -248,9 +250,6 @@ const Calendar = (): JSX.Element => {
                 onChange={({ target: { value: newValue } }) =>
                   handleEventChange(newValue, "name", id)
                 }
-                onBlur={({ target: { value: newValue } }) => {
-                  writeCalendarEventData(id, "name", newValue);
-                }}
               />
             ) : (
               eventName.toUpperCase()
@@ -265,9 +264,6 @@ const Calendar = (): JSX.Element => {
                 onChange={({ target: { value: newValue } }) =>
                   handleEventChange(newValue, "date", id)
                 }
-                onBlur={({ target: { value: newValue } }) => {
-                  writeCalendarEventData(id, "date", newValue);
-                }}
               />
             ) : (
               date
@@ -282,9 +278,6 @@ const Calendar = (): JSX.Element => {
                 onChange={({ target: { value: newValue } }) =>
                   handleEventChange(newValue, "description", id)
                 }
-                onBlur={({ target: { value: newValue } }) => {
-                  writeCalendarEventData(id, "description", newValue);
-                }}
               />
             ) : (
               description
@@ -302,9 +295,6 @@ const Calendar = (): JSX.Element => {
                 onChange={({ target: { value: newValue } }) =>
                   handleEventChange(newValue, "timeOfDay", id)
                 }
-                onBlur={({ target: { value: newValue } }) => {
-                  writeCalendarEventData(id, "timeOfDay", newValue);
-                }}
               />
             ) : (
               timeOfDay
@@ -318,9 +308,6 @@ const Calendar = (): JSX.Element => {
             onChange={({ target: { value: newValue } }) =>
               handleEventChange(newValue, "imageSrc", id)
             }
-            onBlur={({ target: { value: newValue } }) => {
-              writeCalendarEventData(id, "imageSrc", newValue);
-            }}
           />
         ) : (
           <img style={{ width: "30%", height: "auto" }} src={imageSrc} alt="" />
@@ -385,8 +372,8 @@ const Calendar = (): JSX.Element => {
         padding: "0% 5%",
       }}
     >
-      {renderCreateEventDialog()}
-      {Object.values(events).length ? renderEvents() : null}
+      {isSignedIn && isValid && renderCreateEventDialog()}
+      {Object.values(events).length && renderEvents()}
     </div>
   );
 };
