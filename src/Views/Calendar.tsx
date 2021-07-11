@@ -149,78 +149,76 @@ const Calendar = (): JSX.Element => {
   };
 
   const renderCreateEventDialog = (): JSX.Element => (
-    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-      <div>
-        <Button
-          variant="outlined"
-          style={{ color: "black" }}
-          onClick={toggleDialog}
-        >
-          Create Event
-        </Button>
-        <Dialog open={isCreateDialogOpen} onClose={toggleDialog}>
-          <DialogTitle>Make An Event</DialogTitle>
-          <DialogContent>
-            <DialogContentText>Make An Event Below!</DialogContentText>
-            {CalendarEventProperties.map((property) =>
-              property === "date" ? (
-                <KeyboardDatePicker
-                  disableToolbar
-                  variant="inline"
-                  format="MM-dd-yyyy"
-                  margin="normal"
-                  id="date-picker-inline"
-                  label="Date picker inline"
-                  autoOk={true}
-                  value={new Date(eventBeingCreated[property])}
-                  onChange={(newDate) => {
-                    setEventBeingCreated((prevEv) => ({
-                      ...prevEv,
-                      [property]: newDate?.toDateString() as string,
-                      month: months[newDate?.getMonth() ?? 0],
-                    }));
-                  }}
-                  KeyboardButtonProps={{
-                    "aria-label": "change date",
-                  }}
-                />
-              ) : (
-                <TextField
-                  label={property}
-                  required
-                  value={eventBeingCreated[property]}
-                  type="text"
-                  fullWidth
-                  onChange={({ target: { value } }) => {
-                    setEventBeingCreated((prevEv) => ({
-                      ...prevEv,
-                      [property]: value,
-                    }));
-                  }}
-                />
-              )
-            )}
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={toggleDialog}>Cancel</Button>
-            <Button
-              disabled={
-                !CalendarEventProperties.every((key) => eventBeingCreated[key])
-              }
-              onClick={async () => {
-                const newEvent = (await createCalendarEvent(
-                  eventBeingCreated as NonFinishedEvent
-                )) as CalendarEvent;
-                setEvents((p) => ({ ...p, [newEvent.id]: newEvent }));
-                toggleDialog();
-              }}
-            >
-              Create Event
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </div>
-    </MuiPickersUtilsProvider>
+    <div>
+      <Button
+        variant="outlined"
+        style={{ color: "black" }}
+        onClick={toggleDialog}
+      >
+        Create Event
+      </Button>
+      <Dialog open={isCreateDialogOpen} onClose={toggleDialog}>
+        <DialogTitle>Make An Event</DialogTitle>
+        <DialogContent>
+          <DialogContentText>Make An Event Below!</DialogContentText>
+          {CalendarEventProperties.map((property) =>
+            property === "date" ? (
+              <KeyboardDatePicker
+                disableToolbar
+                variant="inline"
+                format="MM-dd-yyyy"
+                margin="normal"
+                id="date-picker-inline"
+                label="Date picker inline"
+                autoOk={true}
+                value={new Date(eventBeingCreated[property])}
+                onChange={(newDate) => {
+                  setEventBeingCreated((prevEv) => ({
+                    ...prevEv,
+                    [property]: newDate?.toDateString() as string,
+                    month: months[newDate?.getMonth() ?? 0],
+                  }));
+                }}
+                KeyboardButtonProps={{
+                  "aria-label": "change date",
+                }}
+              />
+            ) : (
+              <TextField
+                label={property}
+                required
+                value={eventBeingCreated[property]}
+                type="text"
+                fullWidth
+                onChange={({ target: { value } }) => {
+                  setEventBeingCreated((prevEv) => ({
+                    ...prevEv,
+                    [property]: value,
+                  }));
+                }}
+              />
+            )
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={toggleDialog}>Cancel</Button>
+          <Button
+            disabled={
+              !CalendarEventProperties.every((key) => eventBeingCreated[key])
+            }
+            onClick={async () => {
+              const newEvent = (await createCalendarEvent(
+                eventBeingCreated as NonFinishedEvent
+              )) as CalendarEvent;
+              setEvents((p) => ({ ...p, [newEvent.id]: newEvent }));
+              toggleDialog();
+            }}
+          >
+            Create Event
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
   );
 
   const renderSingleEvent = ({
@@ -300,13 +298,28 @@ const Calendar = (): JSX.Element => {
           </div>
           <div style={{ fontSize: "25px" }}>
             {isEventBeingEdited ? (
-              <TextField
-                variant="outlined"
-                type="date"
-                value={formatDate(date)}
-                onChange={({ target: { value: newValue } }) =>
-                  handleEventChange(newValue, "date", id)
-                }
+              <KeyboardDatePicker
+                disableToolbar
+                variant="inline"
+                format="MM-dd-yyyy"
+                margin="normal"
+                id="date-picker-inline"
+                label="Date picker inline"
+                autoOk={true}
+                value={new Date(date)}
+                onChange={(newDate) => {
+                  setEvents((prevEvents) => ({
+                    ...prevEvents,
+                    [id]: {
+                      ...prevEvents[id],
+                      date: newDate?.toDateString() as string,
+                      month: months[newDate?.getMonth() ?? 0],
+                    },
+                  }));
+                }}
+                KeyboardButtonProps={{
+                  "aria-label": "change date",
+                }}
               />
             ) : (
               date
@@ -405,19 +418,21 @@ const Calendar = (): JSX.Element => {
     ));
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        width: "auto",
-        height: "100%",
-        backgroundColor: "#8c9eff",
-        padding: "0% 5%",
-      }}
-    >
-      {isSignedIn && isValid && renderCreateEventDialog()}
-      {Object.values(events).length !== 0 && renderEvents()}
-    </div>
+    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          width: "auto",
+          height: "100%",
+          backgroundColor: "#8c9eff",
+          padding: "0% 5%",
+        }}
+      >
+        {isSignedIn && isValid && renderCreateEventDialog()}
+        {Object.values(events).length !== 0 && renderEvents()}
+      </div>
+    </MuiPickersUtilsProvider>
   );
 };
 
