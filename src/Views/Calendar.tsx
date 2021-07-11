@@ -10,6 +10,12 @@ import {
   DialogContentText,
   DialogActions,
 } from "@material-ui/core";
+import {
+  KeyboardDatePicker,
+  MuiPickersUtilsProvider,
+} from "@material-ui/pickers";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import DateFnsUtils from "@date-io/date-fns";
 
 import { eventState, authState } from "../atoms";
 
@@ -81,8 +87,8 @@ const createCalendarEvent = async (
   eventObj: NonFinishedEvent
 ): Promise<CalendarEvent> =>
   await fetch(
-    "https://us-central1-baumann-firebase.cloudfunctions.net/createCalendarEvent",
-    // "http://localhost:5001/baumann-firebase/us-central1/createCalendarEvent",
+    // "https://us-central1-baumann-firebase.cloudfunctions.net/createCalendarEvent",
+    "http://localhost:5001/baumann-firebase/us-central1/createCalendarEvent",
     {
       method: "POST",
       body: JSON.stringify(eventObj),
@@ -107,7 +113,7 @@ const Calendar = (): JSX.Element => {
   const [eventBeingCreated, setEventBeingCreated] = useState<{
     [key: string]: string;
   }>({
-    date: "",
+    date: new Date().toDateString(),
     month: "",
     description: "",
     name: "",
@@ -131,53 +137,100 @@ const Calendar = (): JSX.Element => {
   };
 
   const renderCreateEventDialog = (): JSX.Element => (
-    <div>
-      <Button
-        variant="outlined"
-        style={{ color: "black" }}
-        onClick={toggleDialog}
-      >
-        Create Event
-      </Button>
-      <Dialog open={isCreateDialogOpen} onClose={toggleDialog}>
-        <DialogTitle>Make An Event</DialogTitle>
-        <DialogContent>
-          <DialogContentText>Make An Event Below!</DialogContentText>
-          {CalendarEventProperties.map((property) => (
-            <TextField
-              label={property}
-              required
-              value={eventBeingCreated[property]}
-              type="text"
-              fullWidth
-              onChange={({ target: { value } }) => {
-                setEventBeingCreated((prevEv) => ({
-                  ...prevEv,
-                  [property]: value,
-                }));
+    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+      <div>
+        <Button
+          variant="outlined"
+          style={{ color: "black" }}
+          onClick={toggleDialog}
+        >
+          Create Event
+        </Button>
+        <Dialog open={isCreateDialogOpen} onClose={toggleDialog}>
+          <DialogTitle>Make An Event</DialogTitle>
+          <DialogContent>
+            <DialogContentText>Make An Event Below!</DialogContentText>
+            {CalendarEventProperties.map((property) =>
+              property === "date" ? (
+                <KeyboardDatePicker
+                  disableToolbar
+                  variant="inline"
+                  format="MM-dd-yyyy"
+                  margin="normal"
+                  id="date-picker-inline"
+                  label="Date picker inline"
+                  autoOk={true}
+                  value={new Date(eventBeingCreated[property])}
+                  onChange={(newDate) => {
+                    setEventBeingCreated((prevEv) => ({
+                      ...prevEv,
+                      [property]: newDate?.toDateString() as string,
+                    }));
+                  }}
+                  KeyboardButtonProps={{
+                    "aria-label": "change date",
+                  }}
+                />
+              ) : property === "month" ? (
+                <Autocomplete
+                  id="combo-box-demo"
+                  options={[
+                    "January",
+                    "February",
+                    "March",
+                    "April",
+                    "May",
+                    "June",
+                    "July",
+                    "August",
+                    "September",
+                    "October",
+                    "November",
+                    "December",
+                  ]}
+                  getOptionLabel={(option) => option}
+                  style={{ width: 300 }}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Month" variant="outlined" />
+                  )}
+                />
+              ) : (
+                <TextField
+                  label={property}
+                  required
+                  value={eventBeingCreated[property]}
+                  type="text"
+                  fullWidth
+                  onChange={({ target: { value } }) => {
+                    setEventBeingCreated((prevEv) => ({
+                      ...prevEv,
+                      [property]: value,
+                    }));
+                  }}
+                />
+              )
+            )}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={toggleDialog}>Cancel</Button>
+            <Button
+              disabled={
+                !CalendarEventProperties.every((key) => eventBeingCreated[key])
+              }
+              onClick={async () => {
+                const newEvent = (await createCalendarEvent(
+                  eventBeingCreated as NonFinishedEvent
+                )) as CalendarEvent;
+                setEvents((p) => ({ ...p, [newEvent.id]: newEvent }));
+                toggleDialog();
               }}
-            />
-          ))}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={toggleDialog}>Cancel</Button>
-          <Button
-            disabled={
-              !CalendarEventProperties.every((key) => eventBeingCreated[key])
-            }
-            onClick={async () => {
-              const newEvent = (await createCalendarEvent(
-                eventBeingCreated as NonFinishedEvent
-              )) as CalendarEvent;
-              setEvents((p) => ({ ...p, [newEvent.id]: newEvent }));
-              toggleDialog();
-            }}
-          >
-            Create Event
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </div>
+            >
+              Create Event
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
+    </MuiPickersUtilsProvider>
   );
 
   const renderSingleEvent = ({
@@ -373,7 +426,7 @@ const Calendar = (): JSX.Element => {
       }}
     >
       {isSignedIn && isValid && renderCreateEventDialog()}
-      {Object.values(events).length && renderEvents()}
+      {Object.values(events).length !== 0 && renderEvents()}
     </div>
   );
 };
