@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, ChangeEvent } from "react";
 import { useRecoilState } from "recoil";
 import {
   Button,
@@ -17,6 +17,8 @@ import {
 import DateFnsUtils from "@date-io/date-fns";
 
 import { eventState, authState } from "../atoms";
+import { storage } from "../firebase";
+
 const months = [
   "January",
   "February",
@@ -109,7 +111,7 @@ const createCalendarEvent = async (
 
 const deleteCalendarEvent = async (evenIdToDelete: string): Promise<string> =>
   await fetch(
-    "https://us-central1-baumann-firebase.cloudfunctions.net/createCalendarEvent",
+    "https://us-central1-baumann-firebase.cloudfunctions.net/deleteCalendarEvent",
     // "http://localhost:5001/baumann-firebase/us-central1/deleteCalendarEvent",
     {
       method: "POST",
@@ -146,6 +148,50 @@ const Calendar = (): JSX.Element => {
 
   const toggleDialog = (): void => {
     setIsCreateDialogOpen((o) => !o);
+  };
+
+  const handleImageAsFile = async (
+    e: ChangeEvent<HTMLInputElement>,
+    eventId: string
+  ) => {
+    // @ts-ignore
+    const image: File | null = e?.target?.files[0];
+
+    if (image) {
+      const uploadTask = storage.ref(`/images/${eventId}`).put(image);
+
+      uploadTask.on(
+        "state_changed",
+        (snapShot) => {
+          //takes a snap shot of the process as it is happening
+          console.log(snapShot);
+        },
+        (err) => {
+          //catches the errors
+          console.log(err);
+        },
+        () => {
+          // gets the functions from storage refences the image storage in firebase by the children
+          // gets the download url then sets the image from firebase as the value for the imgUrl key:
+          storage
+            .ref("images")
+            .child(eventId)
+            .getDownloadURL()
+            .then(async (fireBaseUrl) => {
+              const updatedEvent = {
+                ...events[eventId],
+                imageSrc: fireBaseUrl,
+              };
+              setEvents((prevEvents) => ({
+                ...prevEvents,
+                [eventId]: updatedEvent,
+              }));
+
+              await writeCalendarEventData(eventId, updatedEvent);
+            });
+        }
+      );
+    }
   };
 
   const renderCreateEventDialog = (): JSX.Element => (
@@ -358,13 +404,16 @@ const Calendar = (): JSX.Element => {
           </div>
         </div>
         {isEventBeingEdited ? (
-          <TextField
-            style={{ width: "100%" }}
-            value={imageSrc}
-            onChange={({ target: { value: newValue } }) =>
-              handleEventChange(newValue, "imageSrc", id)
-            }
-          />
+          <>
+            <Button variant="contained" component="label">
+              Upload Image!
+              <input
+                type="file"
+                hidden
+                onChange={(event) => handleImageAsFile(event, id)}
+              />
+            </Button>
+          </>
         ) : (
           <img style={{ width: "30%", height: "auto" }} src={imageSrc} alt="" />
         )}
