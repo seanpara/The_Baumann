@@ -14,5 +14,5 @@ export const eventState = atom<EventMap>({
 
 export const authState = atom<{ isSignedIn: boolean; isValid: boolean }>({
   key: "auth", // unique ID (with respect to other atoms/selectors)
-  default: { isSignedIn: true, isValid: true }, // default value (aka initial value)
+  default: { isSignedIn: false, isValid: false }, // default value (aka initial value)
 });
