@@ -130,9 +130,9 @@ const AdminView = (): JSX.Element => {
           >
             <h1>You Are Signed In!</h1>
             <button
-              onClick={() => {
+              onClick={async () => {
                 setAuthData({ isSignedIn: false, isValid: false });
-                auth.signOut();
+                await auth.signOut();
               }}
             >
               Sign-out

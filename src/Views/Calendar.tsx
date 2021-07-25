@@ -111,8 +111,8 @@ const createCalendarEvent = async (
 
 const deleteCalendarEvent = async (evenIdToDelete: string): Promise<string> =>
   await fetch(
-    "https://us-central1-baumann-firebase.cloudfunctions.net/deleteCalendarEvent",
-    // "http://localhost:5001/baumann-firebase/us-central1/deleteCalendarEvent",
+    // "https://us-central1-baumann-firebase.cloudfunctions.net/deleteCalendarEvent",
+    "http://localhost:5001/baumann-firebase/us-central1/deleteCalendarEvent",
     {
       method: "POST",
       body: JSON.stringify(evenIdToDelete),
@@ -125,13 +125,13 @@ const Calendar = (): JSX.Element => {
   const [eventBeingEdited, setEventBeingEdited] = useState<string | null>(null);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [eventBeingCreated, setEventBeingCreated] = useState<{
-    [key: string]: string;
+    [key: string]: string | File;
   }>({
     date: new Date().toDateString(),
     month: months[new Date().getMonth()],
     description: "",
     name: "",
-    imageSrc: "",
+    imageFile: "",
     timeOfDay: "",
   });
 
@@ -194,6 +194,56 @@ const Calendar = (): JSX.Element => {
     }
   };
 
+  const handleEventCreate = async () => {
+    const { imageFile, ...protoEvent } = eventBeingCreated;
+
+    const newEvent = (await createCalendarEvent({
+      ...protoEvent,
+      imageSrc: "",
+    } as NonFinishedEvent)) as CalendarEvent;
+
+    const uploadTask = storage
+      .ref(`/images/${newEvent.id}`)
+      .put(imageFile as File);
+
+    uploadTask.on(
+      "state_changed",
+      (snapShot) => {
+        //takes a snap shot of the process as it is happening
+        console.log(snapShot);
+      },
+      (err) => {
+        //catches the errors
+        console.log(err);
+      },
+      () => {
+        // gets the functions from storage refences the image storage in firebase by the children
+        // gets the download url then sets the image from firebase as the value for the imgUrl key:
+        storage
+          .ref("images")
+          .child(newEvent.id)
+          .getDownloadURL()
+          .then(async (fireBaseUrl) => {
+            const updatedEvent = {
+              ...newEvent,
+              imageSrc: fireBaseUrl,
+            };
+            console.log(setEvents);
+            debugger;
+            setEvents((prevEvents) => ({
+              ...prevEvents,
+              [newEvent.id]: updatedEvent,
+            }));
+
+            await writeCalendarEventData(newEvent.id, updatedEvent);
+          });
+      }
+    );
+
+    // setEvents((p) => ({ ...p, [newEvent.id]: newEvent }));
+    toggleDialog();
+  };
+
   const renderCreateEventDialog = (): JSX.Element => (
     <div>
       <Button
@@ -217,7 +267,7 @@ const Calendar = (): JSX.Element => {
                 id="date-picker-inline"
                 label="Date picker inline"
                 autoOk={true}
-                value={new Date(eventBeingCreated[property])}
+                value={new Date(eventBeingCreated[property] as string)}
                 onChange={(newDate) => {
                   setEventBeingCreated((prevEv) => ({
                     ...prevEv,
@@ -229,6 +279,21 @@ const Calendar = (): JSX.Element => {
                   "aria-label": "change date",
                 }}
               />
+            ) : property === "imageSrc" ? (
+              <Button variant="contained" component="label">
+                Upload Image!
+                <input
+                  type="file"
+                  hidden
+                  onChange={(event) => {
+                    // @ts-ignore
+                    const image: File | null = event?.target?.files[0];
+                    console.log(image);
+
+                    setEventBeingCreated((p) => ({ ...p, imageFile: image }));
+                  }}
+                />
+              </Button>
             ) : (
               <TextField
                 label={property}
@@ -249,16 +314,12 @@ const Calendar = (): JSX.Element => {
         <DialogActions>
           <Button onClick={toggleDialog}>Cancel</Button>
           <Button
-            disabled={
-              !CalendarEventProperties.every((key) => eventBeingCreated[key])
-            }
-            onClick={async () => {
-              const newEvent = (await createCalendarEvent(
-                eventBeingCreated as NonFinishedEvent
-              )) as CalendarEvent;
-              setEvents((p) => ({ ...p, [newEvent.id]: newEvent }));
-              toggleDialog();
-            }}
+            disabled={Boolean(
+              !CalendarEventProperties.filter((p) => p !== "imageSrc").every(
+                (key) => eventBeingCreated[key]
+              ) && eventBeingCreated.imageFile
+            )}
+            onClick={handleEventCreate}
           >
             Create Event
           </Button>
