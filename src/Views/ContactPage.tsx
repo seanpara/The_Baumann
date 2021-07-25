@@ -91,6 +91,7 @@ const ContactPage = () => {
 
     const { status, error } = await fetch(
       "https://us-central1-baumann-firebase.cloudfunctions.net/sendMail",
+      // "http://localhost:5001/baumann-firebase/us-central1/sendMail",
       {
         method: "POST",
         body: JSON.stringify(formState),

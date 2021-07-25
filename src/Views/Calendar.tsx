@@ -228,20 +228,17 @@ const Calendar = (): JSX.Element => {
               ...newEvent,
               imageSrc: fireBaseUrl,
             };
-            console.log(setEvents);
-            debugger;
+
             setEvents((prevEvents) => ({
               ...prevEvents,
               [newEvent.id]: updatedEvent,
             }));
 
             await writeCalendarEventData(newEvent.id, updatedEvent);
+            toggleDialog();
           });
       }
     );
-
-    // setEvents((p) => ({ ...p, [newEvent.id]: newEvent }));
-    toggleDialog();
   };
 
   const renderCreateEventDialog = (): JSX.Element => (
