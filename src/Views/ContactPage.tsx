@@ -1,8 +1,14 @@
 import React, { useReducer, useState, useEffect } from "react";
 import { useRecoilState } from "recoil";
+import { useHistory } from "react-router-dom";
 
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import Dialog from "@material-ui/core/Dialog";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
 
 import { useHomePageStyles } from "../styles";
 import { contactState } from "../atoms";
@@ -41,6 +47,7 @@ interface FormState {
 }
 
 const ContactPage = () => {
+  const history = useHistory();
   const [formState, dispatchFormAction] = useReducer(
     (state: FormState, { type, payload }: { type: string; payload?: any }) => {
       switch (type) {
@@ -60,6 +67,7 @@ const ContactPage = () => {
     generalContactFields
   );
   const [errorMessage, setErrorMessage] = useState("");
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const classes = useHomePageStyles();
 
@@ -89,17 +97,19 @@ const ContactPage = () => {
   const handleFormSubmit = async () => {
     dispatchFormAction({ type: RESET_FORM });
 
-    const { status, error } = await fetch(
+    const r = await fetch(
       "https://us-central1-baumann-firebase.cloudfunctions.net/sendMail",
       // "http://localhost:5001/baumann-firebase/us-central1/sendMail",
       {
         method: "POST",
         body: JSON.stringify(formState),
       }
-    ).then((r): Promise<{ status: number; error: string }> => r.json());
-
-    if (status !== 200) {
-      setErrorMessage(error);
+    );
+    const { message } = await r.json();
+    if (r.status !== 200) {
+      setErrorMessage(message);
+    } else {
+      setIsDialogOpen(true);
     }
   };
 
@@ -130,6 +140,28 @@ const ContactPage = () => {
       <h1>
         {contactType === "booking" ? "Book with Us!" : "Send Us a Message!"}
       </h1>
+      <Dialog
+        open={isDialogOpen}
+        onClose={() => {
+          setIsDialogOpen(false);
+        }}
+      >
+        <DialogTitle>{"Thank you for contacting the Baumann!"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            We've received your message and will be in touch within 48 hours
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              history.push("/");
+            }}
+          >
+            Go Back to the Main Page
+          </Button>
+        </DialogActions>
+      </Dialog>
       {renderForm()}
       <Button
         disabled={!name || !email}
