@@ -7,4 +7,5 @@ body {
 .carousel .slide {
   max-height: 92vh; /* change this to whatever you want */
   width: auto;
+  background-color: black;
 }

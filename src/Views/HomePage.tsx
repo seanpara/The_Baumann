@@ -157,6 +157,7 @@ export default () => {
             flexDirection: "column",
             alignItems: "center",
             width: isTabletOrMobile ? "80%" : "18%",
+            backgroundColor: "black",
           }}
         >
           <img
