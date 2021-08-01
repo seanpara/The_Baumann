@@ -4,11 +4,6 @@ body {
   font-family: "Helvetica";
 }
 
-.carousel .thumb img {
-  width: 100% !important;
-  height: 100% !important;
-}
-
 .carousel .slide {
   max-height: 92vh; /* change this to whatever you want */
   width: auto;

@@ -341,6 +341,7 @@ const Calendar = (): JSX.Element => {
           height: "50%",
           justifyContent: "space-between",
           marginBottom: "3%",
+          alignItems: "flex-start" /* new */,
         }}
       >
         <div
