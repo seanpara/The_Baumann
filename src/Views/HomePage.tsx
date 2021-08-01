@@ -98,18 +98,20 @@ export default () => {
       </div>
     </div>,
     ...siteImages.map(({ src, link }) => (
-      <div
+      <img
+        key={src}
+        style={{
+          width: "auto",
+          height: "100%",
+          // @ts-ignore
+          "pointer-events": "all",
+        }}
+        src={src}
+        alt=""
         onClick={(): void => {
           window.open(link);
         }}
-      >
-        <img
-          key={src}
-          style={{ width: "auto", height: "100%" }}
-          src={src}
-          alt=""
-        />
-      </div>
+      />
     )),
     <div
       style={{
@@ -182,13 +184,12 @@ export default () => {
     >
       {!isTabletOrMobile ? (
         <Carousel
-          showThumbs={false}
+          showArrows
           onChange={updateCurrentSlide}
           selectedItem={currentSlide}
+          showThumbs={false}
           infiniteLoop
           autoPlay
-          showArrows
-          showStatus={false}
           interval={5000}
         >
           {renderCarouselImages()}
