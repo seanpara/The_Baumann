@@ -210,7 +210,9 @@ const Header = (): JSX.Element => {
                   anchorEl={anchorEl}
                   keepMounted
                   open={Boolean(anchorEl)}
-                  onClose={() => {}}
+                  onClose={() => {
+                    setAnchorEl(null);
+                  }}
                 >
                   {renderMobileMenu()}
                 </Menu>
