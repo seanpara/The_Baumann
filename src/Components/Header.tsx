@@ -10,6 +10,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import IconButton from "@material-ui/core/IconButton";
 import FacebookIcon from "@material-ui/icons/Facebook";
 import InstagramIcon from "@material-ui/icons/Instagram";
+import MenuIcon from "@material-ui/icons/Menu";
 import { useMediaQuery } from "react-responsive";
 
 import { contactState } from "../atoms";
@@ -22,6 +23,9 @@ const Header = (): JSX.Element => {
   const history = useHistory();
 
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+
+  // const [mobileMenuAnchorEl, setMobileMenuAnchorEl] =
+  //   useState<HTMLElement | null>(null);
 
   const [, setContactType] = useRecoilState(contactState);
 
@@ -37,17 +41,120 @@ const Header = (): JSX.Element => {
     setAnchorEl(null);
   };
 
+  const renderMainLinks = () =>
+    ["about", "events", "contact"].map((routeName) => (
+      <div
+        key={routeName}
+        style={{
+          fontSize: "18px",
+          borderBottom: hoveringEl === routeName ? "5px solid #8c9eff" : "",
+        }}
+        onMouseEnter={(): void => {
+          setHoveringEl(routeName);
+        }}
+        onMouseLeave={(): void => {
+          setHoveringEl("");
+        }}
+        onClick={({ currentTarget }): void => {
+          routeName === "contact"
+            ? handleClick(currentTarget)
+            : history.push(`/${routeName}`);
+        }}
+      >
+        {routeName.toUpperCase()}
+      </div>
+    ));
+
+  const renderOtherItems = () => [
+    <div
+      style={{
+        fontSize: "18px",
+        borderBottom: hoveringEl === "rentals" ? "5px solid #8c9eff" : "",
+      }}
+      onMouseEnter={(): void => {
+        setHoveringEl("rentals");
+      }}
+      onMouseLeave={(): void => {
+        setHoveringEl("");
+      }}
+      onClick={(): void => {
+        window.open("https://www.sharegrid.com/p/fergus_baumann?type=rent");
+      }}
+    >
+      EQUIPMENT
+    </div>,
+    !isTabletOrMobile && (
+      <Menu
+        anchorEl={anchorEl}
+        keepMounted
+        open={!isTabletOrMobile && Boolean(anchorEl)}
+        onClose={() => handleClose()}
+        getContentAnchorEl={null}
+        PaperProps={{
+          style: {
+            width: "20ch",
+          },
+        }}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "center",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "center",
+        }}
+      >
+        <MenuItem onClick={() => handleClose("booking")}>Book With Us</MenuItem>
+        <MenuItem onClick={() => handleClose("general")}>
+          General Contact
+        </MenuItem>
+      </Menu>
+    ),
+    <IconButton
+      size="small"
+      edge="end"
+      aria-label="home"
+      color="secondary"
+      onClick={(): void => {
+        window.open("https://www.facebook.com/BaumannNY/", "_blank");
+      }}
+    >
+      <FacebookIcon />
+    </IconButton>,
+    <IconButton
+      size="small"
+      edge="end"
+      aria-label="home"
+      color="secondary"
+      onClick={(): void => {
+        window.open("https://www.instagram.com/baumannnyc/", "_blank");
+      }}
+    >
+      <InstagramIcon />
+    </IconButton>,
+  ];
+
+  const getHeaderContent = () => [
+    <>{renderMainLinks()}</>,
+    ...renderOtherItems(),
+  ];
+
+  const renderMobileMenu = () =>
+    [...renderMainLinks(), ...renderOtherItems()]
+      .filter((el) => el)
+      .map((el) => <MenuItem>{el}</MenuItem>);
+
   return (
     <div
       style={{
-        width: isTabletOrMobile ? "100%" : "",
+        width: isTabletOrMobile ? "100vw" : "",
         height: !isTabletOrMobile ? "10%" : "",
       }}
     >
       <AppBar
         position="sticky"
         style={{
-          width: isTabletOrMobile ? "100%" : "",
+          width: isTabletOrMobile ? "100vw" : "",
           backgroundColor: "white",
         }}
       >
@@ -55,6 +162,8 @@ const Header = (): JSX.Element => {
           <div
             style={{
               display: "flex",
+              flexDirection: "row",
+              alignItems: isTabletOrMobile ? "center" : "",
               justifyContent: "space-between",
               width: "100%",
             }}
@@ -77,111 +186,36 @@ const Header = (): JSX.Element => {
             >
               THE BAUMANN
             </div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                width: "35%",
-              }}
-            >
-              {["about", "events", "contact"].map((routeName) => (
-                <div
-                  key={routeName}
-                  style={{
-                    fontSize: "18px",
-                    borderBottom:
-                      hoveringEl === routeName ? "5px solid #8c9eff" : "",
-                  }}
-                  onMouseEnter={(): void => {
-                    setHoveringEl(routeName);
-                  }}
-                  onMouseLeave={(): void => {
-                    setHoveringEl("");
-                  }}
-                  onClick={({ currentTarget }): void => {
-                    routeName === "contact"
-                      ? handleClick(currentTarget)
-                      : history.push(`/${routeName}`);
-                  }}
-                >
-                  {routeName.toUpperCase()}
-                </div>
-              ))}
+            {!isTabletOrMobile ? (
               <div
                 style={{
-                  fontSize: "18px",
-                  borderBottom:
-                    hoveringEl === "rentals" ? "5px solid #8c9eff" : "",
-                }}
-                onMouseEnter={(): void => {
-                  setHoveringEl("rentals");
-                }}
-                onMouseLeave={(): void => {
-                  setHoveringEl("");
-                }}
-                onClick={(): void => {
-                  window.open(
-                    "https://www.sharegrid.com/p/fergus_baumann?type=rent"
-                  );
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  width: "35%",
                 }}
               >
-                EQUIPMENT
+                {getHeaderContent()}
               </div>
-              <Menu
-                id="simple-menu"
-                anchorEl={anchorEl}
-                keepMounted
-                open={Boolean(anchorEl)}
-                onClose={() => handleClose()}
-                getContentAnchorEl={null}
-                PaperProps={{
-                  style: {
-                    width: "20ch",
-                  },
-                }}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "center",
-                }}
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "center",
-                }}
-              >
-                <MenuItem onClick={() => handleClose("booking")}>
-                  Book With Us
-                </MenuItem>
-                <MenuItem onClick={() => handleClose("general")}>
-                  General Contact
-                </MenuItem>
-              </Menu>
-              <IconButton
-                size="small"
-                edge="end"
-                aria-label="home"
-                color="secondary"
-                onClick={(): void => {
-                  window.open("https://www.facebook.com/BaumannNY/", "_blank");
-                }}
-              >
-                <FacebookIcon />
-              </IconButton>
-              <IconButton
-                size="small"
-                edge="end"
-                aria-label="home"
-                color="secondary"
-                onClick={(): void => {
-                  window.open(
-                    "https://www.instagram.com/baumannnyc/",
-                    "_blank"
-                  );
-                }}
-              >
-                <InstagramIcon />
-              </IconButton>
-            </div>
+            ) : (
+              <>
+                <IconButton
+                  onClick={({ currentTarget }): void => {
+                    handleClick(currentTarget);
+                  }}
+                >
+                  <MenuIcon />
+                </IconButton>
+                <Menu
+                  anchorEl={anchorEl}
+                  keepMounted
+                  open={Boolean(anchorEl)}
+                  onClose={() => {}}
+                >
+                  {renderMobileMenu()}
+                </Menu>
+              </>
+            )}
           </div>
         </Toolbar>
       </AppBar>

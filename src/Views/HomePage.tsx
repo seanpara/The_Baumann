@@ -147,7 +147,7 @@ export default () => {
         overflowY: "auto",
       }}
     >
-      {siteImages.map(({ src }) => (
+      {siteImages.map(({ src, link }) => (
         <Paper
           className={classes.paper}
           square
@@ -158,6 +158,9 @@ export default () => {
             alignItems: "center",
             width: isTabletOrMobile ? "80%" : "18%",
             backgroundColor: "black",
+          }}
+          onClick={() => {
+            window.open(link);
           }}
         >
           <img
@@ -188,7 +191,6 @@ export default () => {
           showArrows
           onChange={updateCurrentSlide}
           selectedItem={currentSlide}
-          showThumbs={false}
           infiniteLoop
           autoPlay
           interval={5000}
