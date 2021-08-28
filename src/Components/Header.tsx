@@ -56,9 +56,12 @@ const Header = (): JSX.Element => {
           setHoveringEl("");
         }}
         onClick={({ currentTarget }): void => {
-          routeName === "contact"
+          routeName === "contact" && !isTabletOrMobile
             ? handleClick(currentTarget)
             : history.push(`/${routeName}`);
+          if (isTabletOrMobile) {
+            setAnchorEl(null);
+          }
         }}
       >
         {routeName.toUpperCase()}
@@ -79,6 +82,7 @@ const Header = (): JSX.Element => {
       }}
       onClick={(): void => {
         window.open("https://www.sharegrid.com/p/fergus_baumann?type=rent");
+        setAnchorEl(null);
       }}
     >
       EQUIPMENT
