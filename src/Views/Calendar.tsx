@@ -15,6 +15,7 @@ import {
   MuiPickersUtilsProvider,
 } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
+import { useMediaQuery } from "react-responsive";
 
 import { eventState, authState } from "../atoms";
 import { storage } from "../firebase";
@@ -134,6 +135,8 @@ const Calendar = (): JSX.Element => {
     imageFile: "",
     timeOfDay: "",
   });
+
+  const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1224px)" });
 
   const handleEventChange = (
     newValue: string,
@@ -385,7 +388,7 @@ const Calendar = (): JSX.Element => {
               )}
             </>
           )}
-          <div style={{ fontSize: "35px" }}>
+          <div style={{ fontSize: isTabletOrMobile ? "25px" : "35px" }}>
             {isEventBeingEdited ? (
               <TextField
                 variant="outlined"
@@ -498,14 +501,14 @@ const Calendar = (): JSX.Element => {
         style={{
           display: "flex",
           flexDirection: "column",
-          width: "auto",
+          width: isTabletOrMobile ? "100%" : "auto",
           height: "100%",
         }}
       >
         <div
           style={{
             borderBottom: "solid black",
-            width: "100%",
+            width: isTabletOrMobile ? "50vw" : "100%",
             height: "10",
             marginTop: "5%",
             marginBottom: "1%",
@@ -514,7 +517,7 @@ const Calendar = (): JSX.Element => {
             zIndex: 1,
             backgroundColor: "#8c9eff",
             cursor: "pointer",
-            fontSize: "70px",
+            fontSize: isTabletOrMobile ? "40px" : "70px",
           }}
         >
           {month.toUpperCase()}
