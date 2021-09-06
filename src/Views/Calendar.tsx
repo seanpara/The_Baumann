@@ -343,7 +343,7 @@ const Calendar = (): JSX.Element => {
           display: "flex",
           height: "50%",
           justifyContent: "space-between",
-          marginBottom: "3%",
+          marginBottom: isTabletOrMobile ? "5%" : "3%",
           alignItems: "flex-start" /* new */,
         }}
       >
@@ -388,7 +388,7 @@ const Calendar = (): JSX.Element => {
               )}
             </>
           )}
-          <div style={{ fontSize: isTabletOrMobile ? "25px" : "35px" }}>
+          <div style={{ fontSize: isTabletOrMobile ? "20px" : "35px" }}>
             {isEventBeingEdited ? (
               <TextField
                 variant="outlined"
@@ -404,7 +404,7 @@ const Calendar = (): JSX.Element => {
               eventName.toUpperCase()
             )}
           </div>
-          <div style={{ fontSize: "25px" }}>
+          <div style={{ fontSize: isTabletOrMobile ? "15px" : "25px" }}>
             {isEventBeingEdited ? (
               <KeyboardDatePicker
                 disableToolbar
@@ -517,7 +517,7 @@ const Calendar = (): JSX.Element => {
             zIndex: 1,
             backgroundColor: "#8c9eff",
             cursor: "pointer",
-            fontSize: isTabletOrMobile ? "40px" : "70px",
+            fontSize: isTabletOrMobile ? "35px" : "70px",
           }}
         >
           {month.toUpperCase()}

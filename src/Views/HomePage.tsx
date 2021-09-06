@@ -147,6 +147,21 @@ export default () => {
         overflowY: "auto",
       }}
     >
+      <div
+        style={{
+          fontSize: "30px",
+          textAlign: "center",
+        }}
+      >
+        A NEW BAUMANN
+      </div>
+      <div
+        style={{
+          fontSize: "30px",
+        }}
+      >
+        IS COMING
+      </div>
       {siteImages.map(({ src, link }) => (
         <Paper
           className={classes.paper}
