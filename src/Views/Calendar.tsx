@@ -112,8 +112,8 @@ const createCalendarEvent = async (
 
 const deleteCalendarEvent = async (evenIdToDelete: string): Promise<string> =>
   await fetch(
-    // "https://us-central1-baumann-firebase.cloudfunctions.net/deleteCalendarEvent",
-    "http://localhost:5001/baumann-firebase/us-central1/deleteCalendarEvent",
+    "https://us-central1-baumann-firebase.cloudfunctions.net/deleteCalendarEvent",
+    //"http://localhost:5001/baumann-firebase/us-central1/deleteCalendarEvent",
     {
       method: "POST",
       body: JSON.stringify(evenIdToDelete),
