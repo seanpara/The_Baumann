@@ -26,8 +26,8 @@ const Header = (): JSX.Element => {
 
   // const [mobileMenuAnchorEl, setMobileMenuAnchorEl] =
   //   useState<HTMLElement | null>(null);
-  const logoSrc = `https://firebasestorage.googleapis.com/v0/b/baumann-firebase.appspot.com/o/Logo-NO%20TEXT.png?alt=media&token=a32b01e3-2b56-4bda-8640-5a9395f1dbb2`;
-
+  const logoSrc =
+    "https://baumann-pics.s3.us-east-2.amazonaws.com/Logo-NO+TEXT.png";
   const [, setContactType] = useRecoilState(contactState);
 
   const handleClick = (currentTarget: HTMLElement): void => {
@@ -184,7 +184,7 @@ const Header = (): JSX.Element => {
               width: "100%",
             }}
           >
-            {isTabletOrMobile ? (
+            {isTabletOrMobile && (
               <IconButton
                 style={{
                   width: "25%",
@@ -200,18 +200,19 @@ const Header = (): JSX.Element => {
                   src={logoSrc}
                 />
               </IconButton>
-            ) : (
-              <div
-                style={{
-                  fontSize: "25px",
-                  borderBottom:
-                    hoveringEl === "homeButton" ? "5px solid #8c9eff" : "",
-                }}
-                {...homeButonProps}
-              >
-                THE BAUMANN
-              </div>
             )}
+            <div
+              style={{
+                fontSize: isTabletOrMobile ? "20px" : "25px",
+                borderBottom:
+                  hoveringEl === "homeButton" && !isTabletOrMobile
+                    ? "5px solid #8c9eff"
+                    : "",
+              }}
+              {...(!isTabletOrMobile && homeButonProps)}
+            >
+              THE BAUMANN
+            </div>
             {!isTabletOrMobile ? (
               <div
                 style={{

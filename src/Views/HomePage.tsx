@@ -149,14 +149,6 @@ export default () => {
     >
       <div
         style={{
-          fontSize: "30px",
-          textAlign: "center",
-        }}
-      >
-        Welcome to the Baumann!
-      </div>
-      <div
-        style={{
           fontSize: "20px",
           textAlign: "center",
         }}
