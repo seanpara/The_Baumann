@@ -151,9 +151,10 @@ export default () => {
         style={{
           fontSize: "20px",
           textAlign: "center",
+          marginTop: "3%",
         }}
       >
-        Here are some upcoming events and projects:
+        UPCOMING EVENTS AND PROJECTS:
       </div>
       {siteImages.map(({ src, link }) => (
         <Paper

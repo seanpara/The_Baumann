@@ -208,6 +208,7 @@ const Header = (): JSX.Element => {
                   hoveringEl === "homeButton" && !isTabletOrMobile
                     ? "5px solid #8c9eff"
                     : "",
+                marginRight: isTabletOrMobile ? "6%" : "",
               }}
               {...(!isTabletOrMobile && homeButonProps)}
             >

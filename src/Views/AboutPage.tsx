@@ -7,11 +7,10 @@ import { useAboutPageStyles } from "../styles";
 const AboutPage = (): JSX.Element => {
   const classes = useAboutPageStyles();
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1224px)" });
-  const textPartOne = `The Baumann performance venue was founded in September 2017 by Zivon
-  Toplin, Owen Campbell, and Fergus Baumann, members of the Zoo City
-  theatre collective.`;
 
-  const textPartTwo = `They debuted the venue with a theatrical
+  const aboutText = `The Baumann performance venue was founded in September 2017 by Zivon
+  Toplin, Owen Campbell, and Fergus Baumann, members of the Zoo City
+  theatre collective. They debuted the venue with a theatrical
   adaptation of Franz Kafka’s “A Country Doctor” for a two week run +
   gallery. Subsequently, Fergus and Owen held a series of film and live
   improv events to fundraise for climate change research. As more events
@@ -43,12 +42,17 @@ const AboutPage = (): JSX.Element => {
           padding: "5% 3% 0% 3%",
         }}
       >
-        <div style={{ fontSize: isTabletOrMobile ? "30px" : "80px" }}>
+        <div
+          style={{
+            fontSize: isTabletOrMobile ? "30px" : "80px",
+            textAlign: isTabletOrMobile ? "center" : "left",
+          }}
+        >
           Who Are We?
         </div>
-        <div style={{ marginTop: "1%" }}>{`${textPartOne}${
-          isTabletOrMobile ? "" : textPartTwo
-        }`}</div>
+        {!isTabletOrMobile && (
+          <div style={{ marginTop: "1%" }}>{aboutText}</div>
+        )}
       </div>
       <img
         style={{
@@ -65,7 +69,7 @@ const AboutPage = (): JSX.Element => {
             backgroundColor: "#8c9eff",
           }}
         >
-          {textPartTwo}
+          {aboutText}
         </div>
       )}
     </div>
