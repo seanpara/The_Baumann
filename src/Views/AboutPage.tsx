@@ -7,7 +7,6 @@ import { useAboutPageStyles } from "../styles";
 const AboutPage = (): JSX.Element => {
   const classes = useAboutPageStyles();
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1224px)" });
-
   const textPartOne = `The Baumann performance venue was founded in September 2017 by Zivon
   Toplin, Owen Campbell, and Fergus Baumann, members of the Zoo City
   theatre collective.`;
