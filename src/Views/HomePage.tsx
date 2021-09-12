@@ -153,14 +153,15 @@ export default () => {
           textAlign: "center",
         }}
       >
-        A NEW BAUMANN
+        Welcome to the Baumann!
       </div>
       <div
         style={{
-          fontSize: "30px",
+          fontSize: "20px",
+          textAlign: "center",
         }}
       >
-        IS COMING
+        Here are some upcoming events and projects:
       </div>
       {siteImages.map(({ src, link }) => (
         <Paper
