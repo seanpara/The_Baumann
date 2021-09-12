@@ -148,6 +148,17 @@ const Header = (): JSX.Element => {
       .filter((el) => el)
       .map((el) => <MenuItem>{el}</MenuItem>);
 
+  const homeButonProps = {
+    onMouseEnter: (): void => {
+      setHoveringEl("homeButton");
+    },
+    onMouseLeave: (): void => {
+      setHoveringEl("");
+    },
+    onClick: (): void => {
+      history.push("/");
+    },
+  };
   return (
     <div
       style={{
@@ -172,24 +183,34 @@ const Header = (): JSX.Element => {
               width: "100%",
             }}
           >
-            <div
-              style={{
-                fontSize: "25px",
-                borderBottom:
-                  hoveringEl === "homeButton" ? "5px solid #8c9eff" : "",
-              }}
-              onMouseEnter={(): void => {
-                setHoveringEl("homeButton");
-              }}
-              onMouseLeave={(): void => {
-                setHoveringEl("");
-              }}
-              onClick={(): void => {
-                history.push("/");
-              }}
-            >
-              THE BAUMANN
-            </div>
+            {isTabletOrMobile ? (
+              <IconButton
+                style={{
+                  width: "20%",
+                  height: "auto",
+                }}
+                {...homeButonProps}
+              >
+                <img
+                  style={{
+                    width: "100%",
+                    height: "auto",
+                  }}
+                  src="https://baumann-pics.s3.us-east-2.amazonaws.com/edited_baumann_logo.png"
+                />
+              </IconButton>
+            ) : (
+              <div
+                style={{
+                  fontSize: "25px",
+                  borderBottom:
+                    hoveringEl === "homeButton" ? "5px solid #8c9eff" : "",
+                }}
+                {...homeButonProps}
+              >
+                THE BAUMANN
+              </div>
+            )}
             {!isTabletOrMobile ? (
               <div
                 style={{
