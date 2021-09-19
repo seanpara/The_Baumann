@@ -201,30 +201,30 @@ const Header = (): JSX.Element => {
                 />
               </IconButton>
             )}
-            <div
-              style={{
-                fontSize: isTabletOrMobile ? "20px" : "25px",
-                borderBottom:
-                  hoveringEl === "homeButton" && !isTabletOrMobile
-                    ? "5px solid #8c9eff"
-                    : "",
-                marginRight: isTabletOrMobile ? "6%" : "",
-              }}
-              {...(!isTabletOrMobile && homeButonProps)}
-            >
-              THE BAUMANN
-            </div>
+
             {!isTabletOrMobile ? (
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  width: "35%",
-                }}
-              >
-                {getHeaderContent()}
-              </div>
+              <>
+                <div
+                  style={{
+                    fontSize: "25px",
+                    borderBottom:
+                      hoveringEl === "homeButton" ? "5px solid #8c9eff" : "",
+                  }}
+                  {...(!isTabletOrMobile && homeButonProps)}
+                >
+                  THE BAUMANN
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    width: "35%",
+                  }}
+                >
+                  {getHeaderContent()}
+                </div>
+              </>
             ) : (
               <>
                 <IconButton

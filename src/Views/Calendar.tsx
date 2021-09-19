@@ -388,7 +388,12 @@ const Calendar = (): JSX.Element => {
               )}
             </>
           )}
-          <div style={{ fontSize: isTabletOrMobile ? "20px" : "35px" }}>
+          <div
+            style={{
+              fontSize: isTabletOrMobile ? "20px" : "35px",
+              fontWeight: isTabletOrMobile ? "bold" : "normal",
+            }}
+          >
             {isEventBeingEdited ? (
               <TextField
                 variant="outlined"
