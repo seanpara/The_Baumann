@@ -4,6 +4,10 @@ body {
   font-family: "Helvetica";
 }
 
+.carousel-root {
+  height: 100%;
+}
+
 .carousel .slide {
   max-height: 92vh; /* change this to whatever you want */
   width: auto;

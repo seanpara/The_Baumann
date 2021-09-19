@@ -74,7 +74,7 @@ export default () => {
     <div
       style={{
         width: "100%",
-        height: "100vh",
+        height: "100%",
         backgroundColor: "#8c9eff",
         display: "flex",
         flexDirection: "column",
@@ -202,6 +202,7 @@ export default () => {
           selectedItem={currentSlide}
           infiniteLoop
           autoPlay
+          showThumbs={false}
           interval={5000}
         >
           {renderCarouselImages()}
