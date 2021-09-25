@@ -40,10 +40,10 @@ const groupBy = <K extends string, T extends { [key in K]: string }>(
   keyToGroupBy: K
 ) =>
   objArry.reduce((mappedObjs: { [key: string]: T[] }, curentObject: T) => {
-    if (curentObject[keyToGroupBy]) {
-      (mappedObjs[curentObject[keyToGroupBy]] =
-        mappedObjs[curentObject[keyToGroupBy]] ?? []).push(curentObject);
-    }
+    mappedObjs[curentObject[keyToGroupBy]] = [
+      ...(mappedObjs[curentObject[keyToGroupBy]] ?? []),
+      curentObject,
+    ];
 
     return mappedObjs;
   }, {});
@@ -491,10 +491,12 @@ const Calendar = (): JSX.Element => {
   const getFormattedEvents = () =>
     Object.entries(
       groupBy(
-        Object.values(events).sort(
-          ({ date: dateA }, { date: dateB }) =>
-            Date.parse(dateA) - Date.parse(dateB)
-        ),
+        Object.values(events)
+          .filter(({ month }) => month)
+          .sort(
+            ({ date: dateA }, { date: dateB }) =>
+              Date.parse(dateA) - Date.parse(dateB)
+          ),
         "month"
       )
     );
