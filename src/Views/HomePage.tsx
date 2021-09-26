@@ -26,7 +26,20 @@ export default () => {
       text: "",
       link: "",
     },
-    slideImageData: [],
+    slideImageData: [
+      {
+        src: "https://firebasestorage.googleapis.com/v0/b/baumann-firebase.appspot.com/o/images%2Fimage1?alt=media",
+        link: "",
+      },
+      {
+        src: "https://firebasestorage.googleapis.com/v0/b/baumann-firebase.appspot.com/o/images%2Fimage2?alt=media",
+        link: "",
+      },
+      {
+        src: "https://firebasestorage.googleapis.com/v0/b/baumann-firebase.appspot.com/o/images%2Fimage3?alt=media",
+        link: "",
+      },
+    ],
   });
   useEffect(() => {
     const setData = async () => {
