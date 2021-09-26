@@ -4,62 +4,54 @@ import { Carousel } from "react-responsive-carousel";
 import Paper from "@material-ui/core/Paper";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
-import { storage } from "../firebase";
 import { useHomePageStyles } from "../styles";
-import { imageNames } from "./Admin";
+
+interface TextSlideData {
+  text: string;
+  link: string;
+}
+type SlideImageData = { link: string; src: string }[];
 
 export default () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [siteImages, setSiteImages] = useState<{ src: string; link: string }[]>(
-    []
-  );
   const classes = useHomePageStyles();
 
   const isTabletOrMobile = useMediaQuery("(max-width: 1224px)");
-  const [slide2Data, setSlide2Data] = useState({
-    text: "Please Subscribe to Our Monthly Artsbox!",
-    link: "",
+
+  const [{ textSlideData, slideImageData }, setHomePageData] = useState<{
+    textSlideData: TextSlideData;
+    slideImageData: SlideImageData;
+  }>({
+    textSlideData: {
+      text: "",
+      link: "",
+    },
+    slideImageData: [],
   });
   useEffect(() => {
     const setData = async () => {
-      const { slideTwoData, otherData } = await fetch(
+      const { otherData } = await fetch(
         "https://us-central1-baumann-firebase.cloudfunctions.net/getHomePageText"
         // "http://localhost:5001/baumann-firebase/us-central1/getHomePageText"
       ).then((r) => r.json());
-
-      const imageUrls = await Promise.all(
-        imageNames.map(async (imageName: string): Promise<{
-          [key: string]: string;
-        }> => {
-          const src = await storage
-            .ref("images")
-            .child(imageName)
-            .getDownloadURL();
-
-          return { [imageName]: src };
-        })
-      );
-
-      setSlide2Data({
+      const textSlideData = {
         link: otherData.find((o: any) => Object.keys(o).includes("slide2Link"))
           .slide2Link.value,
         text: otherData.find((o: any) => Object.keys(o).includes("slide2Text"))
           .slide2Text.value,
-      });
-      // debugger;
-      // i am not proud of myself . . .
-      setSiteImages(
-        Object.values(otherData)
-          .filter((o) => Object.keys(o as {}).some((k) => k.includes("image")))
-          .map((o) => {
-            const { value: link, src } = Object.values(o as any)[0] as {
-              value: string;
-              src: string;
-            };
+      };
+      const slideImageData = Object.values(otherData)
+        .filter((o) => Object.keys(o as {}).some((k) => k.includes("image")))
+        .map((o) => {
+          const { value: link, src } = Object.values(o as any)[0] as {
+            value: string;
+            src: string;
+          };
 
-            return { link, src };
-          })
-      );
+          return { link, src };
+        });
+
+      setHomePageData({ textSlideData, slideImageData });
     };
 
     setData();
@@ -75,7 +67,7 @@ export default () => {
     <div
       style={{
         width: "100%",
-        height: "100%",
+        height: "100vh",
         backgroundColor: "#8c9eff",
         display: "flex",
         flexDirection: "column",
@@ -98,7 +90,7 @@ export default () => {
         IS COMING
       </div>
     </div>,
-    ...siteImages.map(({ src, link }) => (
+    ...slideImageData.map(({ src, link }) => (
       <img
         key={src}
         style={{
@@ -128,9 +120,9 @@ export default () => {
       <a
         style={{ color: "inherit", width: "90%", fontSize: "70px" }}
         target="_blank"
-        href={slide2Data.link}
+        href={textSlideData.link}
       >
-        {slide2Data.text}
+        {textSlideData.text}
       </a>
     </div>,
   ];
@@ -157,7 +149,7 @@ export default () => {
       >
         UPCOMING EVENTS AND PROJECTS:
       </div>
-      {siteImages.map(({ src, link }) => (
+      {slideImageData.map(({ src, link }) => (
         <Paper
           className={classes.paper}
           square
@@ -193,7 +185,7 @@ export default () => {
         display: "flex",
         overflow: "auto",
         height: "100%",
-        width: "100%",
+        width: "100vw",
       }}
     >
       {!isTabletOrMobile ? (
@@ -205,6 +197,7 @@ export default () => {
           autoPlay
           showThumbs={false}
           interval={5000}
+          showStatus={false}
         >
           {renderCarouselImages()}
         </Carousel>
