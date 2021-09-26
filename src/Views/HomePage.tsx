@@ -46,18 +46,19 @@ export default () => {
         text: otherData.find((o: any) => Object.keys(o).includes("slide2Text"))
           .slide2Text.value,
       });
-
+      // debugger;
       // i am not proud of myself . . .
       setSiteImages(
-        imageUrls.map((obj) => {
-          const arO = Object.entries(obj).map(([name, src]) => ({
-            src,
-            link: otherData.find((obj2: any) =>
-              Object.keys(obj2).includes(name)
-            )[name].value,
-          }));
-          return arO[0];
-        })
+        Object.values(otherData)
+          .filter((o) => Object.keys(o as {}).some((k) => k.includes("image")))
+          .map((o) => {
+            const { value: link, src } = Object.values(o as any)[0] as {
+              value: string;
+              src: string;
+            };
+
+            return { link, src };
+          })
       );
     };
 
