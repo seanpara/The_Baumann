@@ -184,36 +184,19 @@ const Header = (): JSX.Element => {
               width: "100%",
             }}
           >
-            {isTabletOrMobile && (
-              <IconButton
-                style={{
-                  width: "25%",
-                  height: "auto",
-                }}
-                {...homeButonProps}
-              >
-                <img
-                  style={{
-                    width: "100%",
-                    height: "auto",
-                  }}
-                  src={logoSrc}
-                />
-              </IconButton>
-            )}
+            <div
+              style={{
+                fontSize: isTabletOrMobile ? "20px" : "25px",
+                borderBottom:
+                  hoveringEl === "homeButton" ? "5px solid #8c9eff" : "",
+              }}
+              {...homeButonProps}
+            >
+              THE BAUMANN
+            </div>
 
             {!isTabletOrMobile ? (
               <>
-                <div
-                  style={{
-                    fontSize: "25px",
-                    borderBottom:
-                      hoveringEl === "homeButton" ? "5px solid #8c9eff" : "",
-                  }}
-                  {...(!isTabletOrMobile && homeButonProps)}
-                >
-                  THE BAUMANN
-                </div>
                 <div
                   style={{
                     display: "flex",
