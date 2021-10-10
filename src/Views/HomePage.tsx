@@ -144,12 +144,11 @@ export default () => {
     <div
       style={{
         display: "flex",
-        justifyContent: "bottom",
         flexDirection: "column",
         alignItems: "center",
         flexWrap: "nowrap",
+        justifyContent: "space-apart",
         width: "100%",
-        height: "100%",
         overflowY: "auto",
       }}
     >
@@ -158,24 +157,24 @@ export default () => {
           fontSize: "20px",
           textAlign: "center",
           marginTop: "3%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
         }}
       >
         UPCOMING EVENTS AND PROJECTS:
       </div>
       {slideImageData.map(({ src, link }) => (
         <Paper
-          className={classes.paper}
           square
-          key={src}
           style={{
+            width: "80%",
+            height: "auto",
+            margin: "2% 1% 2% 1%",
             display: "flex",
             flexDirection: "column",
-            alignItems: "center",
-            width: isTabletOrMobile ? "80%" : "18%",
             backgroundColor: "black",
-          }}
-          onClick={() => {
-            window.open(link);
+            borderRadius: "5px",
           }}
         >
           <img
@@ -184,6 +183,11 @@ export default () => {
             style={{
               width: "100%",
               height: "auto",
+              border: "5px solid black",
+              borderRadius: "5px",
+            }}
+            onClick={() => {
+              window.open(link);
             }}
           />
         </Paper>
