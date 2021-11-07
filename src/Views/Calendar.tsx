@@ -352,7 +352,8 @@ const Calendar = (): JSX.Element => {
             display: "flex",
             flexDirection: "column",
             width: "65%",
-            justifyContent: "flex-start",
+            justifyContent: "space-between",
+            height: "100%",
           }}
         >
           {isSignedIn && isValid && (
@@ -409,7 +410,7 @@ const Calendar = (): JSX.Element => {
               eventName.toUpperCase()
             )}
           </div>
-          <div style={{ fontSize: isTabletOrMobile ? "15px" : "25px" }}>
+          <div style={{ fontSize: isTabletOrMobile ? "15px" : "30px" }}>
             {isEventBeingEdited ? (
               <KeyboardDatePicker
                 disableToolbar
@@ -439,7 +440,13 @@ const Calendar = (): JSX.Element => {
             )}
           </div>
 
-          <div style={{ width: "90%", alignSelf: "left" }}>
+          <div
+            style={{
+              width: "90%",
+              alignSelf: "left",
+              fontSize: isTabletOrMobile ? "15px" : "25px",
+            }}
+          >
             {isEventBeingEdited ? (
               <TextareaAutosize
                 style={{ width: "100%" }}
@@ -455,6 +462,7 @@ const Calendar = (): JSX.Element => {
           <div
             style={{
               borderTop: "solid black",
+              fontSize: isTabletOrMobile ? "15px" : "25px",
             }}
           >
             {isEventBeingEdited ? (
