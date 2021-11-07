@@ -137,9 +137,9 @@ const ContactPage = () => {
   const { name, email } = formState;
   return (
     <div className={classes.contactPage}>
-      <h1>
+      <div style={{ fontSize: "40px", margin: "2% 0%", fontWeight: "bold" }}>
         {contactType === "booking" ? "Book with Us!" : "Send Us a Message!"}
-      </h1>
+      </div>
       <Dialog
         open={isDialogOpen}
         onClose={() => {
